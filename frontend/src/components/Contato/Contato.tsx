@@ -9,11 +9,40 @@ const Contato = () => {
       mensagem: ''
    });
 
+   const formatPhone = (value: string) => {
+      // Remove tudo que não é número
+      const numbers = value.replace(/\D/g, '');
+      
+      // Aplica a máscara conforme o tamanho
+      if (numbers.length <= 10) {
+         // Telefone fixo: (00) 0000-0000
+         return numbers
+            .replace(/(\d{2})(\d)/, '($1) $2')
+            .replace(/(\d{4})(\d)/, '$1-$2');
+      } else {
+         // Celular: (00) 00000-0000
+         return numbers
+            .replace(/(\d{2})(\d)/, '($1) $2')
+            .replace(/(\d{5})(\d)/, '$1-$2');
+      }
+   };
+
    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      setFormData({
-         ...formData,
-         [e.target.name]: e.target.value
-      });
+      const { name, value } = e.target;
+      
+      if (name === 'telefone') {
+         // Aplica a máscara apenas visualmente, mas salva apenas números
+         const formatted = formatPhone(value);
+         setFormData({
+            ...formData,
+            [name]: formatted
+         });
+      } else {
+         setFormData({
+            ...formData,
+            [name]: value
+         });
+      }
    };
 
    const handleSubmit = async (e: React.FormEvent) => {
