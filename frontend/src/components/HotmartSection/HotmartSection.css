@@ -1,0 +1,207 @@
+.hotmart-section {
+  padding: 100px 0;
+  background: linear-gradient(135deg, var(--color-black) 0%, var(--color-dark-gray) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.hotmart-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hotmart-section::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hotmart-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hotmart-text {
+  color: var(--color-text-light);
+}
+
+.hotmart-description {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  color: var(--color-text-gray);
+}
+
+.hotmart-benefits {
+  list-style: none;
+  margin-bottom: 2.5rem;
+}
+
+.hotmart-benefits li {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--color-text-light);
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.hotmart-benefits li i {
+  position: absolute;
+  left: 0;
+  top: 0.25rem;
+  color: var(--color-gold);
+  font-size: 0.9rem;
+}
+
+.hotmart-button {
+  font-size: 1.2rem;
+  padding: 1rem 2.5rem;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 25px rgba(212, 175, 55, 0.6);
+  }
+}
+
+.hotmart-visual {
+  position: relative;
+}
+
+.hotmart-card {
+  background: var(--color-dark-gray);
+  border: 2px solid var(--color-gold);
+  border-radius: 20px;
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  transform: perspective(1000px) rotateY(-5deg);
+  transition: transform 0.3s ease;
+}
+
+.hotmart-card:hover {
+  transform: perspective(1000px) rotateY(0deg) scale(1.05);
+}
+
+.card-glow {
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.card-content {
+  position: relative;
+  z-index: 1;
+}
+
+.card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--gradient-gold);
+  color: var(--color-black);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.card-badge i {
+  font-size: 1rem;
+}
+
+.card-content h3 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-content p {
+  color: var(--color-text-gray);
+  margin-bottom: 2rem;
+}
+
+.card-price {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.price-label {
+  font-size: 0.9rem;
+  color: var(--color-text-gray);
+}
+
+.price-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-gold);
+}
+
+@media (max-width: 968px) {
+  .hotmart-content {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .hotmart-card {
+    transform: none;
+  }
+  
+  .hotmart-card:hover {
+    transform: scale(1.02);
+  }
+}
+
+@media (max-width: 768px) {
+  .hotmart-section {
+    padding: 60px 0;
+  }
+  
+  .hotmart-description {
+    font-size: 1rem;
+  }
+  
+  .hotmart-benefits li {
+    font-size: 1rem;
+  }
+  
+  .hotmart-button {
+    font-size: 1rem;
+    padding: 0.875rem 2rem;
+  }
+  
+  .card-content h3 {
+    font-size: 1.5rem;
+  }
+  
+  .price-value {
+    font-size: 2rem;
+  }
+}
+

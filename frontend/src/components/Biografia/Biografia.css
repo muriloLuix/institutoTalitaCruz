@@ -1,0 +1,119 @@
+.biografia-section {
+  padding: 100px 0;
+  background: var(--gradient-dark);
+  position: relative;
+}
+
+.biografia-content {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.biografia-image {
+  position: relative;
+}
+
+.image-placeholder {
+  aspect-ratio: 1;
+  background: var(--color-dark-gray);
+  border: 3px solid var(--color-gold);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-gray);
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.image-placeholder::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.biografia-text {
+  color: var(--color-text-light);
+}
+
+.biografia-description {
+  margin-bottom: 3rem;
+}
+
+.biografia-description p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--color-text-gray);
+  margin-bottom: 1.5rem;
+}
+
+.biografia-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  padding-top: 2rem;
+  border-top: 2px solid var(--color-gold);
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--color-gold);
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.stat-label {
+  display: block;
+  font-size: 1rem;
+  color: var(--color-text-gray);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 968px) {
+  .biografia-content {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .biografia-image {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .biografia-section {
+    padding: 60px 0;
+  }
+  
+  .biografia-description p {
+    font-size: 1rem;
+  }
+  
+  .biografia-stats {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .stat-number {
+    font-size: 2.5rem;
+  }
+}
+

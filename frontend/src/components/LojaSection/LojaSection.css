@@ -1,0 +1,137 @@
+.loja-section {
+  padding: 100px 0;
+  background: var(--color-black);
+  position: relative;
+}
+
+.loja-subtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--color-text-gray);
+  margin-bottom: 4rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.loja-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.loja-card {
+  background: var(--color-dark-gray);
+  border: 2px solid transparent;
+  border-radius: 15px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.loja-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-gold);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.loja-card:hover::before {
+  transform: scaleX(1);
+}
+
+.loja-card:hover {
+  border-color: var(--color-gold);
+  transform: translateY(-10px);
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+}
+
+.card-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
+  color: var(--color-gold);
+}
+
+.card-icon i {
+  display: block;
+}
+
+.loja-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-gold);
+}
+
+.loja-card p {
+  color: var(--color-text-gray);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.card-link {
+  color: var(--color-gold);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.card-link:hover {
+  color: var(--color-gold-light);
+  transform: translateX(5px);
+}
+
+.card-link i {
+  margin-left: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+.card-link:hover i {
+  transform: translateX(3px);
+}
+
+.loja-cta {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.loja-button {
+  font-size: 1.2rem;
+  padding: 1rem 3rem;
+}
+
+@media (max-width: 768px) {
+  .loja-section {
+    padding: 60px 0;
+  }
+  
+  .loja-subtitle {
+    font-size: 1rem;
+    margin-bottom: 3rem;
+  }
+  
+  .loja-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .loja-card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .card-icon {
+    font-size: 3rem;
+  }
+}
+

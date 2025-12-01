@@ -1,0 +1,142 @@
+.contato-section {
+  padding: 100px 0;
+  background: var(--gradient-dark);
+}
+
+.contato-subtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--color-text-gray);
+  margin-bottom: 4rem;
+}
+
+.contato-content {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 4rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.contato-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.info-item {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.info-icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+  color: var(--color-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+}
+
+.info-text h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-gold);
+}
+
+.info-text p {
+  color: var(--color-text-gray);
+  margin-bottom: 0.25rem;
+}
+
+.contato-form {
+  background: var(--color-dark-gray);
+  padding: 2.5rem;
+  border-radius: 15px;
+  border: 2px solid var(--color-gold);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--color-gold);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.875rem;
+  background: var(--color-black);
+  border: 2px solid var(--color-gray);
+  border-radius: 8px;
+  color: var(--color-text-light);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--color-text-gray);
+  opacity: 0.6;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-submit {
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 968px) {
+  .contato-content {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .contato-section {
+    padding: 60px 0;
+  }
+  
+  .contato-subtitle {
+    font-size: 1rem;
+    margin-bottom: 3rem;
+  }
+  
+  .contato-form {
+    padding: 2rem 1.5rem;
+  }
+  
+  .info-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .info-icon {
+    font-size: 2rem;
+  }
+}
+

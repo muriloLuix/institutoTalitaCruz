@@ -1,0 +1,122 @@
+.video-section {
+  padding: 100px 0;
+  background: var(--gradient-dark);
+  position: relative;
+  overflow: hidden;
+}
+
+.video-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.video-wrapper {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.video-placeholder {
+  aspect-ratio: 16/9;
+  background: var(--color-dark-gray);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  border: 3px solid var(--color-gold);
+  border-radius: 20px;
+}
+
+.video-placeholder h2 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.video-placeholder p {
+  color: var(--color-text-gray);
+  margin-bottom: 0.5rem;
+}
+
+.video-note {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  color: var(--color-text-gray);
+  opacity: 0.7;
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+}
+
+.video-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.video-thumbnail {
+  width: 100%;
+  height: 100%;
+  background: var(--color-dark-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.video-thumbnail::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  transition: background 0.3s ease;
+}
+
+.video-thumbnail:hover::before {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.play-button {
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.play-button:hover {
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .video-section {
+    padding: 50px 0;
+  }
+  
+  .video-placeholder {
+    padding: 1.5rem;
+  }
+  
+  .play-button svg {
+    width: 60px;
+    height: 60px;
+  }
+}
+
