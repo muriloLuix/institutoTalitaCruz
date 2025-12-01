@@ -148,12 +148,29 @@
   }
   
   .info-item {
-    flex-direction: column;
-    text-align: center;
+    flex-direction: row;
+    text-align: left;
+    align-items: flex-start;
   }
   
   .info-icon {
     font-size: 2rem;
+    flex-shrink: 0;
+  }
+  
+  .info-text {
+    flex: 1;
+  }
+  
+  .info-text h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .info-text p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    word-break: break-word;
   }
 }
 

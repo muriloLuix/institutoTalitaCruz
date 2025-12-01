@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import './Loja.css';
 
 interface Produto {
@@ -14,6 +14,7 @@ interface Produto {
 
 const Loja = () => {
    const [searchParams] = useSearchParams();
+   const location = useLocation();
    const categoriaFiltro = searchParams.get('categoria');
    const [produtos, setProdutos] = useState<Produto[]>([]);
    const [categoriaSelecionada, setCategoriaSelecionada] = useState<string>(categoriaFiltro || 'todos');
@@ -26,6 +27,15 @@ const Loja = () => {
       { id: 'cursos', nome: 'Cursos Online' },
       { id: 'materiais', nome: 'Materiais' }
    ];
+
+   useEffect(() => {
+      // Rola para o topo da página sempre que a rota mudar para /loja
+      window.scrollTo({
+         top: 0,
+         left: 0,
+         behavior: 'instant'
+      });
+   }, [location.pathname]);
 
    useEffect(() => {
       // Aqui você fará a chamada para a API do backend

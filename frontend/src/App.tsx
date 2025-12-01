@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Footer from './components/Footer';
 import Chat from './components/Chat';
+import ScrollToTop from './components/ScrollToTop';
+import BackToHome from './components/BackToHome';
 import Landing from './pages/Landing';
 import Loja from './pages/Loja';
 import './App.css';
@@ -17,6 +19,8 @@ function App() {
         </main>
         <Footer />
         <Chat />
+        <ScrollToTop />
+        <BackToHome />
       </div>
     </Router>
   );
