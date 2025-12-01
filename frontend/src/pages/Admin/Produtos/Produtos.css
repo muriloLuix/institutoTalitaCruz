@@ -1,0 +1,19 @@
+.admin-modal-form textarea {
+  width: 100%;
+  padding: 0.875rem;
+  background: var(--color-black);
+  border: 2px solid var(--color-gray);
+  border-radius: 8px;
+  color: var(--color-text-light);
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical;
+  transition: all 0.3s ease;
+}
+
+.admin-modal-form textarea:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+

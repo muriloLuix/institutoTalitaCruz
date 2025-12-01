@@ -1,0 +1,217 @@
+.conteudo-tabs-container {
+  background: var(--color-dark-gray);
+  border: 2px solid var(--color-gray);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.conteudo-tabs {
+  display: flex;
+  background: var(--color-black);
+  border-bottom: 2px solid var(--color-gray);
+  overflow-x: auto;
+}
+
+.conteudo-tab {
+  flex: 1;
+  min-width: 150px;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--color-text-gray);
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.conteudo-tab:hover {
+  background: rgba(212, 175, 55, 0.05);
+  color: var(--color-gold);
+}
+
+.conteudo-tab.active {
+  background: rgba(212, 175, 55, 0.1);
+  color: var(--color-gold);
+  border-bottom-color: var(--color-gold);
+}
+
+.conteudo-tab i {
+  font-size: 1.1rem;
+}
+
+.conteudo-tab-content {
+  padding: 2rem;
+}
+
+.admin-content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.admin-sections-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.admin-section-card {
+  background: var(--color-dark-gray);
+  border: 2px solid var(--color-gray);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.admin-section-card:hover {
+  border-color: var(--color-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.1);
+}
+
+.section-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.section-card-header h3 {
+  color: var(--color-gold);
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.section-preview {
+  color: var(--color-text-light);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.section-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-gray);
+  font-size: 0.85rem;
+  color: var(--color-text-gray);
+}
+
+.admin-content-editor {
+  background: var(--color-dark-gray);
+  border: 2px solid var(--color-gold);
+  border-radius: 12px;
+  padding: 2rem;
+  position: sticky;
+  top: 2rem;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+}
+
+.content-editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-gray);
+}
+
+.content-editor-header h2 {
+  color: var(--color-gold);
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.content-editor-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.content-editor-form .admin-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.content-editor-form label {
+  color: var(--color-gold);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.content-editor-form input,
+.content-editor-form textarea {
+  width: 100%;
+  padding: 0.875rem;
+  background: var(--color-black);
+  border: 2px solid var(--color-gray);
+  border-radius: 8px;
+  color: var(--color-text-light);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  resize: none;
+}
+
+.content-editor-form input:focus,
+.content-editor-form textarea:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.content-editor-form textarea {
+  resize: vertical;
+  min-height: 300px;
+}
+
+.content-editor-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.content-editor-actions button {
+  flex: 1;
+}
+
+@media (max-width: 968px) {
+  .admin-content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-content-editor {
+    position: relative;
+    top: 0;
+  }
+
+  .conteudo-tab {
+    min-width: 120px;
+    padding: 0.875rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .conteudo-tab span {
+    display: none;
+  }
+
+  .conteudo-tab i {
+    font-size: 1.2rem;
+  }
+
+  .conteudo-tab-content {
+    padding: 1.5rem;
+  }
+}
+

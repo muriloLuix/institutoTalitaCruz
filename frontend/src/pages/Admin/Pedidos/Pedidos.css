@@ -1,0 +1,16 @@
+.pedido-produtos {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pedido-produtos li {
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.pedido-produtos li:last-child {
+  margin-bottom: 0;
+}
+

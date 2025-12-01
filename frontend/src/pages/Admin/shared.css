@@ -1,0 +1,41 @@
+/* Estilos compartilhados para todas as páginas de admin */
+
+.admin-content {
+  width: 100%;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--color-gray);
+}
+
+.admin-header h1 {
+  color: var(--color-gold);
+  font-size: 2.5rem;
+  margin: 0;
+}
+
+.admin-section {
+  background: var(--color-dark-gray);
+  border: 2px solid var(--color-gray);
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.admin-section h2 {
+  color: var(--color-gold);
+  font-size: 1.8rem;
+  margin: 0 0 1.5rem 0;
+}
+
+.admin-empty-state {
+  color: var(--color-text-gray);
+  text-align: center;
+  padding: 2rem;
+  font-style: italic;
+}
+

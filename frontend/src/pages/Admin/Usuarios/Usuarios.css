@@ -1,0 +1,229 @@
+.admin-table-container {
+  background: var(--color-dark-gray);
+  border: 2px solid var(--color-gray);
+  border-radius: 12px;
+  padding: 1.5rem;
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table thead {
+  background: rgba(212, 175, 55, 0.1);
+}
+
+.admin-table th {
+  padding: 1rem;
+  text-align: left;
+  color: var(--color-gold);
+  font-weight: 600;
+  border-bottom: 2px solid var(--color-gray);
+}
+
+.admin-table td {
+  padding: 1rem;
+  color: var(--color-text-light);
+  border-bottom: 1px solid var(--color-gray);
+}
+
+.admin-table tbody tr:hover {
+  background: rgba(212, 175, 55, 0.05);
+}
+
+.admin-badge {
+  padding: 0.375rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge-gold {
+  background: rgba(212, 175, 55, 0.2);
+  color: var(--color-gold);
+}
+
+.badge-gray {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-light);
+}
+
+.badge-success {
+  background: rgba(40, 167, 69, 0.2);
+  color: #28a745;
+}
+
+.badge-danger {
+  background: rgba(220, 53, 69, 0.2);
+  color: #dc3545;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.admin-btn-icon {
+  background: transparent;
+  border: 1px solid var(--color-gray);
+  color: var(--color-text-light);
+  padding: 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-btn-icon:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+}
+
+.admin-btn-icon.danger:hover {
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.admin-btn-primary {
+  background: var(--gradient-gold);
+  border: 2px solid var(--color-gold);
+  color: var(--color-black);
+  padding: 0.875rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.admin-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.admin-btn-secondary {
+  background: transparent;
+  border: 2px solid var(--color-gray);
+  color: var(--color-text-light);
+  padding: 0.875rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.admin-btn-secondary:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+}
+
+.admin-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.admin-modal {
+  background: var(--color-dark-gray);
+  border: 2px solid var(--color-gold);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.admin-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--color-gray);
+}
+
+.admin-modal-header h2 {
+  color: var(--color-gold);
+  margin: 0;
+}
+
+.admin-modal-close {
+  background: none;
+  border: none;
+  color: var(--color-text-light);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.admin-modal-close:hover {
+  color: var(--color-gold);
+}
+
+.admin-modal-form {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.admin-modal-form .admin-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin-modal-form .admin-form-group label {
+  color: var(--color-gold);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.admin-modal-form input,
+.admin-modal-form select {
+  width: 100%;
+  padding: 0.875rem;
+  background: var(--color-black);
+  border: 2px solid var(--color-gray);
+  border-radius: 8px;
+  color: var(--color-text-light);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.admin-modal-form input:focus,
+.admin-modal-form select:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.admin-modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.admin-modal-actions button {
+  flex: 1;
+}
+

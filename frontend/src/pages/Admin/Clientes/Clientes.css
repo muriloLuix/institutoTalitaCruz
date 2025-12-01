@@ -1,0 +1,18 @@
+.admin-filter-select {
+  padding: 0.75rem 1rem;
+  background: var(--color-black);
+  border: 2px solid var(--color-gray);
+  border-radius: 8px;
+  color: var(--color-text-light);
+  font-family: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.admin-filter-select:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
