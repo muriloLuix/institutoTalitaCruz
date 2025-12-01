@@ -16,7 +16,6 @@
 
 .logo {
   display: flex;
-  flex-direction: column;
   align-items: center;
   text-decoration: none;
   transition: transform 0.3s ease;
@@ -26,20 +25,10 @@
   transform: scale(1.05);
 }
 
-.logo-text {
-  font-size: 0.7rem;
-  letter-spacing: 2px;
-  color: var(--color-gold);
-  font-weight: 600;
-}
-
-.logo-monogram {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--color-gold);
-  line-height: 1;
-  margin: 0.2rem 0;
-  font-family: 'Bricolage Grotesque', sans-serif;
+.logo-img {
+  height: 100px;
+  width: auto;
+  display: block;
 }
 
 .nav {
@@ -120,12 +109,8 @@
     transform: translateX(0);
   }
 
-  .logo-text {
-    font-size: 0.6rem;
-  }
-
-  .logo-monogram {
-    font-size: 1.5rem;
+  .logo-img {
+    height: 80px;
   }
 }
 

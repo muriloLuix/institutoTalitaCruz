@@ -1,49 +1,112 @@
 .biografia-section {
   padding: 100px 0;
-  background: var(--gradient-dark);
+  background: var(--color-black);
   position: relative;
+  overflow: hidden;
 }
+
+.biografia-section::before {
+  content: '';
+  position: absolute;
+  top: 25%;
+  right: -5%;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(95px);
+  pointer-events: none;
+  z-index: 0;
+}
+
 
 .biografia-content {
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 4rem;
   align-items: center;
+  position: relative;
+  z-index: 1;
+  background: var(--color-dark-gray);
+  border: 2px solid var(--color-gold);
+  border-radius: 24px;
+  padding: 3rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
 .biografia-image {
   position: relative;
+  z-index: 2;
 }
 
-.image-placeholder {
-  aspect-ratio: 1;
-  background: var(--color-dark-gray);
-  border: 3px solid var(--color-gold);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-text-gray);
-  font-size: 1.1rem;
-  text-align: center;
-  padding: 2rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.image-placeholder::before {
+.biografia-image::after {
   content: '';
   position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+  top: -15px;
+  right: -15px;
+  width: calc(100% + 30px);
+  height: calc(100% + 30px);
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      var(--color-black) 0px,
+      var(--color-black) 25px,
+      var(--color-gold) 25px,
+      var(--color-gold) 30px
+    );
+  opacity: 0.2;
+  z-index: -1;
+  border-radius: 20px;
   pointer-events: none;
+}
+
+.professora-image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 3px solid var(--color-gold);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.professora-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(212, 175, 55, 0.3);
 }
 
 .biografia-text {
   color: var(--color-text-light);
+  position: relative;
+  z-index: 2;
+}
+
+.biografia-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-dark-gray);
+  border: 1px solid var(--color-gold);
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  font-weight: 600;
+}
+
+.biografia-badge i {
+  color: var(--color-gold);
+  font-size: 0.9rem;
+}
+
+.biografia-nome {
+  font-size: 3rem;
+  color: var(--color-text-light);
+  margin-bottom: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
 .biografia-description {

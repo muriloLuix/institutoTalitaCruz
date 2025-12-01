@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import backgroundInicial from '../assets/images/pessoais/backgroundInicial.png';
 import VideoSection from '../components/VideoSection';
 import HotmartSection from '../components/HotmartSection';
 import LojaSection from '../components/LojaSection';
+import PerguntasSection from '../components/PerguntasSection';
+import PublicoAlvoSection from '../components/PublicoAlvoSection';
 import Biografia from '../components/Biografia';
 import FAQ from '../components/FAQ';
 import Contato from '../components/Contato';
@@ -14,12 +17,10 @@ const Landing = () => {
    const scrollToSection = (id: string) => {
       const element = document.getElementById(id);
       if (element) {
-         const headerHeight = 80;
          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-         const offsetPosition = elementPosition - headerHeight;
 
          window.scrollTo({
-            top: offsetPosition,
+            top: elementPosition,
             behavior: 'smooth'
          });
       }
@@ -42,7 +43,8 @@ const Landing = () => {
 
    return (
       <div className="landing-page">
-         <section className="hero-section">
+         <section className="hero-section" style={{ backgroundImage: `url(${backgroundInicial})` }}>
+            <div className="hero-overlay"></div>
             <div className="container">
                <div className="hero-content">
                   <h1 className="hero-title">
@@ -64,12 +66,18 @@ const Landing = () => {
                   </div>
                </div>
             </div>
-            <div className="hero-decoration"></div>
+            <div className="scroll-indicator" onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}>
+               <div className="scroll-arrow">
+                  <i className="fas fa-chevron-down"></i>
+               </div>
+            </div>
          </section>
 
          <VideoSection />
          <HotmartSection />
          <LojaSection />
+         <PerguntasSection />
+         <PublicoAlvoSection />
          <Biografia />
          <FAQ />
          <Contato />

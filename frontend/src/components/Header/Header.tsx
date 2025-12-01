@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import logoHeader from '../../assets/images/logos/logoHeader.png';
 import './Header.css';
 
 const Header = () => {
@@ -45,21 +46,31 @@ const Header = () => {
       }
    };
 
+   const handleHomeClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+      setIsMenuOpen(false);
+      
+      if (location.pathname === '/') {
+         e.preventDefault();
+         window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+         });
+      }
+   };
+
    return (
       <header className="header">
          <div className="container">
             <div className="header-content">
                <Link to="/" className="logo">
-                  <span className="logo-text">INSTITUTO</span>
-                  <span className="logo-monogram">TC</span>
-                  <span className="logo-text">TALITA CRUZ</span>
+                  <img src={logoHeader} alt="Instituto Talita Cruz" className="logo-img" />
                </Link>
                
                <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
                   <Link 
                      to="/" 
                      className={`nav-link ${isActive('/') ? 'active' : ''}`}
-                     onClick={() => setIsMenuOpen(false)}
+                     onClick={handleHomeClick}
                   >
                      Início
                   </Link>

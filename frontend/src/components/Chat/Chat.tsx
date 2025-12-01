@@ -43,12 +43,10 @@ const Chat = () => {
    const scrollToSection = (id: string) => {
       const element = document.getElementById(id);
       if (element) {
-         const headerHeight = 80;
          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-         const offsetPosition = elementPosition - headerHeight;
 
          window.scrollTo({
-            top: offsetPosition,
+            top: elementPosition,
             behavior: 'smooth'
          });
       }

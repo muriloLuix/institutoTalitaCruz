@@ -1,6 +1,6 @@
 .hotmart-section {
   padding: 100px 0;
-  background: linear-gradient(135deg, var(--color-black) 0%, var(--color-dark-gray) 100%);
+  background: var(--color-black);
   position: relative;
   overflow: hidden;
 }
@@ -8,26 +8,29 @@
 .hotmart-section::before {
   content: '';
   position: absolute;
-  top: -50%;
-  right: -10%;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
-  border-radius: 50%;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: linear-gradient(to bottom, var(--color-black), transparent);
   pointer-events: none;
+  z-index: 1;
 }
 
 .hotmart-section::after {
   content: '';
   position: absolute;
-  bottom: -30%;
-  left: -10%;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+  top: 20%;
+  right: -5%;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.18) 0%, transparent 70%);
   border-radius: 50%;
+  filter: blur(90px);
   pointer-events: none;
+  z-index: 0;
 }
+
 
 .hotmart-content {
   display: grid;
@@ -96,27 +99,33 @@
   padding: 2.5rem;
   position: relative;
   overflow: hidden;
-  transform: perspective(1000px) rotateY(-5deg);
-  transition: transform 0.3s ease;
-}
-
-.hotmart-card:hover {
-  transform: perspective(1000px) rotateY(0deg) scale(1.05);
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), 
+              box-shadow 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-style: preserve-3d;
+  will-change: transform, box-shadow;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 
+              0 0 20px rgba(212, 175, 55, 0.2),
+              inset 0 0 50px rgba(0, 0, 0, 0.3);
 }
 
 .card-glow {
   position: absolute;
   top: -50%;
-  right: -50%;
+  left: -50%;
   width: 200%;
   height: 200%;
   background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%);
   pointer-events: none;
+  transition: background 0.3s ease-out;
+  opacity: 0.8;
 }
 
 .card-content {
   position: relative;
   z-index: 1;
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease-out;
 }
 
 .card-badge {

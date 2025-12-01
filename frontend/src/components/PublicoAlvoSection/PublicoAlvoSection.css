@@ -1,0 +1,168 @@
+.publico-alvo-section {
+  padding: 100px 0;
+  background: var(--color-black);
+  position: relative;
+  overflow: hidden;
+}
+
+.publico-alvo-section::before {
+  content: '';
+  position: absolute;
+  top: 30%;
+  right: 10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.12) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(85px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+
+.publico-alvo-header {
+  margin-bottom: 3rem;
+}
+
+.publico-alvo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--color-dark-gray);
+  border: 1px solid var(--color-gold);
+  border-radius: 8px;
+  padding: 1rem 2rem;
+  color: var(--color-text-light);
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.publico-alvo-badge i {
+  color: var(--color-gold);
+  font-size: 1rem;
+}
+
+.caracteristicas-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+}
+
+.caracteristica-card {
+  background: var(--color-dark-gray);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.caracteristica-card:hover {
+  border-color: var(--color-gold);
+  transform: translateY(-3px);
+  box-shadow: 0 5px 20px rgba(212, 175, 55, 0.15);
+}
+
+.caracteristica-card i {
+  color: var(--color-gold);
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+}
+
+.caracteristica-card p {
+  color: var(--color-text-light);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.publico-alvo-conclusao {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.conclusao-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--color-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2rem;
+  animation: bounce 2s infinite;
+}
+
+.conclusao-icon i {
+  color: var(--color-black);
+  font-size: 1.5rem;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.conclusao-texto {
+  font-size: 2rem;
+  color: var(--color-text-light);
+  font-weight: 600;
+}
+
+.conclusao-texto .highlight-underline {
+  color: var(--color-gold);
+  position: relative;
+  display: inline-block;
+}
+
+.conclusao-texto .highlight-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--color-gold);
+  border-radius: 2px;
+}
+
+@media (max-width: 968px) {
+  .caracteristicas-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .publico-alvo-section {
+    padding: 60px 0;
+  }
+  
+  .publico-alvo-badge {
+    font-size: 0.9rem;
+    padding: 0.875rem 1.5rem;
+  }
+  
+  .caracteristicas-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .caracteristica-card {
+    padding: 1.25rem;
+  }
+  
+  .conclusao-texto {
+    font-size: 1.5rem;
+  }
+}
+

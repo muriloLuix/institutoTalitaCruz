@@ -1,0 +1,137 @@
+.perguntas-section {
+  padding: 100px 0;
+  background: var(--color-black);
+  position: relative;
+  overflow: hidden;
+}
+
+.perguntas-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 900px;
+  height: 900px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(100px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.perguntas-title {
+  font-size: 3rem;
+  color: var(--color-text-light);
+  text-align: center;
+  margin-bottom: 4rem;
+  font-weight: 700;
+}
+
+.perguntas-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.pergunta-card {
+  background: var(--color-dark-gray);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 12px;
+  padding: 2rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.pergunta-card:hover {
+  border-color: var(--color-gold);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+}
+
+.pergunta-numero {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-gold);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.pergunta-texto {
+  font-size: 1.2rem;
+  color: var(--color-text-light);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.perguntas-conclusao {
+  text-align: center;
+  margin-top: 4rem;
+}
+
+.conclusao-texto {
+  font-size: 2.5rem;
+  color: var(--color-text-light);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.conclusao-texto .highlight-gold {
+  color: var(--color-gold);
+  font-weight: 700;
+}
+
+.conclusao-subtitulo {
+  font-size: 1.3rem;
+  color: var(--color-text-gray);
+  margin-top: 1rem;
+}
+
+@media (max-width: 968px) {
+  .perguntas-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .perguntas-title {
+    font-size: 2.5rem;
+  }
+  
+  .conclusao-texto {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .perguntas-section {
+    padding: 60px 0;
+  }
+  
+  .perguntas-title {
+    font-size: 2rem;
+    margin-bottom: 3rem;
+  }
+  
+  .pergunta-card {
+    padding: 1.5rem;
+  }
+  
+  .pergunta-numero {
+    font-size: 2rem;
+  }
+  
+  .pergunta-texto {
+    font-size: 1rem;
+  }
+  
+  .conclusao-texto {
+    font-size: 1.5rem;
+  }
+  
+  .conclusao-subtitulo {
+    font-size: 1.1rem;
+  }
+}
+

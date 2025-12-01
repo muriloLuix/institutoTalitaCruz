@@ -1,4 +1,5 @@
 import './Biografia.css';
+import fotoProfessora from '../../assets/images/pessoais/fotoProfessoraTalita.jpeg';
 
 const Biografia = () => {
    return (
@@ -6,12 +7,18 @@ const Biografia = () => {
          <div className="container">
             <div className="biografia-content">
                <div className="biografia-image">
-                  <div className="image-placeholder">
-                     <span>Foto da Professora</span>
-                  </div>
+                  <img 
+                     src={fotoProfessora} 
+                     alt="Talita Cruz - Professora de Inglês" 
+                     className="professora-image"
+                  />
                </div>
                <div className="biografia-text">
-                  <h2 className="section-title">Sobre Talita Cruz</h2>
+                  <div className="biografia-badge">
+                     <i className="fas fa-check-circle"></i>
+                     <span>Conheça a professora</span>
+                  </div>
+                  <h2 className="biografia-nome">Talita Cruz</h2>
                   <div className="biografia-description">
                      <p>
                         Com anos de experiência no ensino de inglês, Talita Cruz dedica sua carreira 

@@ -2,7 +2,24 @@
   padding: 100px 0;
   background: var(--color-black);
   position: relative;
+  overflow: hidden;
 }
+
+.loja-section::before {
+  content: '';
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 750px;
+  height: 750px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.14) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(95px);
+  pointer-events: none;
+  z-index: 0;
+}
+
 
 .loja-subtitle {
   text-align: center;
