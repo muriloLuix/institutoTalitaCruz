@@ -400,6 +400,7 @@
   border-radius: 12px;
   color: var(--color-text-light);
   font-size: 1rem;
+  font-family: 'Bricolage Grotesque', sans-serif;
   transition: all 0.3s ease;
 }
 
