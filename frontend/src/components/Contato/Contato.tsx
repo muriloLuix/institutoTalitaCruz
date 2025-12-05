@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './Contato.css';
+import api from '../../config/api';
 
 const Contato = () => {
    const [formData, setFormData] = useState({
@@ -47,11 +48,26 @@ const Contato = () => {
 
    const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
-      // Aqui você fará a chamada para a API do backend
-      // Exemplo: await fetch('http://localhost:8000/api/contato', { method: 'POST', body: JSON.stringify(formData) })
-      console.log('Enviando contato:', formData);
-      alert('Mensagem enviada com sucesso! Entraremos em contato em breve.');
-      setFormData({ nome: '', email: '', telefone: '', mensagem: '' });
+      
+      try {
+         const response = await fetch(api.contato.enviar(), {
+            method: 'POST',
+            headers: {
+               'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+         });
+
+         if (!response.ok) {
+            throw new Error('Erro ao enviar mensagem');
+         }
+
+         alert('Mensagem enviada com sucesso! Entraremos em contato em breve.');
+         setFormData({ nome: '', email: '', telefone: '', mensagem: '' });
+      } catch (error) {
+         console.error('Erro ao enviar contato:', error);
+         alert('Erro ao enviar mensagem. Por favor, tente novamente.');
+      }
    };
 
    return (
