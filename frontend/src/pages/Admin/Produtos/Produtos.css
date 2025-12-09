@@ -17,3 +17,9 @@
   box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
 }
 
+.admin-modal-large {
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+

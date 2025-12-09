@@ -69,6 +69,40 @@
   margin-bottom: 0.25rem;
 }
 
+.contato-link {
+  color: var(--color-text-gray);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contato-link:hover {
+  color: var(--color-gold);
+  text-decoration: underline;
+}
+
+.social-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.social-link {
+  color: var(--color-text-gray);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.social-link:hover {
+  color: var(--color-gold);
+}
+
+.social-link i {
+  font-size: 1.2rem;
+}
+
 .contato-form {
   background: var(--color-dark-gray);
   padding: 2.5rem;

@@ -221,7 +221,7 @@ function DataGrid<T extends { id?: number | string }>({
             </div>
          )}
 
-         <div className="data-grid-table-wrapper">
+         <div className={`data-grid-table-wrapper ${searchTerm || Object.values(filters).some(v => v) ? 'filtering' : ''}`}>
             {loading ? (
                <div className="data-grid-loading">
                   <i className="fas fa-spinner fa-spin"></i>
@@ -270,6 +270,7 @@ function DataGrid<T extends { id?: number | string }>({
                            key={row.id || index}
                            onClick={() => onRowClick && onRowClick(row)}
                            className={onRowClick ? 'clickable' : ''}
+                           style={{ animationDelay: `${index * 0.03}s` }}
                         >
                            {columns.map(column => (
                               <td key={String(column.key)}>

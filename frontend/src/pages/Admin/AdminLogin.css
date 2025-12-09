@@ -160,10 +160,9 @@
 
 .admin-form-options {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .admin-checkbox-label {
@@ -221,20 +220,6 @@
   box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
 }
 
-.admin-forgot-link {
-  background: none;
-  border: none;
-  color: var(--color-gold);
-  font-size: 0.9rem;
-  cursor: pointer;
-  text-decoration: underline;
-  padding: 0;
-  transition: color 0.3s ease;
-}
-
-.admin-forgot-link:hover {
-  color: var(--color-gold-light);
-}
 
 .admin-login-button {
   width: 100%;
@@ -316,9 +301,5 @@
     align-items: flex-start;
   }
 
-  .admin-forgot-link {
-    width: 100%;
-    text-align: left;
-  }
 }
 

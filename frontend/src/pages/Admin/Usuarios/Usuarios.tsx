@@ -1,4 +1,8 @@
 import { useState, useEffect } from 'react';
+import { apiClient } from '../../../utils/apiClient';
+import api from '../../../config/api';
+import { showSuccess, showError } from '../../../utils/swal';
+import ConfirmModal from '../../../components/Admin/ConfirmModal/ConfirmModal';
 import '../shared.css';
 import './Usuarios.css';
 import DataGrid from '../../../components/Admin/DataGrid/DataGrid';
@@ -16,7 +20,11 @@ interface Usuario {
 const Usuarios = () => {
    const [usuarios, setUsuarios] = useState<Usuario[]>([]);
    const [loading, setLoading] = useState(true);
+   const [saving, setSaving] = useState(false);
    const [showModal, setShowModal] = useState(false);
+   const [showDeleteModal, setShowDeleteModal] = useState(false);
+   const [deletingUserId, setDeletingUserId] = useState<number | null>(null);
+   const [deleteLoading, setDeleteLoading] = useState(false);
    const [editingUser, setEditingUser] = useState<Usuario | null>(null);
    const [formData, setFormData] = useState({
       nome: '',
@@ -27,24 +35,76 @@ const Usuarios = () => {
    });
 
    useEffect(() => {
-      // Aqui você fará a chamada para a API do backend
-      // fetch('http://localhost:8000/api/admin/usuarios')
-      // Simulação temporária
-      setUsuarios([
-         { id: 1, nome: 'Admin Principal', email: 'admin@instituto.com', tipo: 'admin', ativo: true, criadoEm: '2024-01-15' },
-         { id: 2, nome: 'Editor 1', email: 'editor1@instituto.com', tipo: 'editor', ativo: true, criadoEm: '2024-02-20' },
-         { id: 3, nome: 'Editor 2', email: 'editor2@instituto.com', tipo: 'editor', ativo: false, criadoEm: '2024-03-01' },
-         { id: 4, nome: 'Admin Secundário', email: 'admin2@instituto.com', tipo: 'admin', ativo: true, criadoEm: '2024-03-05' }
-      ]);
-      setLoading(false);
+      fetchUsuarios();
    }, []);
+
+   const fetchUsuarios = async () => {
+      setLoading(true);
+      try {
+         const data = await apiClient.request<Usuario[]>(api.usuarios.listar());
+         setUsuarios(data);
+      } catch (error) {
+         console.error('Erro ao carregar usuários:', error);
+         showError('Erro!', 'Erro ao carregar usuários. Tente novamente.');
+      } finally {
+         setLoading(false);
+      }
+   };
 
    const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
-      // Chamada para API
-      console.log('Salvar usuário:', formData);
-      setShowModal(false);
-      resetForm();
+      setSaving(true);
+      
+      try {
+         if (editingUser) {
+            // Atualizar usuário
+            const updateData: any = {
+               nome: formData.nome,
+               email: formData.email,
+               tipo: formData.tipo,
+               ativo: formData.ativo,
+            };
+
+            // Só adiciona senha se foi preenchida
+            if (formData.senha && formData.senha.trim() !== '') {
+               updateData.senha = formData.senha;
+            }
+
+            const response = await apiClient.put(api.usuarios.atualizar(editingUser.id), updateData);
+
+            if (!response.ok) {
+               const errorData = await response.json().catch(() => ({}));
+               throw new Error(errorData.message || 'Erro ao atualizar usuário');
+            }
+
+            await showSuccess('Sucesso!', 'Usuário atualizado com sucesso!');
+         } else {
+            // Criar novo usuário
+            const response = await apiClient.post(api.usuarios.criar(), {
+               nome: formData.nome,
+               email: formData.email,
+               senha: formData.senha,
+               tipo: formData.tipo,
+               ativo: formData.ativo,
+            });
+
+            if (!response.ok) {
+               const errorData = await response.json().catch(() => ({}));
+               throw new Error(errorData.message || 'Erro ao criar usuário');
+            }
+
+            await showSuccess('Sucesso!', 'Usuário criado com sucesso!');
+         }
+
+         setShowModal(false);
+         resetForm();
+         fetchUsuarios(); // Recarrega a lista
+      } catch (error: any) {
+         console.error('Erro ao salvar usuário:', error);
+         showError('Erro!', error.message || 'Erro ao salvar usuário. Tente novamente.');
+      } finally {
+         setSaving(false);
+      }
    };
 
    const handleEdit = (usuario: Usuario) => {
@@ -59,11 +119,38 @@ const Usuarios = () => {
       setShowModal(true);
    };
 
-   const handleDelete = async (id: number) => {
-      if (window.confirm('Tem certeza que deseja excluir este usuário?')) {
-         // Chamada para API
-         console.log('Excluir usuário:', id);
+   const handleDeleteClick = (id: number) => {
+      setDeletingUserId(id);
+      setShowDeleteModal(true);
+   };
+
+   const handleDeleteConfirm = async () => {
+      if (!deletingUserId) return;
+      
+      setDeleteLoading(true);
+      try {
+         const response = await apiClient.delete(api.usuarios.deletar(deletingUserId));
+
+         if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Erro ao excluir usuário');
+         }
+
+         await showSuccess('Sucesso!', 'Usuário excluído com sucesso!');
+         setShowDeleteModal(false);
+         setDeletingUserId(null);
+         fetchUsuarios(); // Recarrega a lista
+      } catch (error: any) {
+         console.error('Erro ao excluir usuário:', error);
+         showError('Erro!', error.message || 'Erro ao excluir usuário. Tente novamente.');
+      } finally {
+         setDeleteLoading(false);
       }
+   };
+
+   const handleDeleteCancel = () => {
+      setShowDeleteModal(false);
+      setDeletingUserId(null);
    };
 
    const resetForm = () => {
@@ -148,7 +235,7 @@ const Usuarios = () => {
                   <button className="admin-btn-icon" onClick={(e) => { e.stopPropagation(); handleEdit(usuario); }}>
                      <i className="fas fa-edit"></i>
                   </button>
-                  <button className="admin-btn-icon danger" onClick={(e) => { e.stopPropagation(); handleDelete(usuario.id); }}>
+                  <button className="admin-btn-icon danger" onClick={(e) => { e.stopPropagation(); handleDeleteClick(usuario.id); }}>
                      <i className="fas fa-trash"></i>
                   </button>
                </div>
@@ -156,11 +243,11 @@ const Usuarios = () => {
          />
 
          {showModal && (
-            <div className="admin-modal-overlay" onClick={() => { setShowModal(false); resetForm(); }}>
+            <div className="admin-modal-overlay" onClick={() => { if (!saving) { setShowModal(false); resetForm(); } }}>
                <div className="admin-modal" onClick={(e) => e.stopPropagation()}>
                   <div className="admin-modal-header">
                      <h2>{editingUser ? 'Editar Usuário' : 'Novo Usuário'}</h2>
-                     <button className="admin-modal-close" onClick={() => { setShowModal(false); resetForm(); }}>
+                     <button className="admin-modal-close" onClick={() => { if (!saving) { setShowModal(false); resetForm(); } }} disabled={saving}>
                         <i className="fas fa-times"></i>
                      </button>
                   </div>
@@ -214,17 +301,36 @@ const Usuarios = () => {
                         </label>
                      </div>
                      <div className="admin-modal-actions">
-                        <button type="button" className="admin-btn-secondary" onClick={() => { setShowModal(false); resetForm(); }}>
+                        <button type="button" className="admin-btn-secondary" onClick={() => { if (!saving) { setShowModal(false); resetForm(); } }} disabled={saving}>
                            Cancelar
                         </button>
-                        <button type="submit" className="admin-btn-primary">
-                           {editingUser ? 'Atualizar' : 'Criar'}
+                        <button type="submit" className="admin-btn-primary" disabled={saving}>
+                           {saving ? (
+                              <>
+                                 <i className="fas fa-spinner fa-spin"></i>
+                                 {editingUser ? 'Atualizando...' : 'Criando...'}
+                              </>
+                           ) : (
+                              editingUser ? 'Atualizar' : 'Criar'
+                           )}
                         </button>
                      </div>
                   </form>
                </div>
             </div>
          )}
+
+         <ConfirmModal
+            isOpen={showDeleteModal}
+            onClose={handleDeleteCancel}
+            onConfirm={handleDeleteConfirm}
+            title="Confirmar Exclusão"
+            message="Tem certeza que deseja excluir este usuário? Esta ação não pode ser desfeita."
+            confirmText="Excluir"
+            cancelText="Cancelar"
+            confirmButtonClass="danger"
+            loading={deleteLoading}
+         />
       </div>
    );
 };

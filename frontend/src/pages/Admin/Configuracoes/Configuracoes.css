@@ -124,6 +124,40 @@ textarea.config-input {
   min-height: 100px;
 }
 
+.config-input-password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.config-input-password-wrapper .config-input {
+  padding-right: 3rem;
+}
+
+.config-password-toggle {
+  position: absolute;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  color: var(--color-text-gray);
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+  font-size: 1rem;
+}
+
+.config-password-toggle:hover {
+  color: var(--color-gold);
+}
+
+.config-password-toggle:focus {
+  outline: none;
+  color: var(--color-gold);
+}
+
 @media (max-width: 768px) {
   .admin-config-grid {
     grid-template-columns: 1fr;

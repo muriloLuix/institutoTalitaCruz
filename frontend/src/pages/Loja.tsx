@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams, useLocation } from 'react-router-dom';
+import { useSearchParams, useLocation, useNavigate, Link } from 'react-router-dom';
+import { apiClient } from '../utils/apiClient';
+import api from '../config/api';
+import { useCarrinho } from '../hooks/useCarrinho';
+import { showSuccess } from "../utils/swal/swal.ts";
 import './Loja.css';
 
 interface Produto {
@@ -16,6 +20,7 @@ interface Produto {
 const Loja = () => {
    const [searchParams] = useSearchParams();
    const location = useLocation();
+   const navigate = useNavigate();
    const categoriaFiltro = searchParams.get('categoria');
    const [produtos, setProdutos] = useState<Produto[]>([]);
    const [categoriaSelecionada, setCategoriaSelecionada] = useState<string>(categoriaFiltro || 'todos');
@@ -25,6 +30,7 @@ const Loja = () => {
    const [precoMax, setPrecoMax] = useState<number>(10000);
    const [autoresSelecionados, setAutoresSelecionados] = useState<string[]>([]);
    const [disponibilidadeFiltro, setDisponibilidadeFiltro] = useState<string>('todos');
+   const { adicionarItem, totalItens } = useCarrinho();
 
    const categorias = [
       { id: 'todos', nome: 'Todos os Produtos' },
@@ -44,81 +50,35 @@ const Loja = () => {
    }, [location.pathname]);
 
    useEffect(() => {
-      // Aqui você fará a chamada para a API do backend
-      // Exemplo: fetch('http://localhost:8000/api/produtos')
-      // Por enquanto, usando dados mockados
       const fetchProdutos = async () => {
          setLoading(true);
          try {
-            // Simulação de chamada à API
-            // const response = await fetch('http://localhost:8000/api/produtos');
-            // const data = await response.json();
+            const params = new URLSearchParams();
+            if (categoriaSelecionada !== 'todos') {
+               params.append('categoria', categoriaSelecionada);
+            }
+            if (disponibilidadeFiltro === 'disponivel') {
+               params.append('disponivel', 'true');
+            } else if (disponibilidadeFiltro === 'indisponivel') {
+               params.append('disponivel', 'false');
+            }
+            if (searchTerm) {
+               params.append('search', searchTerm);
+            }
+            if (precoMin > 0) {
+               params.append('preco_min', precoMin.toString());
+            }
+            if (precoMax < 10000) {
+               params.append('preco_max', precoMax.toString());
+            }
+            if (autoresSelecionados.length > 0) {
+               params.append('autor', autoresSelecionados[0]); // API pode aceitar múltiplos
+            }
+
+            const url = `${api.produtos.listar()}${params.toString() ? '?' + params.toString() : ''}`;
+            const data = await apiClient.request<Produto[]>(url, { method: 'GET' }, false);
             
-            // Dados mockados para demonstração
-            const mockProdutos: Produto[] = [
-               {
-                  id: 1,
-                  nome: 'Livro: Inglês para Iniciantes',
-                  descricao: 'Guia completo para começar sua jornada no inglês',
-                  preco: 99.90,
-                  imagem: '',
-                  categoria: 'livros',
-                  disponivel: true,
-                  autor: 'Talita Cruz'
-               },
-               {
-                  id: 2,
-                  nome: 'Mentoria Individual',
-                  descricao: 'Acompanhamento personalizado 1 a 1',
-                  preco: 299.90,
-                  imagem: '',
-                  categoria: 'mentorias',
-                  disponivel: true,
-                  autor: 'Talita Cruz'
-               },
-               {
-                  id: 3,
-                  nome: 'Curso Completo de Inglês',
-                  descricao: 'Curso online com mais de 50 horas de conteúdo',
-                  preco: 499.90,
-                  imagem: '',
-                  categoria: 'cursos',
-                  disponivel: true,
-                  autor: 'Talita Cruz'
-               },
-               {
-                  id: 4,
-                  nome: 'Pacote de Exercícios',
-                  descricao: 'Mais de 200 exercícios práticos',
-                  preco: 49.90,
-                  imagem: '',
-                  categoria: 'materiais',
-                  disponivel: true,
-                  autor: 'Talita Cruz'
-               },
-               {
-                  id: 5,
-                  nome: 'Livro: Pronúncia Perfeita',
-                  descricao: 'Domine a pronúncia do inglês americano',
-                  preco: 129.90,
-                  imagem: '',
-                  categoria: 'livros',
-                  disponivel: true,
-                  autor: 'Maria Silva'
-               },
-               {
-                  id: 6,
-                  nome: 'Curso Avançado de Gramática',
-                  descricao: 'Aprofunde seus conhecimentos gramaticais',
-                  preco: 399.90,
-                  imagem: '',
-                  categoria: 'cursos',
-                  disponivel: false,
-                  autor: 'João Santos'
-               }
-            ];
-            
-            setProdutos(mockProdutos);
+            setProdutos(data);
          } catch (error) {
             console.error('Erro ao carregar produtos:', error);
          } finally {
@@ -127,7 +87,7 @@ const Loja = () => {
       };
 
       fetchProdutos();
-   }, []);
+   }, [categoriaSelecionada, disponibilidadeFiltro, searchTerm, precoMin, precoMax, autoresSelecionados]);
 
    // Calcular preço médio e máximo dos produtos
    const precoMedio = produtos.length > 0
@@ -208,14 +168,45 @@ const Loja = () => {
    };
 
    const handleComprar = (produto: Produto) => {
-      // Aqui você fará a chamada para a API do backend para adicionar ao carrinho
-      // Exemplo: fetch('http://localhost:8000/api/carrinho', { method: 'POST', body: JSON.stringify({ produto_id: produto.id }) })
-      console.log('Adicionando ao carrinho:', produto);
-      alert(`Produto "${produto.nome}" adicionado ao carrinho!`);
+      adicionarItem({
+         id: produto.id,
+         nome: produto.nome,
+         preco: produto.preco,
+         imagem: produto.imagem,
+      });
+      showSuccess('Produto Adicionado!', `Produto "${produto.nome}" adicionado ao carrinho!`);
+   };
+
+   const handleVerDetalhes = (produto: Produto) => {
+      navigate(`/produto/${produto.id}`);
    };
 
    return (
       <div className="loja-page">
+         <Link 
+            to="/carrinho" 
+            className="loja-carrinho-icon"
+            aria-label="Carrinho de compras"
+         >
+            <svg 
+               width="24" 
+               height="24" 
+               viewBox="0 0 24 24" 
+               fill="none" 
+               stroke="currentColor" 
+               strokeWidth="2" 
+               strokeLinecap="round" 
+               strokeLinejoin="round"
+            >
+               <circle cx="9" cy="21" r="1"></circle>
+               <circle cx="20" cy="21" r="1"></circle>
+               <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            {totalItens > 0 && (
+               <span className="loja-carrinho-badge">{totalItens}</span>
+            )}
+         </Link>
+
          <section className="loja-hero">
             <div className="container">
                <h1 className="page-title">Nossa Loja</h1>
@@ -382,7 +373,7 @@ const Loja = () => {
                      ) : (
                         <div className="produtos-grid">
                            {produtosFiltrados.map(produto => (
-                              <div key={produto.id} className="produto-card">
+                              <div key={produto.id} className="produto-card" onClick={() => handleVerDetalhes(produto)} style={{ cursor: 'pointer' }}>
                                  <div className="produto-imagem">
                                     {produto.imagem ? (
                                        <img src={produto.imagem} alt={produto.nome} />
@@ -405,7 +396,10 @@ const Loja = () => {
                                        <span className="produto-preco">{formatPrice(produto.preco)}</span>
                                        <button
                                           className="btn-primary produto-btn"
-                                          onClick={() => handleComprar(produto)}
+                                          onClick={(e) => {
+                                             e.stopPropagation();
+                                             handleComprar(produto);
+                                          }}
                                           disabled={!produto.disponivel}
                                        >
                                           {produto.disponivel ? 'Comprar' : 'Indisponível'}

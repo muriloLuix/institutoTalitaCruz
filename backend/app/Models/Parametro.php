@@ -8,7 +8,7 @@ class Parametro extends Model
 {
    protected $table = 'parametro';
    protected $primaryKey = 'par_id';
-   public $timestamps = false;
+   public $timestamps = true;
 
    protected $fillable = [
       'par_nome',
@@ -17,4 +17,13 @@ class Parametro extends Model
       'par_descricao',
       'par_tipo',
    ];
+
+   /**
+    * Busca um parâmetro pela chave
+    */
+   public static function getByChave(string $chave): ?string
+   {
+      $parametro = self::where('par_chave', $chave)->first();
+      return $parametro ? $parametro->par_valor : null;
+   }
 }

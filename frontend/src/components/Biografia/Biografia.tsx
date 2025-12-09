@@ -1,15 +1,68 @@
-import './Biografia.css';
+import { useState, useEffect } from 'react';
+import { apiClient } from '../../utils/apiClient';
+import api from '../../config/api';
 import fotoProfessora from '../../assets/images/pessoais/fotoProfessoraTalita.jpeg';
+import './Biografia.css';
+
+interface BiografiaData {
+   id: number;
+   nome: string;
+   descricao: string;
+   imagem: string | null;
+   alunos: number;
+   anosExperiencia: number;
+   dedicacao: string;
+}
 
 const Biografia = () => {
+   const [biografia, setBiografia] = useState<BiografiaData | null>(null);
+   const [loading, setLoading] = useState(true);
+
+   useEffect(() => {
+      const fetchBiografia = async () => {
+         setLoading(true);
+         try {
+            const data = await apiClient.request<BiografiaData>(
+               api.biografia.buscar(),
+               { method: 'GET' },
+               false
+            );
+            setBiografia(data);
+         } catch (error) {
+            console.error('Erro ao carregar biografia:', error);
+         } finally {
+            setLoading(false);
+         }
+      };
+
+      fetchBiografia();
+   }, []);
+
+   if (loading) {
+      return (
+         <section className="biografia-section" id="biografia">
+            <div className="container">
+               <p>Carregando...</p>
+            </div>
+         </section>
+      );
+   }
+
+   if (!biografia) {
+      return null;
+   }
+
+   // Divide a descrição em parágrafos (separados por \n\n)
+   const paragrafos = biografia.descricao.split('\n\n').filter(p => p.trim());
+
    return (
       <section className="biografia-section" id="biografia">
          <div className="container">
             <div className="biografia-content">
                <div className="biografia-image">
                   <img 
-                     src={fotoProfessora} 
-                     alt="Talita Cruz - Professora de Inglês" 
+                     src={biografia.imagem || fotoProfessora} 
+                     alt={`${biografia.nome} - Professora de Inglês`} 
                      className="professora-image"
                   />
                </div>
@@ -18,34 +71,23 @@ const Biografia = () => {
                      <i className="fas fa-check-circle"></i>
                      <span>Conheça a professora</span>
                   </div>
-                  <h2 className="biografia-nome">Talita Cruz</h2>
+                  <h2 className="biografia-nome">{biografia.nome}</h2>
                   <div className="biografia-description">
-                     <p>
-                        Com anos de experiência no ensino de inglês, Talita Cruz dedica sua carreira 
-                        a transformar a vida de seus alunos através de um método único e eficaz de aprendizado.
-                     </p>
-                     <p>
-                        Sua paixão pelo ensino e comprometimento com a excelência fazem dela uma das 
-                        coachs mais respeitadas na área, ajudando centenas de pessoas a alcançarem 
-                        fluência no idioma inglês.
-                     </p>
-                     <p>
-                        Através de seus livros, cursos e mentorias, Talita compartilha conhecimento 
-                        e técnicas comprovadas que aceleram o processo de aprendizado, tornando o 
-                        inglês acessível para todos.
-                     </p>
+                     {paragrafos.map((paragrafo, index) => (
+                        <p key={index}>{paragrafo}</p>
+                     ))}
                   </div>
                   <div className="biografia-stats">
                      <div className="stat-item">
-                        <span className="stat-number">500+</span>
+                        <span className="stat-number">{biografia.alunos}+</span>
                         <span className="stat-label">Alunos Formados</span>
                      </div>
                      <div className="stat-item">
-                        <span className="stat-number">10+</span>
+                        <span className="stat-number">{biografia.anosExperiencia}+</span>
                         <span className="stat-label">Anos de Experiência</span>
                      </div>
                      <div className="stat-item">
-                        <span className="stat-number">100%</span>
+                        <span className="stat-number">{biografia.dedicacao}</span>
                         <span className="stat-label">Dedicação</span>
                      </div>
                   </div>

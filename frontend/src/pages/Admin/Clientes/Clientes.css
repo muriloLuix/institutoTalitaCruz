@@ -16,3 +16,41 @@
   box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
 }
 
+.admin-form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.admin-modal-form textarea {
+  width: 100%;
+  padding: 0.875rem;
+  background: var(--color-black);
+  border: 2px solid var(--color-gray);
+  border-radius: 8px;
+  color: var(--color-text-light);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.admin-modal-form textarea:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.admin-subtitle {
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+  opacity: 0.8;
+}
+
+.badge-warning {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+}
+

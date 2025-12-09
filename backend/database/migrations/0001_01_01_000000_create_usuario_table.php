@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('usu_email')->unique();
             $table->timestamp('usu_email_verified_at')->nullable();
             $table->string('usu_password');
+            $table->string('usu_tipo')->default('editor'); // 'admin' ou 'editor'
+            $table->boolean('usu_ativo')->default(true);
             $table->string('usu_remember_token', 100)->nullable();
             $table->timestamp('usu_created_at')->nullable();
             $table->timestamp('usu_updated_at')->nullable();

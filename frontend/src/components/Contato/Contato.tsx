@@ -1,14 +1,30 @@
 import { useState } from 'react';
+import { showSuccess, showError } from '../../utils/swal';
+import { useParametros } from '../../hooks/useParametros';
 import './Contato.css';
 import api from '../../config/api';
 
 const Contato = () => {
+   const { getParametro, loading: parametrosLoading } = useParametros();
+   
    const [formData, setFormData] = useState({
       nome: '',
       email: '',
       telefone: '',
       mensagem: ''
    });
+
+   // Busca os parâmetros de contato
+   const contatoEmail = getParametro('contato_email', 'contato@institutotalitacruz.com.br');
+   const contatoWhatsapp = getParametro('contato_whatsapp', '(00) 00000-0000');
+   const contatoWhatsappNumero = getParametro('contato_whatsapp_numero', '');
+   const contatoHorarioSemana = getParametro('contato_horario_semana', 'Segunda a Sexta: 9h às 18h');
+   const contatoHorarioSabado = getParametro('contato_horario_sabado', 'Sábado: 9h às 13h');
+
+   // Cria o link do WhatsApp se o número estiver disponível
+   const whatsappLink = contatoWhatsappNumero 
+      ? `https://wa.me/${contatoWhatsappNumero}` 
+      : '#';
 
    const formatPhone = (value: string) => {
       // Remove tudo que não é número
@@ -62,11 +78,11 @@ const Contato = () => {
             throw new Error('Erro ao enviar mensagem');
          }
 
-         alert('Mensagem enviada com sucesso! Entraremos em contato em breve.');
+         showSuccess('Mensagem Enviada!', 'Mensagem enviada com sucesso! Entraremos em contato em breve.');
          setFormData({ nome: '', email: '', telefone: '', mensagem: '' });
       } catch (error) {
          console.error('Erro ao enviar contato:', error);
-         alert('Erro ao enviar mensagem. Por favor, tente novamente.');
+         showError('Erro!', 'Erro ao enviar mensagem. Por favor, tente novamente.');
       }
    };
 
@@ -80,36 +96,55 @@ const Contato = () => {
             
             <div className="contato-content">
                <div className="contato-info">
-                  <div className="info-item">
-                     <div className="info-icon">
-                        <i className="fas fa-envelope"></i>
+                  {contatoEmail && (
+                     <div className="info-item">
+                        <div className="info-icon">
+                           <i className="fas fa-envelope"></i>
+                        </div>
+                        <div className="info-text">
+                           <h3>E-mail</h3>
+                           <p>
+                              <a href={`mailto:${contatoEmail}`} className="contato-link">
+                                 {contatoEmail}
+                              </a>
+                           </p>
+                        </div>
                      </div>
-                     <div className="info-text">
-                        <h3>E-mail</h3>
-                        <p>contato@institutotalitacruz.com.br</p>
-                     </div>
-                  </div>
+                  )}
                   
-                  <div className="info-item">
-                     <div className="info-icon">
-                        <i className="fab fa-whatsapp"></i>
+                  {contatoWhatsapp && (
+                     <div className="info-item">
+                        <div className="info-icon">
+                           <i className="fab fa-whatsapp"></i>
+                        </div>
+                        <div className="info-text">
+                           <h3>WhatsApp</h3>
+                           <p>
+                              <a 
+                                 href={whatsappLink} 
+                                 target="_blank" 
+                                 rel="noopener noreferrer"
+                                 className="contato-link"
+                              >
+                                 {contatoWhatsapp}
+                              </a>
+                           </p>
+                        </div>
                      </div>
-                     <div className="info-text">
-                        <h3>WhatsApp</h3>
-                        <p>(00) 00000-0000</p>
-                     </div>
-                  </div>
+                  )}
                   
-                  <div className="info-item">
-                     <div className="info-icon">
-                        <i className="fas fa-clock"></i>
+                  {(contatoHorarioSemana || contatoHorarioSabado) && (
+                     <div className="info-item">
+                        <div className="info-icon">
+                           <i className="fas fa-clock"></i>
+                        </div>
+                        <div className="info-text">
+                           <h3>Horário de Atendimento</h3>
+                           {contatoHorarioSemana && <p>{contatoHorarioSemana}</p>}
+                           {contatoHorarioSabado && <p>{contatoHorarioSabado}</p>}
+                        </div>
                      </div>
-                     <div className="info-text">
-                        <h3>Horário de Atendimento</h3>
-                        <p>Segunda a Sexta: 9h às 18h</p>
-                        <p>Sábado: 9h às 13h</p>
-                     </div>
-                  </div>
+                  )}
                </div>
                
                <form className="contato-form" onSubmit={handleSubmit}>

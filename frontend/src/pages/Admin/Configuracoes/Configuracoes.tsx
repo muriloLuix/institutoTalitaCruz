@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react';
+import { apiClient } from '../../../utils/apiClient';
+import api from '../../../config/api';
+import { showSuccess, showError } from '../../../utils/swal';
 import '../shared.css';
 import './Configuracoes.css';
 
 interface Configuracao {
-   id: string;
+   id: number;
    nome: string;
    valor: string;
-   tipo: 'text' | 'email' | 'url' | 'textarea';
+   tipo: 'text' | 'email' | 'url' | 'textarea' | 'password';
    descricao: string;
    categoria: 'geral' | 'contato' | 'integracoes' | 'redes-sociais';
+   chave: string;
 }
 
 const Configuracoes = () => {
@@ -16,51 +20,248 @@ const Configuracoes = () => {
    const [loading, setLoading] = useState(true);
    const [saving, setSaving] = useState(false);
    const [activeTab, setActiveTab] = useState<'geral' | 'contato' | 'integracoes' | 'redes-sociais'>('geral');
+   const [showPasswords, setShowPasswords] = useState<{ [key: number]: boolean }>({});
 
    useEffect(() => {
-      // Aqui você fará a chamada para a API do backend
-      // fetch('http://localhost:8000/api/admin/configuracoes')
-      // Simulação temporária
-      setConfiguracoes([
-         // Geral
-         { id: 'nome_site', nome: 'Nome do Site', valor: 'Instituto Talita Cruz', tipo: 'text', descricao: 'Nome exibido no site', categoria: 'geral' },
-         { id: 'descricao_site', nome: 'Descrição do Site', valor: 'Aprenda inglês com excelência', tipo: 'textarea', descricao: 'Descrição breve do site', categoria: 'geral' },
-         { id: 'logo_url', nome: 'URL da Logo', valor: '', tipo: 'url', descricao: 'URL da logo principal do site', categoria: 'geral' },
-         
-         // Contato
-         { id: 'email_contato', nome: 'E-mail de Contato', valor: 'contato@institutotalitacruz.com.br', tipo: 'email', descricao: 'E-mail exibido na seção de contato', categoria: 'contato' },
-         { id: 'whatsapp', nome: 'WhatsApp', valor: '(00) 00000-0000', tipo: 'text', descricao: 'Número do WhatsApp exibido no site', categoria: 'contato' },
-         { id: 'telefone', nome: 'Telefone', valor: '(00) 0000-0000', tipo: 'text', descricao: 'Telefone de contato', categoria: 'contato' },
-         { id: 'horario_atendimento', nome: 'Horário de Atendimento', valor: 'Segunda a Sexta: 9h às 18h\nSábado: 9h às 13h', tipo: 'textarea', descricao: 'Horário de atendimento exibido no site', categoria: 'contato' },
-         { id: 'endereco', nome: 'Endereço', valor: '', tipo: 'textarea', descricao: 'Endereço físico (se houver)', categoria: 'contato' },
-         
-         // Integrações
-         { id: 'video_url', nome: 'URL do Vídeo', valor: '', tipo: 'url', descricao: 'URL do vídeo de apresentação (YouTube ou outro)', categoria: 'integracoes' },
-         { id: 'hotmart_url', nome: 'URL do Hotmart', valor: '', tipo: 'url', descricao: 'Link para a página do Hotmart', categoria: 'integracoes' },
-         { id: 'chat_api_key', nome: 'Chave da API do Chat', valor: '', tipo: 'text', descricao: 'Chave de API para integração do chat', categoria: 'integracoes' },
-         
-         // Redes Sociais
-         { id: 'facebook_url', nome: 'Facebook', valor: '', tipo: 'url', descricao: 'URL do perfil/página do Facebook', categoria: 'redes-sociais' },
-         { id: 'instagram_url', nome: 'Instagram', valor: '', tipo: 'url', descricao: 'URL do perfil do Instagram', categoria: 'redes-sociais' },
-         { id: 'youtube_url', nome: 'YouTube', valor: '', tipo: 'url', descricao: 'URL do canal do YouTube', categoria: 'redes-sociais' },
-         { id: 'linkedin_url', nome: 'LinkedIn', valor: '', tipo: 'url', descricao: 'URL do perfil do LinkedIn', categoria: 'redes-sociais' }
-      ]);
-      setLoading(false);
+      const fetchConfiguracoes = async () => {
+         try {
+            const data = await apiClient.request<Configuracao[]>(api.parametros.listarAdmin());
+            
+            // Função auxiliar para formatar telefone
+            const formatPhoneOnLoad = (value: string, chave: string): string => {
+               if (!value) return value;
+               
+               // Se já está formatado, retorna como está
+               if (value.includes('(') && value.includes(')')) {
+                  return value;
+               }
+               
+               // Remove tudo que não é número
+               const numbers = value.replace(/\D/g, '');
+               
+               if (chave === 'contato_whatsapp') {
+                  // WhatsApp sempre é celular: (00) 00000-0000
+                  return numbers
+                     .replace(/(\d{2})(\d)/, '($1) $2')
+                     .replace(/(\d{5})(\d)/, '$1-$2');
+               } else if (chave === 'contato_telefone') {
+                  // Telefone fixo ou celular
+                  if (numbers.length <= 10) {
+                     // Telefone fixo: (00) 0000-0000
+                     return numbers
+                        .replace(/(\d{2})(\d)/, '($1) $2')
+                        .replace(/(\d{4})(\d)/, '$1-$2');
+                  } else {
+                     // Celular: (00) 00000-0000
+                     return numbers
+                        .replace(/(\d{2})(\d)/, '($1) $2')
+                        .replace(/(\d{5})(\d)/, '$1-$2');
+                  }
+               }
+               
+               return value;
+            };
+
+            // Mapeia os dados da API para o formato esperado
+            const configuracoesMapeadas = data.map((param: any) => {
+               // Determina o tipo baseado na chave ou descrição
+               let tipo: 'text' | 'email' | 'url' | 'textarea' | 'password' = 'text';
+               
+               // Detecta campos de API Key e Secret (tipo password)
+               if (param.chave.includes('api_key') || 
+                   param.chave.includes('api_secret') || 
+                   param.chave.includes('webhook_secret') ||
+                   param.chave.includes('secret') ||
+                   param.descricao.toLowerCase().includes('secret') ||
+                   param.descricao.toLowerCase().includes('chave de api')) {
+                  tipo = 'password';
+               } else if (param.chave.includes('url') || param.chave.includes('_url')) {
+                  tipo = 'url';
+               } else if (param.chave.includes('email')) {
+                  tipo = 'email';
+               } else if (param.descricao.toLowerCase().includes('descrição') || param.chave.includes('descricao')) {
+                  tipo = 'textarea';
+               }
+
+               // Determina a categoria baseado no tipo do parâmetro
+               let categoria: 'geral' | 'contato' | 'integracoes' | 'redes-sociais' = 'geral';
+               if (param.tipo === 'geral') categoria = 'geral';
+               else if (param.tipo === 'contato') categoria = 'contato';
+               else if (param.tipo === 'integracoes') categoria = 'integracoes';
+               else if (param.tipo === 'redes-sociais') categoria = 'redes-sociais';
+
+               // Formata valores de telefone e WhatsApp ao carregar
+               let valorFormatado = param.valor || '';
+               if (param.chave === 'contato_whatsapp' || param.chave === 'contato_telefone') {
+                  valorFormatado = formatPhoneOnLoad(valorFormatado, param.chave);
+               }
+
+               return {
+                  id: param.id,
+                  nome: param.nome,
+                  valor: valorFormatado,
+                  tipo,
+                  descricao: param.descricao,
+                  categoria,
+                  chave: param.chave,
+               };
+            });
+
+            // Ordena as configurações: na categoria "geral", Nome do Site vem antes de Descrição do Site
+            const configuracoesOrdenadas = configuracoesMapeadas.sort((a, b) => {
+               // Se ambas são da categoria "geral", ordena por chave específica
+               if (a.categoria === 'geral' && b.categoria === 'geral') {
+                  const ordemGeral = ['site_nome', 'site_descricao', 'site_logo_url', 'site_favicon_url'];
+                  const indexA = ordemGeral.indexOf(a.chave);
+                  const indexB = ordemGeral.indexOf(b.chave);
+                  
+                  // Se ambas estão na lista de ordem, usa a ordem definida
+                  if (indexA !== -1 && indexB !== -1) {
+                     return indexA - indexB;
+                  }
+                  // Se apenas uma está na lista, ela vem primeiro
+                  if (indexA !== -1) return -1;
+                  if (indexB !== -1) return 1;
+               }
+               
+               // Para outras categorias ou se não está na lista, mantém ordem original
+               return 0;
+            });
+
+            setConfiguracoes(configuracoesOrdenadas);
+         } catch (error) {
+            console.error('Erro ao carregar configurações:', error);
+         } finally {
+            setLoading(false);
+         }
+      };
+
+      fetchConfiguracoes();
    }, []);
 
-   const handleChange = (id: string, valor: string) => {
-      setConfiguracoes(configuracoes.map(c => c.id === id ? { ...c, valor } : c));
+   // Função para formatar telefone (fixo ou celular)
+   const formatPhone = (value: string): string => {
+      // Remove tudo que não é número
+      const numbers = value.replace(/\D/g, '');
+      
+      // Aplica a máscara conforme o tamanho
+      if (numbers.length <= 10) {
+         // Telefone fixo: (00) 0000-0000
+         return numbers
+            .replace(/(\d{2})(\d)/, '($1) $2')
+            .replace(/(\d{4})(\d)/, '$1-$2');
+      } else {
+         // Celular: (00) 00000-0000
+         return numbers
+            .replace(/(\d{2})(\d)/, '($1) $2')
+            .replace(/(\d{5})(\d)/, '$1-$2');
+      }
+   };
+
+   // Função para formatar WhatsApp (celular)
+   const formatWhatsApp = (value: string): string => {
+      // Remove tudo que não é número
+      const numbers = value.replace(/\D/g, '');
+      
+      // WhatsApp sempre é celular: (00) 00000-0000
+      return numbers
+         .replace(/(\d{2})(\d)/, '($1) $2')
+         .replace(/(\d{5})(\d)/, '$1-$2');
+   };
+
+   const handleChange = (id: number, valor: string, chave?: string) => {
+      // Aplica máscara para campos de telefone e WhatsApp
+      let valorFormatado = valor;
+      
+      if (chave === 'contato_whatsapp') {
+         // Aplica máscara de WhatsApp
+         valorFormatado = formatWhatsApp(valor);
+      } else if (chave === 'contato_telefone') {
+         // Aplica máscara de telefone
+         valorFormatado = formatPhone(valor);
+      }
+      
+      setConfiguracoes(configuracoes.map(c => c.id === id ? { ...c, valor: valorFormatado } : c));
    };
 
    const handleSave = async () => {
       setSaving(true);
-      // Chamada para API
-      // await fetch('http://localhost:8000/api/admin/configuracoes', { method: 'PUT', body: JSON.stringify(configuracoes) })
-      console.log('Salvar configurações:', configuracoes);
-      setTimeout(() => {
+      try {
+         // Prepara os dados para enviar (apenas os da aba atual)
+         // Filtra apenas parâmetros que têm ID válido e valor definido (pode ser string vazia)
+         const parametrosParaSalvar = configuracoesFiltradas
+            .filter(config => {
+               // Verifica se tem ID válido
+               if (!config.id || isNaN(Number(config.id))) {
+                  return false;
+               }
+               // Verifica se o valor não é null ou undefined (string vazia é permitida)
+               if (config.valor === null || config.valor === undefined) {
+                  return false;
+               }
+               return true;
+            })
+            .map(config => ({
+               id: Number(config.id), // Garante que é um número
+               valor: String(config.valor ?? ''), // Garante que valor é sempre uma string (null vira '')
+            }));
+
+         // Valida se há parâmetros para salvar
+         if (parametrosParaSalvar.length === 0) {
+            await showError('Atenção!', 'Não há configurações para salvar nesta aba.');
+            return;
+         }
+
+         const response = await apiClient.put(api.parametros.atualizarMuitos(), {
+            parametros: parametrosParaSalvar,
+         });
+
+         // Verifica se a resposta foi bem-sucedida
+         if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            
+            // Trata erros de validação do Laravel
+            let errorMessage = 'Erro ao salvar configurações';
+            
+            if (errorData.errors) {
+               // Erros de validação do Laravel vêm no formato { campo: [mensagens] }
+               const validationErrors = Object.values(errorData.errors).flat() as string[];
+               errorMessage = validationErrors.join(', ') || errorMessage;
+            } else if (errorData.message) {
+               errorMessage = errorData.message;
+            }
+            
+            await showError('Erro de Validação!', errorMessage);
+            return;
+         }
+
+         const data = await response.json();
+         
+         // Verifica se há erros na resposta
+         if (data.erros && data.erros.length > 0) {
+            await showError('Atenção!', `Alguns parâmetros não puderam ser salvos: ${data.erros.join(', ')}`);
+         } else {
+            await showSuccess('Sucesso!', data.message || 'Configurações salvas com sucesso!');
+         }
+         
+         // Recarrega a página para aplicar as mudanças
+         window.location.reload();
+      } catch (error: any) {
+         console.error('Erro ao salvar configurações:', error);
+         
+         // Trata diferentes tipos de erro
+         let errorMessage = 'Erro ao salvar configurações. Tente novamente.';
+         
+         if (error.message) {
+            errorMessage = error.message;
+         } else if (typeof error === 'string') {
+            errorMessage = error;
+         }
+         
+         showError('Erro!', errorMessage);
+      } finally {
          setSaving(false);
-         alert('Configurações salvas com sucesso!');
-      }, 1000);
+      }
    };
 
    const configuracoesFiltradas = configuracoes.filter(c => c.categoria === activeTab);
@@ -122,18 +323,48 @@ const Configuracoes = () => {
                               {config.tipo === 'textarea' ? (
                                  <textarea
                                     value={config.valor}
-                                    onChange={(e) => handleChange(config.id, e.target.value)}
+                                    onChange={(e) => handleChange(config.id, e.target.value, config.chave)}
                                     rows={4}
                                     className="config-input"
                                  />
                               ) : (
-                                 <input
-                                    type={config.tipo}
-                                    value={config.valor}
-                                    onChange={(e) => handleChange(config.id, e.target.value)}
-                                    className="config-input"
-                                    placeholder={config.tipo === 'url' ? 'https://...' : ''}
-                                 />
+                                 <div className={config.tipo === 'password' ? 'config-input-password-wrapper' : ''}>
+                                    <input
+                                       type={
+                                          config.tipo === 'password' 
+                                             ? (showPasswords[config.id] ? 'text' : 'password')
+                                             : config.tipo
+                                       }
+                                       value={config.valor}
+                                       onChange={(e) => handleChange(config.id, e.target.value, config.chave)}
+                                       className="config-input"
+                                       placeholder={
+                                          config.tipo === 'url' ? 'https://...' :
+                                          config.chave === 'contato_whatsapp' ? '(00) 00000-0000' :
+                                          config.chave === 'contato_telefone' ? '(00) 0000-0000' :
+                                          config.tipo === 'password' ? '••••••••••••' :
+                                          ''
+                                       }
+                                       maxLength={
+                                          config.chave === 'contato_whatsapp' ? 15 : // (00) 00000-0000
+                                          config.chave === 'contato_telefone' ? 14 : // (00) 0000-0000
+                                          undefined
+                                       }
+                                    />
+                                    {config.tipo === 'password' && (
+                                       <button
+                                          type="button"
+                                          className="config-password-toggle"
+                                          onClick={() => setShowPasswords(prev => ({
+                                             ...prev,
+                                             [config.id]: !prev[config.id]
+                                          }))}
+                                          title={showPasswords[config.id] ? 'Ocultar senha' : 'Mostrar senha'}
+                                       >
+                                          <i className={`fas ${showPasswords[config.id] ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                                       </button>
+                                    )}
+                                 </div>
                               )}
                            </div>
                         </div>

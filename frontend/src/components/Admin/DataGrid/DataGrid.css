@@ -159,6 +159,22 @@
   background: var(--color-black);
   border: 2px solid var(--color-gray);
   border-radius: 8px;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
 }
 
 .data-grid-filter-item {
@@ -194,6 +210,11 @@
 .data-grid-table-wrapper {
   overflow-x: auto;
   border-radius: 8px;
+  transition: opacity 0.2s ease;
+}
+
+.data-grid-table-wrapper.filtering {
+  opacity: 0.8;
 }
 
 .data-grid-table {
@@ -252,11 +273,24 @@
 }
 
 .data-grid-table tbody tr {
-  transition: background 0.2s ease;
+  transition: all 0.3s ease;
+  animation: fadeInRow 0.3s ease;
+}
+
+@keyframes fadeInRow {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .data-grid-table tbody tr:hover {
   background: rgba(212, 175, 55, 0.05);
+  transform: translateX(2px);
 }
 
 .data-grid-table tbody tr.clickable {
