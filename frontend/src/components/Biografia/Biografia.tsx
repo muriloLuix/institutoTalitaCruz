@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { apiClient } from '../../utils/apiClient';
 import api from '../../config/api';
-import fotoProfessora from '../../assets/images/pessoais/fotoProfessoraTalita.jpeg';
+import fotoProfessora from '../../assets/images/pessoais/fotoEmPe.jpg';
 import './Biografia.css';
 
 interface BiografiaData {
@@ -62,14 +62,14 @@ const Biografia = () => {
                <div className="biografia-image">
                   <img 
                      src={biografia.imagem || fotoProfessora} 
-                     alt={`${biografia.nome} - Professora de Inglês`} 
+                     alt={`${biografia.nome} - Fundadora do Instituto Talita Cruz`} 
                      className="professora-image"
                   />
                </div>
                <div className="biografia-text">
                   <div className="biografia-badge">
                      <i className="fas fa-check-circle"></i>
-                     <span>Conheça a professora</span>
+                     <span>Conheça a CEO</span>
                   </div>
                   <h2 className="biografia-nome">{biografia.nome}</h2>
                   <div className="biografia-description">

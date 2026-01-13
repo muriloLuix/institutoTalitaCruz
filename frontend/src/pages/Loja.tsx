@@ -211,7 +211,8 @@ const Loja = () => {
             <div className="container">
                <h1 className="page-title">Nossa Loja</h1>
                <p className="page-subtitle">
-                  Descubra nossos produtos exclusivos e transforme seu aprendizado de inglês
+                  Descubra nossos produtos exclusivos: cursos de inglês, inglês business, pacotes terapêuticos, 
+                  mentorias e muito mais para transformar sua vida pessoal e profissional
                </p>
             </div>
          </section>

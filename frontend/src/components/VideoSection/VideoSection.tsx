@@ -6,8 +6,9 @@ const VideoSection = () => {
    
    // URL do vídeo - será substituída pelo link real do YouTube ou vídeo baixado
    // Para YouTube: use o formato https://www.youtube.com/embed/VIDEO_ID
-   // Para vídeo local: use o caminho relativo, ex: /videos/apresentacao.mp4
-   const videoUrl = ''; // Aqui você colocará o link do YouTube ou caminho do vídeo
+   // Para vídeo local: use o caminho completo para o backend que serve o arquivo
+   // Ajuste o host/porta se seu backend não estiver em http://localhost:8000
+   const videoUrl = 'http://localhost:8000/videos/apresentacao.mp4'; // Aqui você colocará o link do YouTube ou caminho do vídeo
    const isYouTube = videoUrl ? (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) : false;
 
    const handlePlay = () => {

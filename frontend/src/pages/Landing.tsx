@@ -3,6 +3,8 @@ import { useLocation } from 'react-router-dom';
 import backgroundInicial from '../assets/images/pessoais/backgroundInicial.png';
 import VideoSection from '../components/VideoSection';
 import HotmartSection from '../components/HotmartSection';
+import ApresentacaoSection from '../components/ApresentacaoSection';
+import BonusSection from '../components/BonusSection';
 import LojaSection from '../components/LojaSection';
 import PerguntasSection from '../components/PerguntasSection';
 import PublicoAlvoSection from '../components/PublicoAlvoSection';
@@ -48,20 +50,20 @@ const Landing = () => {
             <div className="container">
                <div className="hero-content">
                   <h1 className="hero-title">
-                     Transforme seu <span className="highlight">Inglês</span> com
+                     Transforme sua <span className="highlight">Vida</span> com
                      <br />
                      <span className="highlight-gold">Talita Cruz</span>
                   </h1>
                   <p className="hero-subtitle">
-                     Método exclusivo e comprovado para você dominar o inglês de forma prática, 
-                     eficiente e definitiva. Comece sua jornada hoje mesmo!
+                     Portal completo com cursos de inglês, pacotes terapêuticos, inglês business, 
+                     produtos exclusivos e mentorias. Desenvolva suas habilidades e transforme sua vida hoje mesmo!
                   </p>
                   <div className="hero-buttons">
                      <a href="#hotmart" className="btn-primary" onClick={(e) => handleHashLink('#hotmart', e)}>
                         Ver Produtos
                      </a>
                      <a href="#biografia" className="btn-secondary" onClick={(e) => handleHashLink('#biografia', e)}>
-                        Conheça a Professora
+                        Conheça a CEO
                      </a>
                   </div>
                </div>
@@ -75,6 +77,8 @@ const Landing = () => {
 
          <VideoSection />
          <HotmartSection />
+         <ApresentacaoSection />
+         <BonusSection />
          <LojaSection />
          <PerguntasSection />
          <PublicoAlvoSection />

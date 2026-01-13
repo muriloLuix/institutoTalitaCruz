@@ -3,11 +3,16 @@ import Footer from './components/Footer';
 import Chat from './components/Chat';
 import ScrollToTop from './components/ScrollToTop';
 import BackToHome from './components/BackToHome';
+import TopBanner from './components/TopBanner';
 import ParametrosUpdater from './components/Parametros/ParametrosUpdater';
 import Landing from './pages/Landing';
 import Loja from './pages/Loja';
 import ProdutoDetalhes from './pages/ProdutoDetalhes';
 import Carrinho from './pages/Carrinho';
+import Equipe from './pages/Equipe';
+import Mentorias from './pages/Mentorias';
+import PacotesTerapeuticos from './pages/PacotesTerapeuticos';
+import InglesBusiness from './pages/InglesBusiness';
 import { AdminLogin, ForgotPassword } from './pages/Admin';
 import AdminLayout from './pages/Admin/Layout/AdminLayout';
 import AdminDashboard from './pages/Admin/Dashboard/AdminDashboard';
@@ -45,12 +50,17 @@ function AppContent() {
   return (
     <div className="App">
         <ParametrosUpdater />
+        <TopBanner />
         <main className="main-content">
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/loja" element={<Loja />} />
             <Route path="/produto/:id" element={<ProdutoDetalhes />} />
             <Route path="/carrinho" element={<Carrinho />} />
+            <Route path="/equipe" element={<Equipe />} />
+            <Route path="/mentorias" element={<Mentorias />} />
+            <Route path="/pacotes-terapeuticos" element={<PacotesTerapeuticos />} />
+            <Route path="/ingles-business" element={<InglesBusiness />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/recuperar-senha" element={<ForgotPassword />} />
             <Route path="/admin" element={

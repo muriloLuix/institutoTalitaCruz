@@ -57,15 +57,16 @@ const HotmartSection = () => {
          <div className="container">
             <div className="hotmart-content">
                <div className="hotmart-text">
-                  <h2 className="section-title">Livros e Cursos Exclusivos</h2>
+                  <h2 className="section-title">Produtos e Cursos Exclusivos</h2>
                   <p className="hotmart-description">
-                     Descubra os livros e cursos desenvolvidos especialmente para você dominar o inglês de forma prática e eficiente.
+                     Descubra nossa coleção completa: cursos de inglês, inglês business, pacotes terapêuticos, 
+                     livros, mentorias e muito mais. Desenvolvidos especialmente para sua transformação pessoal e profissional.
                   </p>
                   <ul className="hotmart-benefits">
                      <li><i className="fas fa-check"></i> Material exclusivo e atualizado</li>
-                     <li><i className="fas fa-check"></i> Método comprovado de ensino</li>
+                     <li><i className="fas fa-check"></i> Métodos comprovados de ensino e desenvolvimento</li>
                      <li><i className="fas fa-check"></i> Acesso imediato após a compra</li>
-                     <li><i className="fas fa-check"></i> Suporte completo durante o aprendizado</li>
+                     <li><i className="fas fa-check"></i> Suporte completo durante sua jornada</li>
                   </ul>
                   <button className="btn-primary hotmart-button" onClick={handleClick}>
                      Ver Produtos no Hotmart
