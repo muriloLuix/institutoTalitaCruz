@@ -10,11 +10,13 @@ use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\ProdutoImagemController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\BiografiaController;
+use App\Http\Controllers\ConteudoController;
 
 // Rotas públicas
 Route::post('/admin/login', [AdminController::class, 'login']);
 Route::post('/contato', [ContatoController::class, 'enviar']);
 Route::get('/parametros', [ParametroController::class, 'index']);
+Route::get('/parametros/many', [ParametroController::class, 'showMany']); // Deve vir antes da rota com parâmetro dinâmico
 Route::get('/parametros/{chave}', [ParametroController::class, 'show']);
 
 // Rotas públicas de produtos
@@ -33,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
    
    // Rotas de parâmetros (admin)
    Route::get('/admin/parametros', [ParametroController::class, 'list']);
+   Route::post('/admin/parametros', [ParametroController::class, 'store']);
    Route::put('/admin/parametros/{id}', [ParametroController::class, 'update']);
    Route::put('/admin/parametros', [ParametroController::class, 'updateMany']);
    
@@ -75,6 +78,12 @@ Route::middleware('auth:sanctum')->group(function () {
    // Rotas de Biografia (admin)
    Route::get('/admin/biografia', [BiografiaController::class, 'showAdmin']);
    Route::put('/admin/biografia/{id}', [BiografiaController::class, 'update']);
+   
+   // Rotas de Conteúdo (admin)
+   Route::post('/admin/conteudo/hotmart-background', [ConteudoController::class, 'uploadHotmartBackground']);
+   Route::delete('/admin/conteudo/hotmart-background', [ConteudoController::class, 'removeHotmartBackground']);
+   Route::post('/admin/conteudo/bonus-card-background', [ConteudoController::class, 'uploadBonusCardBackground']);
+   Route::delete('/admin/conteudo/bonus-card-background', [ConteudoController::class, 'removeBonusCardBackground']);
 });
 
 ?>

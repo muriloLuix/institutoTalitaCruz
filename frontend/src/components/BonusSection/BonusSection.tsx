@@ -1,49 +1,63 @@
 import { useState } from 'react';
+import { useParametros } from '../../hooks/useParametros';
 import fotoEmPeComLivro from '../../assets/images/pessoais/fotoEmPeComLivro.jpg';
 import fotoEmPeOlhandoEsquerda from '../../assets/images/pessoais/fotoEmPeOlhandoEsquerda.jpg';
 import './BonusSection.css';
 
 const BonusSection = () => {
    const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+   const { getParametro } = useParametros();
+
+   // Buscar dados dos cards de bônus dos parâmetros
+   const card1Icon = getParametro('bonus_card_1_icon', 'fas fa-heart');
+   const card1Titulo = getParametro('bonus_card_1_titulo', 'Sessão Cortesia de Terapia');
+   const card1Subtitulo = getParametro('bonus_card_1_subtitulo', 'Triagem Gratuita');
+   const card1Descricao = getParametro('bonus_card_1_descricao', 'Agende sua sessão de triagem gratuita e descubra como podemos ajudar você a transformar suas dores em propósito.');
+   const card1Features = getParametro('bonus_card_1_features', 'Avaliação personalizada,Identificação de necessidades,Plano de ação inicial').split(',').map(f => f.trim()).filter(f => f);
+   const card1Cta = getParametro('bonus_card_1_cta', 'Agendar Triagem');
+   const card1Link = getParametro('bonus_card_1_link', '');
+   const card1BackgroundImage = getParametro('bonus_card_1_background_image', '');
+
+   const card2Icon = getParametro('bonus_card_2_icon', 'fas fa-graduation-cap');
+   const card2Titulo = getParametro('bonus_card_2_titulo', 'Aula Demonstrativa');
+   const card2Subtitulo = getParametro('bonus_card_2_subtitulo', 'Experimente Grátis');
+   const card2Descricao = getParametro('bonus_card_2_descricao', 'Participe de uma aula demonstrativa e conheça nossos métodos exclusivos de ensino, desenvolvimento pessoal e profissional de forma prática e eficiente.');
+   const card2Features = getParametro('bonus_card_2_features', 'Métodos exclusivos,Aula interativa,Material didático incluso').split(',').map(f => f.trim()).filter(f => f);
+   const card2Cta = getParametro('bonus_card_2_cta', 'Agendar Aula Demo');
+   const card2Link = getParametro('bonus_card_2_link', 'https://docs.google.com/forms/d/1goBfn0K-LbkGl9s8VHErvu3-xJ0AWP2GHZb9uKxTH80/edit');
+   const card2BackgroundImage = getParametro('bonus_card_2_background_image', '');
 
    const bonuses = [
       {
          id: 1,
-         icon: 'fas fa-heart',
-         title: 'Sessão Cortesia de Terapia',
-         subtitle: 'Triagem Gratuita',
-         description: 'Agende sua sessão de triagem gratuita e descubra como podemos ajudar você a transformar suas dores em propósito.',
-         features: [
-            'Avaliação personalizada',
-            'Identificação de necessidades',
-            'Plano de ação inicial'
-         ],
-         cta: 'Agendar Triagem',
+         icon: card1Icon,
+         title: card1Titulo,
+         subtitle: card1Subtitulo,
+         description: card1Descricao,
+         features: card1Features,
+         cta: card1Cta,
+         link: card1Link,
+         backgroundImage: card1BackgroundImage || fotoEmPeComLivro,
          gradient: 'linear-gradient(135deg, #d4af37 0%, #f4d03f 50%, #d4af37 100%)'
       },
       {
          id: 2,
-         icon: 'fas fa-graduation-cap',
-         title: 'Aula Demonstrativa',
-         subtitle: 'Experimente Grátis',
-         description: 'Participe de uma aula demonstrativa e conheça nossos métodos exclusivos de ensino, desenvolvimento pessoal e profissional de forma prática e eficiente.',
-         features: [
-            'Métodos exclusivos',
-            'Aula interativa',
-            'Material didático incluso'
-         ],
-         cta: 'Agendar Aula Demo',
+         icon: card2Icon,
+         title: card2Titulo,
+         subtitle: card2Subtitulo,
+         description: card2Descricao,
+         features: card2Features,
+         cta: card2Cta,
+         link: card2Link,
+         backgroundImage: card2BackgroundImage || fotoEmPeOlhandoEsquerda,
          gradient: 'linear-gradient(135deg, #f4d03f 0%, #d4af37 50%, #f4d03f 100%)'
       }
    ];
 
    const handleCardClick = (bonusId: number) => {
-      if (bonusId === 2) {
-         // Card de Aula Demonstrativa - redireciona para o teste de nivelamento
-         window.open('https://docs.google.com/forms/d/1goBfn0K-LbkGl9s8VHErvu3-xJ0AWP2GHZb9uKxTH80/edit', '_blank');
-      } else if (bonusId === 1) {
-         // Card de Terapia - pode redirecionar para contato ou outro link
-         // window.open('/contato?tipo=terapia', '_blank');
+      const bonus = bonuses.find(b => b.id === bonusId);
+      if (bonus && bonus.link) {
+         window.open(bonus.link, '_blank');
       }
    };
 
@@ -70,12 +84,6 @@ const BonusSection = () => {
 
             <div className="bonus-cards">
                {bonuses.map((bonus) => {
-                  const backgroundImage = bonus.id === 1 
-                     ? fotoEmPeComLivro 
-                     : bonus.id === 2 
-                     ? fotoEmPeOlhandoEsquerda 
-                     : null;
-                  
                   return (
                   <div
                      key={bonus.id}
@@ -83,8 +91,8 @@ const BonusSection = () => {
                      onMouseEnter={() => setHoveredCard(bonus.id)}
                      onMouseLeave={() => setHoveredCard(null)}
                      onClick={() => handleCardClick(bonus.id)}
-                     style={backgroundImage ? {
-                        backgroundImage: `url(${backgroundImage})`,
+                     style={bonus.backgroundImage ? {
+                        backgroundImage: `url(${bonus.backgroundImage})`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                         backgroundRepeat: 'no-repeat'

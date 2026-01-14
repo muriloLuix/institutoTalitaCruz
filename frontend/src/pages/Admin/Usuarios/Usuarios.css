@@ -256,3 +256,37 @@
   flex: 1;
 }
 
+.admin-input-password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.admin-input-password-wrapper input {
+  padding-right: 3rem;
+}
+
+.admin-password-toggle {
+  position: absolute;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  color: var(--color-text-gray);
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+  font-size: 1rem;
+}
+
+.admin-password-toggle:hover {
+  color: var(--color-gold);
+}
+
+.admin-password-toggle:focus {
+  outline: none;
+  color: var(--color-gold);
+}
+

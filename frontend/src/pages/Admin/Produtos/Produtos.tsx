@@ -373,15 +373,7 @@ const Produtos = () => {
          />
 
          {showModal && (
-            <div
-               className="admin-modal-overlay"
-               onClick={() => {
-                  if (!saving) {
-                     setShowModal(false);
-                     resetForm();
-                  }
-               }}
-            >
+            <div className="admin-modal-overlay">
                <div className="admin-modal admin-modal-large" onClick={(e) => e.stopPropagation()}>
                   <div className="admin-modal-header">
                      <h2>{editingProduto ? 'Editar Produto' : 'Novo Produto'}</h2>

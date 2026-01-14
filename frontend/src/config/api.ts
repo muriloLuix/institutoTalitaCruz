@@ -66,6 +66,7 @@ export const api = {
   parametros: {
     listar: () => `${API_BASE_URL}/parametros`,
     buscar: (chave: string) => `${API_BASE_URL}/parametros/${chave}`,
+    buscarMuitos: (chaves: string[]) => `${API_BASE_URL}/parametros/many?chaves=${chaves.join(',')}`,
     listarAdmin: () => `${API_BASE_URL}/admin/parametros`,
     atualizar: (id: number) => `${API_BASE_URL}/admin/parametros/${id}`,
     atualizarMuitos: () => `${API_BASE_URL}/admin/parametros`,

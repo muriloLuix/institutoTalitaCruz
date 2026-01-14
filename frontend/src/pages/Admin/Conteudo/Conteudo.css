@@ -311,6 +311,31 @@
   flex: 1;
 }
 
+.hotmart-image-preview {
+  margin-top: 1rem;
+}
+
+.hotmart-image-preview img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid var(--color-gray);
+  margin-bottom: 1rem;
+}
+
+.hotmart-image-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.hotmart-image-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 @media (max-width: 968px) {
   .admin-content-grid {
     grid-template-columns: 1fr;
@@ -337,6 +362,15 @@
 
   .conteudo-tab-content {
     padding: 1.5rem;
+  }
+
+  .hotmart-image-actions {
+    flex-direction: column;
+  }
+
+  .hotmart-image-actions button,
+  .hotmart-image-actions label {
+    width: 100%;
   }
 }
 

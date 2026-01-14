@@ -50,6 +50,50 @@ class ParametroController extends Controller
    }
 
    /**
+    * Busca múltiplos parâmetros por suas chaves (público)
+    * Aceita um array de chaves via query string ou body
+    */
+   public function showMany(Request $request): JsonResponse
+   {
+      $chaves = $request->input('chaves', []);
+      
+      // Se vier como string separada por vírgula, converter para array
+      if (is_string($chaves)) {
+         $chaves = explode(',', $chaves);
+      }
+
+      if (empty($chaves) || !is_array($chaves)) {
+         return response()->json(['message' => 'É necessário fornecer um array de chaves'], 400);
+      }
+
+      // Limpar espaços e remover vazios
+      $chaves = array_filter(array_map('trim', $chaves));
+
+      if (empty($chaves)) {
+         return response()->json(['message' => 'Nenhuma chave válida fornecida'], 400);
+      }
+
+      $parametros = Parametro::whereIn('par_chave', $chaves)->get()->map(function ($parametro) {
+         return [
+            'id' => $parametro->par_id,
+            'nome' => $parametro->par_nome,
+            'valor' => $parametro->par_valor,
+            'chave' => $parametro->par_chave,
+            'descricao' => $parametro->par_descricao,
+            'tipo' => $parametro->par_tipo,
+         ];
+      });
+
+      // Criar um array indexado por chave para facilitar o acesso
+      $resultado = [];
+      foreach ($parametros as $param) {
+         $resultado[$param['chave']] = $param;
+      }
+
+      return response()->json($resultado, 200);
+   }
+
+   /**
     * Lista todos os parâmetros para o admin (protegido)
     */
    public function list(): JsonResponse
@@ -105,6 +149,44 @@ class ParametroController extends Controller
             'tipo' => $parametro->par_tipo,
          ],
       ], 200);
+   }
+
+   /**
+    * Cria um novo parâmetro (protegido)
+    */
+   public function store(Request $request): JsonResponse
+   {
+      $request->validate([
+         'nome' => 'required|string|max:255',
+         'chave' => 'required|string|max:255|unique:parametro,par_chave',
+         'valor' => 'nullable|string|max:1000',
+         'descricao' => 'nullable|string|max:500',
+         'tipo' => 'nullable|string|max:50',
+      ], [
+         'nome.required' => 'O nome é obrigatório.',
+         'chave.required' => 'A chave é obrigatória.',
+         'chave.unique' => 'Já existe um parâmetro com esta chave.',
+      ]);
+
+      $parametro = Parametro::create([
+         'par_nome' => $request->nome,
+         'par_chave' => $request->chave,
+         'par_valor' => $request->valor ?? '',
+         'par_descricao' => $request->descricao ?? '',
+         'par_tipo' => $request->tipo ?? 'geral',
+      ]);
+
+      return response()->json([
+         'message' => 'Parâmetro criado com sucesso',
+         'parametro' => [
+            'id' => $parametro->par_id,
+            'nome' => $parametro->par_nome,
+            'valor' => $parametro->par_valor,
+            'chave' => $parametro->par_chave,
+            'descricao' => $parametro->par_descricao,
+            'tipo' => $parametro->par_tipo,
+         ],
+      ], 201);
    }
 
    /**

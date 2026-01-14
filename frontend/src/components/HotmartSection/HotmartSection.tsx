@@ -1,9 +1,17 @@
 import { useRef } from 'react';
+import { useParametros } from '../../hooks/useParametros';
 import './HotmartSection.css';
 
 const HotmartSection = () => {
    // URL do Hotmart - será configurada posteriormente
    const hotmartUrl = '#'; // Substitua pelo link real do Hotmart
+   const { getParametro } = useParametros();
+   const backgroundImage = getParametro('hotmart_background_image', '');
+   const cardBadge = getParametro('hotmart_card_badge', 'Mais Vendido');
+   const cardTitulo = getParametro('hotmart_card_titulo', 'Coleção Completa');
+   const cardDescricao = getParametro('hotmart_card_descricao', 'Livros e materiais didáticos');
+   const cardPrecoLabel = getParametro('hotmart_card_preco_label', 'A partir de');
+   const cardPreco = getParametro('hotmart_card_preco', 'R$ 99,90');
    const cardRef = useRef<HTMLDivElement>(null);
    const glowRef = useRef<HTMLDivElement>(null);
 
@@ -52,9 +60,17 @@ const HotmartSection = () => {
       glowRef.current.style.background = 'radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, transparent 70%)';
    };
 
+   // Estilo dinâmico para a imagem de fundo do card
+   const cardStyle = backgroundImage ? {
+      backgroundImage: `url(${backgroundImage})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+   } : {};
+
    return (
       <section className="hotmart-section" id="hotmart">
-         <div className="container">
+         <div className="container" style={{ position: 'relative', zIndex: 2 }}>
             <div className="hotmart-content">
                <div className="hotmart-text">
                   <h2 className="section-title">Produtos e Cursos Exclusivos</h2>
@@ -78,17 +94,19 @@ const HotmartSection = () => {
                      ref={cardRef}
                      onMouseMove={handleMouseMove}
                      onMouseLeave={handleMouseLeave}
+                     style={cardStyle}
                   >
+                     <div className="card-background-overlay"></div>
                      <div className="card-glow" ref={glowRef}></div>
                      <div className="card-content">
                         <span className="card-badge">
-                           <i className="fas fa-fire"></i> Mais Vendido
+                           <i className="fas fa-fire"></i> {cardBadge}
                         </span>
-                        <h3>Coleção Completa</h3>
-                        <p>Livros e materiais didáticos</p>
+                        <h3>{cardTitulo}</h3>
+                        <p>{cardDescricao}</p>
                         <div className="card-price">
-                           <span className="price-label">A partir de</span>
-                           <span className="price-value">R$ 99,90</span>
+                           <span className="price-label">{cardPrecoLabel}</span>
+                           <span className="price-value">{cardPreco}</span>
                         </div>
                      </div>
                   </div>

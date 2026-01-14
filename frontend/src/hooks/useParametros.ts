@@ -18,6 +18,24 @@ let parametrosCache: ParametrosCache = {};
 let parametrosLoading = false;
 let parametrosPromise: Promise<void> | null = null;
 
+// Tentar carregar do localStorage se disponível (persistência entre sessões)
+if (typeof window !== 'undefined') {
+  try {
+    const cached = localStorage.getItem('parametros_cache');
+    const cacheTimestamp = localStorage.getItem('parametros_cache_timestamp');
+    
+    // Usar cache se tiver menos de 5 minutos
+    if (cached && cacheTimestamp) {
+      const age = Date.now() - parseInt(cacheTimestamp, 10);
+      if (age < 5 * 60 * 1000) { // 5 minutos
+        parametrosCache = JSON.parse(cached);
+      }
+    }
+  } catch (error) {
+    console.warn('Erro ao carregar cache de parâmetros do localStorage:', error);
+  }
+}
+
 /**
  * Hook para buscar e usar parâmetros do sistema
  */
@@ -46,8 +64,17 @@ export const useParametros = () => {
       setLoading(true);
 
       try {
-        parametrosPromise = fetch(api.parametros.listar())
-          .then((res) => res.json())
+        // Usar AbortController para cancelar requisições duplicadas se necessário
+        const controller = new AbortController();
+        
+        parametrosPromise = fetch(api.parametros.listar(), {
+          signal: controller.signal,
+          cache: 'default', // Usar cache do navegador quando possível
+        })
+          .then((res) => {
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+            return res.json();
+          })
           .then((data: Parametro[]) => {
             const cache: ParametrosCache = {};
             data.forEach((param) => {
@@ -55,11 +82,31 @@ export const useParametros = () => {
             });
             parametrosCache = cache;
             setParametros(cache);
+            
+            // Salvar no localStorage para persistência entre sessões
+            if (typeof window !== 'undefined') {
+              try {
+                localStorage.setItem('parametros_cache', JSON.stringify(cache));
+                localStorage.setItem('parametros_cache_timestamp', Date.now().toString());
+              } catch (error) {
+                console.warn('Erro ao salvar cache de parâmetros no localStorage:', error);
+              }
+            }
+          })
+          .catch((error) => {
+            if (error.name !== 'AbortError') {
+              console.error('Erro ao carregar parâmetros:', error);
+            }
+            throw error;
           });
 
         await parametrosPromise;
       } catch (error) {
         console.error('Erro ao carregar parâmetros:', error);
+        // Em caso de erro, manter cache existente se houver
+        if (Object.keys(parametrosCache).length > 0) {
+          setParametros(parametrosCache);
+        }
       } finally {
         parametrosLoading = false;
         setLoading(false);

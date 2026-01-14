@@ -26,6 +26,7 @@ const Usuarios = () => {
    const [deletingUserId, setDeletingUserId] = useState<number | null>(null);
    const [deleteLoading, setDeleteLoading] = useState(false);
    const [editingUser, setEditingUser] = useState<Usuario | null>(null);
+   const [showPassword, setShowPassword] = useState(false);
    const [formData, setFormData] = useState({
       nome: '',
       email: '',
@@ -136,12 +137,19 @@ const Usuarios = () => {
             throw new Error(errorData.message || 'Erro ao excluir usuário');
          }
 
-         await showSuccess('Sucesso!', 'Usuário excluído com sucesso!');
+         // Fecha o modal antes de mostrar o sucesso
          setShowDeleteModal(false);
          setDeletingUserId(null);
-         fetchUsuarios(); // Recarrega a lista
+         
+         // Usa setTimeout para garantir que o modal seja fechado antes do showSuccess
+         setTimeout(async () => {
+            await showSuccess('Sucesso!', 'Usuário excluído com sucesso!');
+            fetchUsuarios(); // Recarrega a lista
+         }, 100);
       } catch (error: any) {
          console.error('Erro ao excluir usuário:', error);
+         setShowDeleteModal(false);
+         setDeletingUserId(null);
          showError('Erro!', error.message || 'Erro ao excluir usuário. Tente novamente.');
       } finally {
          setDeleteLoading(false);
@@ -243,7 +251,7 @@ const Usuarios = () => {
          />
 
          {showModal && (
-            <div className="admin-modal-overlay" onClick={() => { if (!saving) { setShowModal(false); resetForm(); } }}>
+            <div className="admin-modal-overlay">
                <div className="admin-modal" onClick={(e) => e.stopPropagation()}>
                   <div className="admin-modal-header">
                      <h2>{editingUser ? 'Editar Usuário' : 'Novo Usuário'}</h2>
@@ -272,12 +280,22 @@ const Usuarios = () => {
                      </div>
                      <div className="admin-form-group">
                         <label>Senha {editingUser && '(deixe em branco para manter)'}</label>
-                        <input
-                           type="password"
-                           value={formData.senha}
-                           onChange={(e) => setFormData({ ...formData, senha: e.target.value })}
-                           required={!editingUser}
-                        />
+                        <div className="admin-input-password-wrapper">
+                           <input
+                              type={showPassword ? 'text' : 'password'}
+                              value={formData.senha}
+                              onChange={(e) => setFormData({ ...formData, senha: e.target.value })}
+                              required={!editingUser}
+                           />
+                           <button
+                              type="button"
+                              className="admin-password-toggle"
+                              onClick={() => setShowPassword(!showPassword)}
+                              title={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                           >
+                              <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                           </button>
+                        </div>
                      </div>
                      <div className="admin-form-group">
                         <label>Tipo</label>
