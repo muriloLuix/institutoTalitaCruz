@@ -264,7 +264,49 @@ const Configuracoes = () => {
       }
    };
 
-   const configuracoesFiltradas = configuracoes.filter(c => c.categoria === activeTab);
+   // Filtrar configurações, excluindo parâmetros de conteúdo que são gerenciados em /admin/conteudo
+   const configuracoesFiltradas = configuracoes.filter(c => {
+      if (c.categoria === activeTab) {
+         // Na aba geral, excluir parâmetros de conteúdo (gerenciados em /admin/conteudo)
+         if (activeTab === 'geral') {
+            return !c.chave.startsWith('hotmart_') && !c.chave.startsWith('bonus_card_');
+         }
+         return true;
+      }
+      return false;
+   });
+
+   // Organizar configurações gerais em subseções
+   // Nota: Parâmetros de conteúdo (Card Hotmart e Cards de Bônus) são gerenciados na página /admin/conteudo
+   const organizarConfiguracoesGerais = (configs: Configuracao[]) => {
+      // Filtrar apenas configurações que não são de conteúdo
+      const configsFiltradas = configs.filter(config => 
+         !config.chave.startsWith('hotmart_') && 
+         !config.chave.startsWith('bonus_card_')
+      );
+
+      const subsecoes: { [key: string]: Configuracao[] } = {
+         'Informações do Site': [],
+         'Outros': []
+      };
+
+      configsFiltradas.forEach(config => {
+         if (config.chave.startsWith('site_')) {
+            subsecoes['Informações do Site'].push(config);
+         } else {
+            subsecoes['Outros'].push(config);
+         }
+      });
+
+      // Remove subseções vazias
+      Object.keys(subsecoes).forEach(key => {
+         if (subsecoes[key].length === 0) {
+            delete subsecoes[key];
+         }
+      });
+
+      return subsecoes;
+   };
 
    const tabs = [
       { id: 'geral', label: 'Geral', icon: 'fa-cog' },
@@ -311,7 +353,89 @@ const Configuracoes = () => {
                   <p>Carregando...</p>
                ) : configuracoesFiltradas.length === 0 ? (
                   <p className="admin-empty-state">Nenhuma configuração nesta categoria</p>
+               ) : activeTab === 'geral' ? (
+                  // Renderização organizada para a aba Geral
+                  (() => {
+                     const subsecoes = organizarConfiguracoesGerais(configuracoesFiltradas);
+                     return (
+                        <div className="config-subsecoes">
+                           {Object.entries(subsecoes).map(([nomeSubsecao, configs]) => (
+                              <div key={nomeSubsecao} className="config-subsecao">
+                                 <h2 className="config-subsecao-title">
+                                    <i className={`fas ${
+                                       nomeSubsecao === 'Informações do Site' ? 'fa-globe' :
+                                       nomeSubsecao === 'Card Hotmart' ? 'fa-shopping-bag' :
+                                       nomeSubsecao === 'Card de Bônus 1' ? 'fa-gift' :
+                                       nomeSubsecao === 'Card de Bônus 2' ? 'fa-gift' :
+                                       'fa-cog'
+                                    }`}></i>
+                                    {nomeSubsecao}
+                                 </h2>
+                                 <div className="admin-config-grid">
+                                    {configs.map(config => (
+                                       <div key={config.id} className="admin-config-card">
+                                          <div className="config-card-header">
+                                             <h3>{config.nome}</h3>
+                                             <p className="config-description">{config.descricao}</p>
+                                          </div>
+                                          <div className="config-card-body">
+                                             {config.tipo === 'textarea' ? (
+                                                <textarea
+                                                   value={config.valor}
+                                                   onChange={(e) => handleChange(config.id, e.target.value, config.chave)}
+                                                   rows={4}
+                                                   className="config-input"
+                                                />
+                                             ) : (
+                                                <div className={config.tipo === 'password' ? 'config-input-password-wrapper' : ''}>
+                                                   <input
+                                                      type={
+                                                         config.tipo === 'password' 
+                                                            ? (showPasswords[config.id] ? 'text' : 'password')
+                                                            : config.tipo
+                                                      }
+                                                      value={config.valor}
+                                                      onChange={(e) => handleChange(config.id, e.target.value, config.chave)}
+                                                      className="config-input"
+                                                      placeholder={
+                                                         config.tipo === 'url' ? 'https://...' :
+                                                         config.chave === 'contato_whatsapp' ? '(00) 00000-0000' :
+                                                         config.chave === 'contato_telefone' ? '(00) 0000-0000' :
+                                                         config.tipo === 'password' ? '••••••••••••' :
+                                                         ''
+                                                      }
+                                                      maxLength={
+                                                         config.chave === 'contato_whatsapp' ? 15 :
+                                                         config.chave === 'contato_telefone' ? 14 :
+                                                         undefined
+                                                      }
+                                                   />
+                                                   {config.tipo === 'password' && (
+                                                      <button
+                                                         type="button"
+                                                         className="config-password-toggle"
+                                                         onClick={() => setShowPasswords(prev => ({
+                                                            ...prev,
+                                                            [config.id]: !prev[config.id]
+                                                         }))}
+                                                         title={showPasswords[config.id] ? 'Ocultar senha' : 'Mostrar senha'}
+                                                      >
+                                                         <i className={`fas ${showPasswords[config.id] ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                                                      </button>
+                                                   )}
+                                                </div>
+                                             )}
+                                          </div>
+                                       </div>
+                                    ))}
+                                 </div>
+                              </div>
+                           ))}
+                        </div>
+                     );
+                  })()
                ) : (
+                  // Renderização padrão para outras abas
                   <div className="admin-config-grid">
                      {configuracoesFiltradas.map(config => (
                         <div key={config.id} className="admin-config-card">
@@ -346,8 +470,8 @@ const Configuracoes = () => {
                                           ''
                                        }
                                        maxLength={
-                                          config.chave === 'contato_whatsapp' ? 15 : // (00) 00000-0000
-                                          config.chave === 'contato_telefone' ? 14 : // (00) 0000-0000
+                                          config.chave === 'contato_whatsapp' ? 15 :
+                                          config.chave === 'contato_telefone' ? 14 :
                                           undefined
                                        }
                                     />

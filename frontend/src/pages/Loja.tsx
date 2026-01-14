@@ -11,7 +11,8 @@ interface Produto {
    nome: string;
    descricao: string;
    preco: number;
-   imagem: string;
+   imagem?: string;
+   imagens?: Array<{ id: number; url: string; capa: boolean; ordem: number }>;
    categoria: string;
    disponivel: boolean;
    autor?: string;
@@ -31,6 +32,7 @@ const Loja = () => {
    const [autoresSelecionados, setAutoresSelecionados] = useState<string[]>([]);
    const [disponibilidadeFiltro, setDisponibilidadeFiltro] = useState<string>('todos');
    const { adicionarItem, totalItens } = useCarrinho();
+   const [addingToCart, setAddingToCart] = useState<Set<number>>(new Set());
 
    const categorias = [
       { id: 'todos', nome: 'Todos os Produtos' },
@@ -167,14 +169,32 @@ const Loja = () => {
       }).format(price);
    };
 
-   const handleComprar = (produto: Produto) => {
-      adicionarItem({
-         id: produto.id,
-         nome: produto.nome,
-         preco: produto.preco,
-         imagem: produto.imagem,
-      });
-      showSuccess('Produto Adicionado!', `Produto "${produto.nome}" adicionado ao carrinho!`);
+   const handleComprar = async (produto: Produto) => {
+      // Pegar a imagem de capa ou a primeira imagem disponível
+      let imagemUrl = produto.imagem || '';
+      if (!imagemUrl && produto.imagens && produto.imagens.length > 0) {
+         const imagemCapa = produto.imagens.find(img => img.capa) || produto.imagens[0];
+         imagemUrl = imagemCapa.url;
+      }
+
+      try {
+         setAddingToCart(prev => new Set(prev).add(produto.id));
+         await adicionarItem({
+            id: produto.id,
+            nome: produto.nome,
+            preco: produto.preco,
+            imagem: imagemUrl,
+         });
+         showSuccess('Produto Adicionado!', `Produto "${produto.nome}" adicionado ao carrinho!`);
+      } catch (error) {
+         showError('Erro!', 'Não foi possível adicionar o produto ao carrinho.');
+      } finally {
+         setAddingToCart(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(produto.id);
+            return newSet;
+         });
+      }
    };
 
    const handleVerDetalhes = (produto: Produto) => {
@@ -364,8 +384,26 @@ const Loja = () => {
 
                      {/* Grid de Produtos */}
                      {loading ? (
-                        <div className="loading">
-                           <p>Carregando produtos...</p>
+                        <div style={{ 
+                           display: 'flex', 
+                           flexDirection: 'column', 
+                           alignItems: 'center', 
+                           justifyContent: 'center', 
+                           minHeight: '50vh',
+                           gap: '1.5rem',
+                           padding: '4rem 2rem'
+                        }}>
+                           <i className="fas fa-spinner fa-spin" style={{ 
+                              fontSize: '4rem', 
+                              color: 'var(--color-gold)',
+                              filter: 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.5))'
+                           }}></i>
+                           <p style={{ 
+                              margin: 0, 
+                              color: 'var(--color-text-light)',
+                              fontSize: '1.2rem',
+                              fontWeight: 500
+                           }}>Carregando produtos...</p>
                         </div>
                      ) : produtosFiltrados.length === 0 ? (
                         <div className="empty-state">
@@ -401,8 +439,11 @@ const Loja = () => {
                                              e.stopPropagation();
                                              handleComprar(produto);
                                           }}
-                                          disabled={!produto.disponivel}
+                                          disabled={!produto.disponivel || addingToCart.has(produto.id)}
                                        >
+                                          {addingToCart.has(produto.id) && (
+                                             <i className="fas fa-spinner fa-spin" style={{ marginRight: '0.5rem' }}></i>
+                                          )}
                                           {produto.disponivel ? 'Comprar' : 'Indisponível'}
                                        </button>
                                     </div>

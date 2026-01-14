@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { apiClient } from '../utils/apiClient';
 import api from '../config/api';
 import { useCarrinho } from '../hooks/useCarrinho';
-import { showSuccess } from '../utils/swal/swal';
+import { showSuccess, showError } from '../utils/swal/swal';
 import './ProdutoDetalhes.css';
 
 interface Produto {
@@ -13,6 +13,7 @@ interface Produto {
    descricaoCompleta?: string;
    preco: number;
    imagem?: string;
+   imagens?: Array<{ id: number; url: string; capa: boolean; ordem: number }>;
    categoria: string;
    autor?: string;
    disponivel: boolean;
@@ -33,6 +34,7 @@ const ProdutoDetalhes = () => {
    const { adicionarItem } = useCarrinho();
    const [produto, setProduto] = useState<Produto | null>(null);
    const [loading, setLoading] = useState(true);
+   const [addingToCart, setAddingToCart] = useState(false);
 
    useEffect(() => {
       const fetchProduto = async () => {
@@ -84,15 +86,30 @@ const ProdutoDetalhes = () => {
       return niveis[nivel] || nivel;
    };
 
-   const handleComprar = () => {
+   const handleComprar = async () => {
       if (!produto) return;
-      adicionarItem({
-         id: produto.id,
-         nome: produto.nome,
-         preco: produto.preco,
-         imagem: produto.imagem || '',
-      });
-      showSuccess('Produto Adicionado!', `Produto "${produto.nome}" adicionado ao carrinho!`);
+      
+      // Pegar a imagem de capa ou a primeira imagem disponível
+      let imagemUrl = produto.imagem || '';
+      if (!imagemUrl && produto.imagens && produto.imagens.length > 0) {
+         const imagemCapa = produto.imagens.find(img => img.capa) || produto.imagens[0];
+         imagemUrl = imagemCapa.url;
+      }
+
+      try {
+         setAddingToCart(true);
+         await adicionarItem({
+            id: produto.id,
+            nome: produto.nome,
+            preco: produto.preco,
+            imagem: imagemUrl,
+         });
+         showSuccess('Produto Adicionado!', `Produto "${produto.nome}" adicionado ao carrinho!`);
+      } catch (error) {
+         showError('Erro!', 'Não foi possível adicionar o produto ao carrinho.');
+      } finally {
+         setAddingToCart(false);
+      }
    };
 
    if (loading) {
@@ -241,9 +258,13 @@ const ProdutoDetalhes = () => {
                         <button
                            className="btn-primary btn-comprar-grande"
                            onClick={handleComprar}
-                           disabled={!produto.disponivel}
+                           disabled={!produto.disponivel || addingToCart}
                         >
-                           {produto.disponivel ? (
+                           {addingToCart ? (
+                              <>
+                                 <i className="fas fa-spinner fa-spin"></i> Adicionando ao carrinho...
+                              </>
+                           ) : produto.disponivel ? (
                               <>
                                  <i className="fas fa-shopping-cart"></i>
                                  Adicionar ao Carrinho

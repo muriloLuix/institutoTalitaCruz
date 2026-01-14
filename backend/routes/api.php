@@ -11,6 +11,7 @@ use App\Http\Controllers\ProdutoImagemController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\BiografiaController;
 use App\Http\Controllers\ConteudoController;
+use App\Http\Controllers\CarrinhoController;
 
 // Rotas públicas
 Route::post('/admin/login', [AdminController::class, 'login']);
@@ -26,6 +27,14 @@ Route::get('/produtos/{id}', [ProdutoController::class, 'show']);
 // Rotas públicas de FAQ e Biografia
 Route::get('/faq', [FaqController::class, 'index']);
 Route::get('/biografia', [BiografiaController::class, 'show']);
+
+// Rotas públicas de carrinho
+Route::get('/carrinho', [CarrinhoController::class, 'index']);
+Route::get('/carrinho/total', [CarrinhoController::class, 'total']);
+Route::post('/carrinho', [CarrinhoController::class, 'store']);
+Route::put('/carrinho/{id}', [CarrinhoController::class, 'update']);
+Route::delete('/carrinho/{id}', [CarrinhoController::class, 'destroy']);
+Route::delete('/carrinho', [CarrinhoController::class, 'limpar']);
 
 // Rotas protegidas (requerem autenticação)
 Route::middleware('auth:sanctum')->group(function () {

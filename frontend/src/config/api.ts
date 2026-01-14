@@ -35,11 +35,12 @@ export const api = {
 
   // Endpoints de carrinho
   carrinho: {
-    listar: () => `${API_BASE_URL}/carrinho`,
+    listar: (sessionId: string) => `${API_BASE_URL}/carrinho?session_id=${sessionId}`,
+    total: (sessionId: string) => `${API_BASE_URL}/carrinho/total?session_id=${sessionId}`,
     adicionar: () => `${API_BASE_URL}/carrinho`,
-    remover: (id: number) => `${API_BASE_URL}/carrinho/${id}`,
     atualizar: (id: number) => `${API_BASE_URL}/carrinho/${id}`,
-    limpar: () => `${API_BASE_URL}/carrinho/limpar`,
+    remover: (id: number, sessionId: string) => `${API_BASE_URL}/carrinho/${id}?session_id=${sessionId}`,
+    limpar: (sessionId: string) => `${API_BASE_URL}/carrinho?session_id=${sessionId}`,
   },
 
   // Endpoints de contato

@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import api from '../config/api';
+import { apiClient } from '../utils/apiClient';
 
 export interface ItemCarrinho {
+   id: number;
    produtoId: number;
    nome: string;
    preco: number;
@@ -8,87 +11,144 @@ export interface ItemCarrinho {
    quantidade: number;
 }
 
-const CARRINHO_STORAGE_KEY = 'carrinho_itens';
+// Função para obter ou criar session_id
+const getSessionId = (): string => {
+   if (typeof window === 'undefined') {
+      return '';
+   }
+
+   const SESSION_ID_KEY = 'carrinho_session_id';
+   let sessionId = localStorage.getItem(SESSION_ID_KEY);
+
+   if (!sessionId) {
+      // Gerar um ID único
+      sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem(SESSION_ID_KEY, sessionId);
+   }
+
+   return sessionId;
+};
 
 export const useCarrinho = () => {
    const [itens, setItens] = useState<ItemCarrinho[]>([]);
+   const [loading, setLoading] = useState(true);
+   const [sessionId] = useState<string>(getSessionId);
 
-   // Carregar itens do localStorage ao montar
-   useEffect(() => {
-      const carrinhoSalvo = localStorage.getItem(CARRINHO_STORAGE_KEY);
-      if (carrinhoSalvo) {
-         try {
-            setItens(JSON.parse(carrinhoSalvo));
-         } catch (error) {
-            console.error('Erro ao carregar carrinho:', error);
-            setItens([]);
-         }
+   // Carregar itens do carrinho ao montar
+   const carregarCarrinho = useCallback(async () => {
+      try {
+         setLoading(true);
+         const data = await apiClient.request<{ itens: ItemCarrinho[]; totalPreco: number; totalItens: number }>(
+            api.carrinho.listar(sessionId),
+            { method: 'GET' },
+            false
+         );
+         setItens(data.itens || []);
+      } catch (error) {
+         console.error('Erro ao carregar carrinho:', error);
+         setItens([]);
+      } finally {
+         setLoading(false);
       }
-   }, []);
+   }, [sessionId]);
 
-   // Salvar no localStorage sempre que os itens mudarem
    useEffect(() => {
-      localStorage.setItem(CARRINHO_STORAGE_KEY, JSON.stringify(itens));
-   }, [itens]);
+      carregarCarrinho();
+   }, [carregarCarrinho]);
 
-   const adicionarItem = (produto: {
+   const adicionarItem = async (produto: {
       id: number;
       nome: string;
       preco: number;
       imagem: string;
    }) => {
-      setItens((prevItens) => {
-         const itemExistente = prevItens.find(
-            (item) => item.produtoId === produto.id
+      try {
+         const data = await apiClient.request<{ message: string; item: ItemCarrinho }>(
+            api.carrinho.adicionar(),
+            {
+               method: 'POST',
+               body: JSON.stringify({
+                  session_id: sessionId,
+                  produto_id: produto.id,
+                  quantidade: 1,
+               }),
+            },
+            false
          );
 
-         if (itemExistente) {
-            // Se já existe, aumenta a quantidade
-            return prevItens.map((item) =>
-               item.produtoId === produto.id
-                  ? { ...item, quantidade: item.quantidade + 1 }
-                  : item
-            );
-         } else {
-            // Se não existe, adiciona novo item
-            return [
-               ...prevItens,
-               {
-                  produtoId: produto.id,
-                  nome: produto.nome,
-                  preco: produto.preco,
-                  imagem: produto.imagem,
-                  quantidade: 1,
-               },
-            ];
-         }
-      });
+         // Recarregar carrinho para ter dados atualizados
+         await carregarCarrinho();
+
+         return data;
+      } catch (error: any) {
+         console.error('Erro ao adicionar item ao carrinho:', error);
+         throw error;
+      }
    };
 
-   const removerItem = (produtoId: number) => {
-      setItens((prevItens) =>
-         prevItens.filter((item) => item.produtoId !== produtoId)
-      );
+   const removerItem = async (itemId: number) => {
+      try {
+         await apiClient.request<{ message: string }>(
+            api.carrinho.remover(itemId, sessionId),
+            { method: 'DELETE' },
+            false
+         );
+
+         // Recarregar carrinho
+         await carregarCarrinho();
+      } catch (error) {
+         console.error('Erro ao remover item do carrinho:', error);
+         throw error;
+      }
    };
 
-   const atualizarQuantidade = (produtoId: number, quantidade: number) => {
+   const atualizarQuantidade = async (itemId: number, quantidade: number) => {
       if (quantidade <= 0) {
-         removerItem(produtoId);
+         await removerItem(itemId);
          return;
       }
 
-      setItens((prevItens) =>
-         prevItens.map((item) =>
-            item.produtoId === produtoId
-               ? { ...item, quantidade }
-               : item
-         )
-      );
+      // Validar quantidade máxima
+      if (quantidade > 999) {
+         console.warn('Quantidade máxima permitida é 999');
+         quantidade = 999;
+      }
+
+      try {
+         await apiClient.request<{ message: string; item: { id: number; quantidade: number; total: number } }>(
+            api.carrinho.atualizar(itemId),
+            {
+               method: 'PUT',
+               body: JSON.stringify({
+                  session_id: sessionId,
+                  quantidade: Math.max(1, Math.min(999, quantidade)),
+               }),
+            },
+            false
+         );
+
+         // Recarregar carrinho
+         await carregarCarrinho();
+      } catch (error) {
+         console.error('Erro ao atualizar quantidade:', error);
+         throw error;
+      }
    };
 
-   const limparCarrinho = () => {
-      setItens([]);
-      localStorage.removeItem(CARRINHO_STORAGE_KEY);
+   const limparCarrinho = async () => {
+      try {
+         await apiClient.request<{ message: string }>(
+            api.carrinho.limpar(sessionId),
+            { method: 'DELETE' },
+            false
+         );
+
+         // Recarregar carrinho
+         await carregarCarrinho();
+      } catch (error) {
+         console.error('Erro ao limpar carrinho:', error);
+         throw error;
+      }
    };
 
    const totalItens = itens.reduce(
@@ -109,6 +169,7 @@ export const useCarrinho = () => {
       limparCarrinho,
       totalItens,
       totalPreco,
+      loading,
+      recarregar: carregarCarrinho,
    };
 };
-

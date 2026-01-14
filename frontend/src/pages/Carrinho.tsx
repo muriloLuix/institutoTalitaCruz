@@ -1,5 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useCarrinho } from '../hooks/useCarrinho';
+import { showSuccess, showError } from '../utils/swal/swal';
+import ConfirmModal from '../components/Admin/ConfirmModal/ConfirmModal';
+import { useState, useEffect } from 'react';
 import './Carrinho.css';
 
 const Carrinho = () => {
@@ -10,7 +13,18 @@ const Carrinho = () => {
       atualizarQuantidade,
       limparCarrinho,
       totalPreco,
+      loading,
    } = useCarrinho();
+   const [showDeleteModal, setShowDeleteModal] = useState(false);
+   const [showClearModal, setShowClearModal] = useState(false);
+   const [itemToDelete, setItemToDelete] = useState<number | null>(null);
+   const [loadingItems, setLoadingItems] = useState<Set<number>>(new Set());
+
+   // Forçar recarregamento do carrinho ao montar a página
+   useEffect(() => {
+      // Disparar evento customizado para forçar sincronização
+      window.dispatchEvent(new Event('carrinho-sincronizar'));
+   }, []);
 
    const formatPrice = (price: number) => {
       return new Intl.NumberFormat('pt-BR', {
@@ -27,6 +41,103 @@ const Carrinho = () => {
       // Aqui será implementada a lógica de finalização de compra
       console.log('Finalizar compra');
    };
+
+   const handleRemoverItemClick = (itemId: number) => {
+      setItemToDelete(itemId);
+      setShowDeleteModal(true);
+   };
+
+   const handleRemoverItemConfirm = async () => {
+      if (itemToDelete !== null) {
+         const item = itens.find(i => i.id === itemToDelete);
+         try {
+            await removerItem(itemToDelete);
+            showSuccess('Item Removido!', item ? `"${item.nome}" foi removido do carrinho.` : 'Item removido do carrinho.');
+         } catch (error) {
+            showError('Erro!', 'Não foi possível remover o item do carrinho.');
+         }
+         setItemToDelete(null);
+      }
+      setShowDeleteModal(false);
+   };
+
+   const handleLimparCarrinhoClick = () => {
+      setShowClearModal(true);
+   };
+
+   const handleLimparCarrinhoConfirm = async () => {
+      try {
+         await limparCarrinho();
+         showSuccess('Carrinho Limpo!', 'Todos os itens foram removidos do carrinho.');
+      } catch (error) {
+         showError('Erro!', 'Não foi possível limpar o carrinho.');
+      }
+      setShowClearModal(false);
+   };
+
+   const handleAtualizarQuantidade = async (itemId: number, quantidade: number) => {
+      if (quantidade < 1) {
+         handleRemoverItemClick(itemId);
+         return;
+      }
+      
+      // Validar quantidade máxima (pode ser ajustado conforme necessário)
+      if (quantidade > 999) {
+         showError('Erro!', 'A quantidade máxima permitida é 999.');
+         return;
+      }
+
+      try {
+         setLoadingItems(prev => new Set(prev).add(itemId));
+         await atualizarQuantidade(itemId, quantidade);
+      } catch (error) {
+         showError('Erro!', 'Não foi possível atualizar a quantidade.');
+      } finally {
+         setLoadingItems(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(itemId);
+            return newSet;
+         });
+      }
+   };
+
+   // Mostrar loading enquanto carrega os dados
+   if (loading) {
+      return (
+         <div className="carrinho-page">
+            <section className="carrinho-hero">
+               <div className="container">
+                  <h1 className="page-title">Carrinho de Compras</h1>
+               </div>
+            </section>
+
+            <section className="carrinho-content">
+               <div className="container">
+                  <div style={{ 
+                     display: 'flex', 
+                     flexDirection: 'column', 
+                     alignItems: 'center', 
+                     justifyContent: 'center', 
+                     minHeight: '50vh',
+                     gap: '1.5rem'
+                  }}>
+                     <i className="fas fa-spinner fa-spin" style={{ 
+                        fontSize: '4rem', 
+                        color: 'var(--color-gold)',
+                        filter: 'drop-shadow(0 0 10px rgba(212, 175, 55, 0.5))'
+                     }}></i>
+                     <p style={{ 
+                        margin: 0, 
+                        color: 'var(--color-text-light)',
+                        fontSize: '1.2rem',
+                        fontWeight: 500
+                     }}>Carregando carrinho...</p>
+                  </div>
+               </div>
+            </section>
+         </div>
+      );
+   }
 
    if (itens.length === 0) {
       return (
@@ -93,7 +204,7 @@ const Carrinho = () => {
                         </div>
                         <button
                            className="btn-link"
-                           onClick={limparCarrinho}
+                           onClick={handleLimparCarrinhoClick}
                         >
                            <i className="fas fa-trash-alt"></i>
                            Limpar Carrinho
@@ -102,16 +213,22 @@ const Carrinho = () => {
 
                      <div className="carrinho-lista">
                         {itens.map((item) => (
-                           <div key={item.produtoId} className="carrinho-item">
+                           <div key={item.id} className="carrinho-item">
                               <div className="item-imagem">
-                                 <img
-                                    src={item.imagem}
-                                    alt={item.nome}
-                                    onError={(e) => {
-                                       (e.target as HTMLImageElement).src =
-                                          'https://via.placeholder.com/150';
-                                    }}
-                                 />
+                                 {item.imagem ? (
+                                    <img
+                                       src={item.imagem}
+                                       alt={item.nome}
+                                       onError={(e) => {
+                                          (e.target as HTMLImageElement).src =
+                                             'https://via.placeholder.com/150?text=Sem+Imagem';
+                                       }}
+                                    />
+                                 ) : (
+                                    <div className="item-imagem-placeholder">
+                                       <i className="fas fa-image"></i>
+                                    </div>
+                                 )}
                               </div>
 
                               <div className="item-info">
@@ -127,36 +244,56 @@ const Carrinho = () => {
                                     <button
                                        className="btn-quantidade"
                                        onClick={() =>
-                                          atualizarQuantidade(
-                                             item.produtoId,
+                                          handleAtualizarQuantidade(
+                                             item.id,
                                              item.quantidade - 1
                                           )
                                        }
+                                       aria-label="Diminuir quantidade"
+                                       disabled={loadingItems.has(item.id)}
                                     >
-                                       −
+                                       {loadingItems.has(item.id) ? (
+                                          <i className="fas fa-spinner fa-spin"></i>
+                                       ) : (
+                                          '−'
+                                       )}
                                     </button>
                                     <input
                                        type="number"
                                        min="1"
+                                       max="999"
                                        value={item.quantidade}
-                                       onChange={(e) =>
-                                          atualizarQuantidade(
-                                             item.produtoId,
-                                             parseInt(e.target.value) || 1
-                                          )
-                                       }
+                                       onChange={(e) => {
+                                          const value = parseInt(e.target.value) || 1;
+                                          handleAtualizarQuantidade(item.id, value);
+                                       }}
+                                       onBlur={(e) => {
+                                          const value = parseInt(e.target.value) || 1;
+                                          if (value < 1) {
+                                             e.target.value = '1';
+                                             handleAtualizarQuantidade(item.id, 1);
+                                          }
+                                       }}
                                        className="quantidade-input"
+                                       aria-label="Quantidade"
+                                       disabled={loadingItems.has(item.id)}
                                     />
                                     <button
                                        className="btn-quantidade"
                                        onClick={() =>
-                                          atualizarQuantidade(
-                                             item.produtoId,
+                                          handleAtualizarQuantidade(
+                                             item.id,
                                              item.quantidade + 1
                                           )
                                        }
+                                       aria-label="Aumentar quantidade"
+                                       disabled={loadingItems.has(item.id)}
                                     >
-                                       +
+                                       {loadingItems.has(item.id) ? (
+                                          <i className="fas fa-spinner fa-spin"></i>
+                                       ) : (
+                                          '+'
+                                       )}
                                     </button>
                                  </div>
                               </div>
@@ -170,22 +307,12 @@ const Carrinho = () => {
 
                               <button
                                  className="item-remover"
-                                 onClick={() => removerItem(item.produtoId)}
+                                 onClick={() => handleRemoverItemClick(item.id)}
                                  aria-label="Remover item"
+                                 title="Remover item do carrinho"
+                                 disabled={loadingItems.has(item.id)}
                               >
-                                 <svg
-                                    width="20"
-                                    height="20"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                 >
-                                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                                 </svg>
+                                 <i className="fas fa-trash"></i>
                               </button>
                            </div>
                         ))}
@@ -240,6 +367,31 @@ const Carrinho = () => {
                </div>
             </div>
          </section>
+
+         <ConfirmModal
+            isOpen={showDeleteModal}
+            onClose={() => {
+               setShowDeleteModal(false);
+               setItemToDelete(null);
+            }}
+            onConfirm={handleRemoverItemConfirm}
+            title="Remover Item"
+            message={itemToDelete ? `Tem certeza que deseja remover "${itens.find(i => i.produtoId === itemToDelete)?.nome}" do carrinho?` : 'Tem certeza que deseja remover este item do carrinho?'}
+            confirmText="Remover"
+            cancelText="Cancelar"
+            confirmButtonClass="danger"
+         />
+
+         <ConfirmModal
+            isOpen={showClearModal}
+            onClose={() => setShowClearModal(false)}
+            onConfirm={handleLimparCarrinhoConfirm}
+            title="Limpar Carrinho"
+            message="Tem certeza que deseja remover todos os itens do carrinho? Esta ação não pode ser desfeita."
+            confirmText="Limpar"
+            cancelText="Cancelar"
+            confirmButtonClass="danger"
+         />
       </div>
    );
 };

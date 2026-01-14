@@ -158,6 +158,35 @@ textarea.config-input {
   color: var(--color-gold);
 }
 
+.config-subsecoes {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.config-subsecao {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.config-subsecao-title {
+  color: var(--color-gold);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--color-gray);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.config-subsecao-title i {
+  font-size: 1.3rem;
+  color: var(--color-gold);
+}
+
 @media (max-width: 768px) {
   .admin-config-grid {
     grid-template-columns: 1fr;
@@ -179,6 +208,14 @@ textarea.config-input {
 
   .config-tab-content {
     padding: 1.5rem;
+  }
+
+  .config-subsecoes {
+    gap: 2rem;
+  }
+
+  .config-subsecao-title {
+    font-size: 1.3rem;
   }
 }
 
