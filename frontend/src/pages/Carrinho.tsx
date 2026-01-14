@@ -39,29 +39,34 @@ const Carrinho = () => {
 
             <section className="carrinho-content">
                <div className="container">
-                  <div className="carrinho-vazio">
-                     <svg
-                        width="80"
-                        height="80"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                     >
-                        <circle cx="9" cy="21" r="1"></circle>
-                        <circle cx="20" cy="21" r="1"></circle>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                     </svg>
-                     <h2>Seu carrinho está vazio</h2>
-                     <p>Adicione produtos à sua lista de compras</p>
-                     <button
-                        className="btn btn-primary"
-                        onClick={handleContinuarComprando}
-                     >
-                        Continuar Comprando
-                     </button>
+                  <div className="carrinho-vazio-wrapper">
+                     <div className="carrinho-vazio">
+                        <div className="carrinho-vazio-icon">
+                           <svg
+                              width="120"
+                              height="120"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                           >
+                              <circle cx="9" cy="21" r="1"></circle>
+                              <circle cx="20" cy="21" r="1"></circle>
+                              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                           </svg>
+                        </div>
+                        <h2>Seu carrinho está vazio</h2>
+                        <p>Adicione produtos à sua lista de compras e comece a transformar sua vida hoje mesmo!</p>
+                        <button
+                           className="btn btn-primary btn-large"
+                           onClick={handleContinuarComprando}
+                        >
+                           <i className="fas fa-shopping-bag"></i>
+                           Continuar Comprando
+                        </button>
+                     </div>
                   </div>
                </div>
             </section>
@@ -82,11 +87,15 @@ const Carrinho = () => {
                <div className="carrinho-layout">
                   <div className="carrinho-itens">
                      <div className="carrinho-header">
-                        <h2>Itens do Carrinho</h2>
+                        <div className="carrinho-header-title">
+                           <i className="fas fa-shopping-cart"></i>
+                           <h2>Itens do Carrinho ({itens.length})</h2>
+                        </div>
                         <button
                            className="btn-link"
                            onClick={limparCarrinho}
                         >
+                           <i className="fas fa-trash-alt"></i>
                            Limpar Carrinho
                         </button>
                      </div>
@@ -185,7 +194,10 @@ const Carrinho = () => {
 
                   <div className="carrinho-resumo">
                      <div className="resumo-card">
-                        <h3>Resumo do Pedido</h3>
+                        <div className="resumo-header">
+                           <i className="fas fa-receipt"></i>
+                           <h3>Resumo do Pedido</h3>
+                        </div>
 
                         <div className="resumo-linha">
                            <span>Subtotal</span>
@@ -209,9 +221,10 @@ const Carrinho = () => {
                         </div>
 
                         <button
-                           className="btn btn-primary btn-block"
+                           className="btn btn-primary btn-block btn-large"
                            onClick={handleFinalizarCompra}
                         >
+                           <i className="fas fa-lock"></i>
                            Finalizar Compra
                         </button>
 
@@ -219,6 +232,7 @@ const Carrinho = () => {
                            className="btn btn-secondary btn-block"
                            onClick={handleContinuarComprando}
                         >
+                           <i className="fas fa-arrow-left"></i>
                            Continuar Comprando
                         </button>
                      </div>

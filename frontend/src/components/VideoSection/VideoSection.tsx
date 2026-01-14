@@ -6,9 +6,8 @@ const VideoSection = () => {
    
    // URL do vídeo - será substituída pelo link real do YouTube ou vídeo baixado
    // Para YouTube: use o formato https://www.youtube.com/embed/VIDEO_ID
-   // Para vídeo local: use o caminho completo para o backend que serve o arquivo
-   // Ajuste o host/porta se seu backend não estiver em http://localhost:8000
-   const videoUrl = 'http://localhost:8000/videos/apresentacao.mp4'; // Aqui você colocará o link do YouTube ou caminho do vídeo
+   // Para vídeo local: use o caminho relativo a partir da pasta public
+   const videoUrl = '/videos/apresentacao/videoApresentacao.mp4'; // Vídeo local na pasta public
    const isYouTube = videoUrl ? (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) : false;
 
    const handlePlay = () => {
@@ -33,8 +32,21 @@ const VideoSection = () => {
    };
 
    return (
-      <section className="video-section">
+      <section className="video-section" id="video">
          <div className="container">
+            <div className="video-header">
+               <div className="video-badge">
+                  <i className="fas fa-play-circle"></i>
+                  <span>Vídeo de Apresentação</span>
+               </div>
+               <h2 className="video-title">
+                  Conheça a <span className="video-highlight">História</span> por Trás do Sucesso
+               </h2>
+               <p className="video-subtitle">
+                  Assista ao vídeo e descubra como o Instituto Talita Cruz pode transformar sua vida através de cursos de inglês, 
+                  mentorias e produtos exclusivos. Uma jornada de transformação espera por você!
+               </p>
+            </div>
             <div className="video-wrapper">
                {!isPlaying && !videoUrl ? (
                   <div className="video-placeholder">
@@ -79,6 +91,9 @@ const VideoSection = () => {
                                  <circle cx="40" cy="40" r="40" fill="var(--color-gold)" opacity="0.9"/>
                                  <path d="M32 25L32 55L55 40L32 25Z" fill="var(--color-black)"/>
                               </svg>
+                           </div>
+                           <div className="video-thumbnail-text">
+                              <p>Clique para assistir</p>
                            </div>
                         </div>
                      )}
