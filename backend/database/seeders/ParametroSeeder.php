@@ -177,6 +177,21 @@ class ParametroSeeder extends Seeder
             'par_descricao' => 'Ativa ou desativa a integração do chat (true/false)',
             'par_tipo' => 'integracoes',
          ],
+         // Parâmetros de Manutenção
+         [
+            'par_nome' => 'Manutenção Ativa',
+            'par_valor' => '0',
+            'par_chave' => 'manutencao_ativa',
+            'par_descricao' => 'Ativa ou desativa o modo de manutenção do site. Quando ativo, apenas IPs cadastrados podem acessar o site. Use 1 para ativar e 0 para desativar.',
+            'par_tipo' => 'geral',
+         ],
+         [
+            'par_nome' => 'IPs Permitidos Durante Manutenção',
+            'par_valor' => '',
+            'par_chave' => 'manutencao_ips_permitidos',
+            'par_descricao' => 'Lista de IPs que podem acessar o site durante a manutenção. Separe por vírgula ou um por linha. Exemplo: 192.168.1.1, 10.0.0.1',
+            'par_tipo' => 'geral',
+         ],
          // Parâmetros do Card Hotmart
          [
             'par_nome' => 'Imagem de Fundo do Card Hotmart',
@@ -218,6 +233,13 @@ class ParametroSeeder extends Seeder
             'par_valor' => 'R$ 99,90',
             'par_chave' => 'hotmart_card_preco',
             'par_descricao' => 'Valor do preço exibido no card',
+            'par_tipo' => 'geral',
+         ],
+         [
+            'par_nome' => 'Link do Botão do Card Hotmart',
+            'par_valor' => '/loja',
+            'par_chave' => 'hotmart_card_botao_link',
+            'par_descricao' => 'URL de destino do botão "Ver produto na loja" (ex: /loja para rota interna ou https://... para link externo)',
             'par_tipo' => 'geral',
          ],
          // Parâmetros do Card de Bônus 1

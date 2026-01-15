@@ -53,5 +53,13 @@ class Cliente extends Model
    {
       return $query->where('cli_status', 'inativo');
    }
+
+   /**
+    * Relacionamento com Pedidos
+    */
+   public function pedidos()
+   {
+      return $this->hasMany(Pedido::class, 'ped_cliente_id', 'cli_id');
+   }
 }
 

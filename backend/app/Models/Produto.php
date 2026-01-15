@@ -37,6 +37,7 @@ class Produto extends Model
       'pro_nivel',
       'pro_destaque',
       'pro_ordem',
+      'pro_checkout_hotmart',
    ];
 
    protected $casts = [
@@ -102,6 +103,14 @@ class Produto extends Model
                   ->orWhere(function ($query) {
                      $query->orderBy('pim_ordem')->limit(1);
                   });
+   }
+
+   /**
+    * Relacionamento com Pedidos
+    */
+   public function pedidos()
+   {
+      return $this->hasMany(Pedido::class, 'ped_produto_id', 'pro_id');
    }
 }
 

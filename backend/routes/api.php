@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\ParametroController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ContatoController;
@@ -13,28 +14,50 @@ use App\Http\Controllers\BiografiaController;
 use App\Http\Controllers\ConteudoController;
 use App\Http\Controllers\CarrinhoController;
 
-// Rotas públicas
+// Rotas públicas (com verificação de manutenção)
+// Exceção: login do admin e rotas de parâmetros necessárias para verificar manutenção
 Route::post('/admin/login', [AdminController::class, 'login']);
-Route::post('/contato', [ContatoController::class, 'enviar']);
-Route::get('/parametros', [ParametroController::class, 'index']);
-Route::get('/parametros/many', [ParametroController::class, 'showMany']); // Deve vir antes da rota com parâmetro dinâmico
-Route::get('/parametros/{chave}', [ParametroController::class, 'show']);
+Route::get('/parametros/many', [ParametroController::class, 'showMany']); // Necessário para verificar manutenção no frontend
 
-// Rotas públicas de produtos
-Route::get('/produtos', [ProdutoController::class, 'index']);
-Route::get('/produtos/{id}', [ProdutoController::class, 'show']);
+// Rota de debug para verificar IP (remover em produção se necessário)
+Route::get('/debug/ip', function (Request $request) {
+    $clientIp = $request->ip();
+    $headers = [
+        'HTTP_CF_CONNECTING_IP' => $request->server('HTTP_CF_CONNECTING_IP'),
+        'HTTP_X_FORWARDED_FOR' => $request->server('HTTP_X_FORWARDED_FOR'),
+        'HTTP_X_REAL_IP' => $request->server('HTTP_X_REAL_IP'),
+        'HTTP_CLIENT_IP' => $request->server('HTTP_CLIENT_IP'),
+        'REMOTE_ADDR' => $request->server('REMOTE_ADDR'),
+    ];
+    
+    return response()->json([
+        'ip_detectado' => $clientIp,
+        'headers' => $headers,
+        'todos_ips' => $request->ips(),
+    ]);
+});
 
-// Rotas públicas de FAQ e Biografia
-Route::get('/faq', [FaqController::class, 'index']);
-Route::get('/biografia', [BiografiaController::class, 'show']);
+Route::middleware('maintenance')->group(function () {
+    Route::post('/contato', [ContatoController::class, 'enviar']);
+    Route::get('/parametros', [ParametroController::class, 'index']);
+    Route::get('/parametros/{chave}', [ParametroController::class, 'show']);
 
-// Rotas públicas de carrinho
-Route::get('/carrinho', [CarrinhoController::class, 'index']);
-Route::get('/carrinho/total', [CarrinhoController::class, 'total']);
-Route::post('/carrinho', [CarrinhoController::class, 'store']);
-Route::put('/carrinho/{id}', [CarrinhoController::class, 'update']);
-Route::delete('/carrinho/{id}', [CarrinhoController::class, 'destroy']);
-Route::delete('/carrinho', [CarrinhoController::class, 'limpar']);
+    // Rotas públicas de produtos
+    Route::get('/produtos', [ProdutoController::class, 'index']);
+    Route::get('/produtos/{id}', [ProdutoController::class, 'show']);
+
+    // Rotas públicas de FAQ e Biografia
+    Route::get('/faq', [FaqController::class, 'index']);
+    Route::get('/biografia', [BiografiaController::class, 'show']);
+
+    // Rotas públicas de carrinho
+    Route::get('/carrinho', [CarrinhoController::class, 'index']);
+    Route::get('/carrinho/total', [CarrinhoController::class, 'total']);
+    Route::post('/carrinho', [CarrinhoController::class, 'store']);
+    Route::put('/carrinho/{id}', [CarrinhoController::class, 'update']);
+    Route::delete('/carrinho/{id}', [CarrinhoController::class, 'destroy']);
+    Route::delete('/carrinho', [CarrinhoController::class, 'limpar']);
+});
 
 // Rotas protegidas (requerem autenticação)
 Route::middleware('auth:sanctum')->group(function () {

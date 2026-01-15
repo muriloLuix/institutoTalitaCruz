@@ -175,6 +175,7 @@ class ProdutoController extends Controller
          'nivel' => 'nullable|in:iniciante,intermediario,avancado',
          'destaque' => 'boolean',
          'ordem' => 'nullable|integer|min:0',
+         'checkoutHotmart' => 'required|url|max:500',
       ], [
          'nome.required' => 'O nome é obrigatório.',
          'descricao.required' => 'A descrição é obrigatória.',
@@ -183,6 +184,8 @@ class ProdutoController extends Controller
          'preco.min' => 'O preço não pode ser negativo.',
          'categoria.required' => 'A categoria é obrigatória.',
          'categoria.in' => 'A categoria deve ser: livros, mentorias, cursos ou materiais.',
+         'checkoutHotmart.required' => 'O link de pagamento Hotmart é obrigatório.',
+         'checkoutHotmart.url' => 'O link de pagamento Hotmart deve ser uma URL válida.',
       ]);
 
       $produto = Produto::create([
@@ -201,6 +204,7 @@ class ProdutoController extends Controller
          'pro_nivel' => $request->nivel,
          'pro_destaque' => $request->destaque ?? false,
          'pro_ordem' => $request->ordem ?? 0,
+         'pro_checkout_hotmart' => $request->checkoutHotmart,
       ]);
 
       $produto->load('imagens');
@@ -237,6 +241,7 @@ class ProdutoController extends Controller
          'nivel' => 'nullable|in:iniciante,intermediario,avancado',
          'destaque' => 'boolean',
          'ordem' => 'nullable|integer|min:0',
+         'checkoutHotmart' => 'required|url|max:500',
       ], [
          'nome.required' => 'O nome é obrigatório.',
          'descricao.required' => 'A descrição é obrigatória.',
@@ -245,6 +250,8 @@ class ProdutoController extends Controller
          'preco.min' => 'O preço não pode ser negativo.',
          'categoria.required' => 'A categoria é obrigatória.',
          'categoria.in' => 'A categoria deve ser: livros, mentorias, cursos ou materiais.',
+         'checkoutHotmart.required' => 'O link de pagamento Hotmart é obrigatório.',
+         'checkoutHotmart.url' => 'O link de pagamento Hotmart deve ser uma URL válida.',
       ]);
 
       $produto->pro_nome = $request->nome;
@@ -261,6 +268,7 @@ class ProdutoController extends Controller
       $produto->pro_nivel = $request->nivel;
       $produto->pro_destaque = $request->destaque ?? false;
       $produto->pro_ordem = $request->ordem ?? 0;
+      $produto->pro_checkout_hotmart = $request->checkoutHotmart;
 
       $produto->save();
 
@@ -402,6 +410,7 @@ class ProdutoController extends Controller
          'nivel' => $produto->pro_nivel,
          'destaque' => $produto->pro_destaque,
          'ordem' => $produto->pro_ordem,
+         'checkoutHotmart' => $produto->pro_checkout_hotmart,
          'criadoEm' => $produto->pro_created_at ? $produto->pro_created_at->toIso8601String() : null,
          'atualizadoEm' => $produto->pro_updated_at ? $produto->pro_updated_at->toIso8601String() : null,
          'deletadoEm' => $produto->pro_deleted_at ? $produto->pro_deleted_at->toIso8601String() : null,

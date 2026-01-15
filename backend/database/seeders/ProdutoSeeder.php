@@ -34,6 +34,7 @@ class ProdutoSeeder extends Seeder
             'pro_nivel' => 'iniciante',
             'pro_destaque' => true,
             'pro_ordem' => 1,
+            'pro_checkout_hotmart' => 'https://pay.hotmart.com/exemplo-checkout-1',
             'pro_created_at' => Carbon::now()->subDays(30),
          ],
          [
@@ -56,6 +57,7 @@ class ProdutoSeeder extends Seeder
             'pro_nivel' => null,
             'pro_destaque' => true,
             'pro_ordem' => 2,
+            'pro_checkout_hotmart' => 'https://pay.hotmart.com/exemplo-checkout-2',
             'pro_created_at' => Carbon::now()->subDays(25),
          ],
          [
@@ -79,6 +81,7 @@ class ProdutoSeeder extends Seeder
             'pro_nivel' => 'intermediario',
             'pro_destaque' => true,
             'pro_ordem' => 3,
+            'pro_checkout_hotmart' => 'https://pay.hotmart.com/exemplo-checkout-3',
             'pro_created_at' => Carbon::now()->subDays(20),
          ],
          [
@@ -101,6 +104,7 @@ class ProdutoSeeder extends Seeder
             'pro_nivel' => null,
             'pro_destaque' => false,
             'pro_ordem' => 4,
+            'pro_checkout_hotmart' => 'https://pay.hotmart.com/exemplo-checkout-4',
             'pro_created_at' => Carbon::now()->subDays(15),
          ],
          [
@@ -123,6 +127,7 @@ class ProdutoSeeder extends Seeder
             'pro_nivel' => 'avancado',
             'pro_destaque' => false,
             'pro_ordem' => 5,
+            'pro_checkout_hotmart' => 'https://pay.hotmart.com/exemplo-checkout-5',
             'pro_created_at' => Carbon::now()->subDays(10),
          ],
          [
@@ -145,13 +150,14 @@ class ProdutoSeeder extends Seeder
             'pro_nivel' => 'avancado',
             'pro_destaque' => false,
             'pro_ordem' => 6,
+            'pro_checkout_hotmart' => 'https://pay.hotmart.com/exemplo-checkout-6',
             'pro_created_at' => Carbon::now()->subDays(5),
          ],
       ];
 
       foreach ($produtos as $produto) {
          $exists = Produto::where('pro_nome', $produto['pro_nome'])->exists();
-         
+
          if (!$exists) {
             Produto::create($produto);
             $this->command->info("✅ Produto '{$produto['pro_nome']}' criado com sucesso!");
@@ -164,4 +170,3 @@ class ProdutoSeeder extends Seeder
       $this->command->info('✅ Seeders de produtos concluída!');
    }
 }
-
