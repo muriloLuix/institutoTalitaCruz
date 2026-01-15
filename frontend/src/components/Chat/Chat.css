@@ -260,6 +260,13 @@
   color: var(--color-gold);
 }
 
+@media (max-width: 768px) {
+  .chat-toggle {
+    bottom: 80px;
+    right: 20px;
+  }
+}
+
 @media (max-width: 480px) {
   .chat-widget {
     width: calc(100vw - 20px);
@@ -270,8 +277,8 @@
   }
   
   .chat-toggle {
-    bottom: 20px;
-    right: 20px;
+    bottom: 90px;
+    right: 15px;
     width: 55px;
     height: 55px;
   }

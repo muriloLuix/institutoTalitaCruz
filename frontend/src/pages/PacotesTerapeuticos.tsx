@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import RelatedNavigation from '../components/RelatedNavigation';
 import './PacotesTerapeuticos.css';
 
 const PacotesTerapeuticos = () => {
@@ -78,6 +79,8 @@ const PacotesTerapeuticos = () => {
                </div>
             </div>
          </section>
+
+         <RelatedNavigation />
       </div>
    );
 };

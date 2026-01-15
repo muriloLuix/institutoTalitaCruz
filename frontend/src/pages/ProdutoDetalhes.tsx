@@ -4,6 +4,7 @@ import { apiClient } from '../utils/apiClient';
 import api from '../config/api';
 import { useCarrinho } from '../hooks/useCarrinho';
 import { showSuccess, showError } from '../utils/swal/swal';
+import LojaHeader from '../components/LojaHeader';
 import './ProdutoDetalhes.css';
 
 interface Produto {
@@ -115,6 +116,7 @@ const ProdutoDetalhes = () => {
    if (loading) {
       return (
          <div className="produto-detalhes-page">
+            <LojaHeader title="Carregando..." subtitle="Aguarde enquanto carregamos o produto" />
             <div className="container">
                <div className="loading">
                   <p>Carregando produto...</p>
@@ -127,6 +129,7 @@ const ProdutoDetalhes = () => {
    if (!produto) {
       return (
          <div className="produto-detalhes-page">
+            <LojaHeader title="Produto não encontrado" subtitle="O produto que você procura não existe" />
             <div className="container">
                <div className="empty-state">
                   <p>Produto não encontrado.</p>
@@ -141,13 +144,10 @@ const ProdutoDetalhes = () => {
 
    return (
       <div className="produto-detalhes-page">
-         <section className="produto-detalhes-hero">
-            <div className="container">
-               <button className="btn-back" onClick={() => navigate('/loja')}>
-                  <i className="fas fa-arrow-left"></i> Voltar para a Loja
-               </button>
-            </div>
-         </section>
+         <LojaHeader 
+            title={produto.nome} 
+            subtitle={`${getCategoriaNome(produto.categoria)} - ${formatPrice(produto.preco)}`}
+         />
 
          <section className="produto-detalhes-content">
             <div className="container">

@@ -49,6 +49,8 @@ function AppContent() {
                                 location.pathname.startsWith('/admin/configuracoes'));
   const isLojaPage = location.pathname === '/loja';
   const isCarrinhoPage = location.pathname === '/carrinho';
+  const isProdutoPage = location.pathname.startsWith('/produto/');
+  const isHomePage = location.pathname === '/';
 
   return (
     <div className="App">
@@ -120,9 +122,9 @@ function AppContent() {
       {!shouldHideComponents && !isCarrinhoPage && !isMaintenance && (
         <>
           <Footer />
-          <Chat />
+          {isHomePage && <Chat />}
           <ScrollToTop />
-          <BackToHome />
+          {!isLojaPage && !isCarrinhoPage && !isProdutoPage && <BackToHome />}
         </>
       )}
     </div>

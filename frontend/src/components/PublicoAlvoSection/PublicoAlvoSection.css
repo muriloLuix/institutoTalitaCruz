@@ -154,11 +154,6 @@
   
   .caracteristicas-grid {
     grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  
-  .caracteristica-card {
-    padding: 1.25rem;
   }
   
   .conclusao-texto {

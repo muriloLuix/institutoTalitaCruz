@@ -4,8 +4,12 @@ import './BackToHome.css';
 const BackToHome = () => {
    const location = useLocation();
    const isHome = location.pathname === '/';
+   const isLojaPage = location.pathname === '/loja';
+   const isCarrinhoPage = location.pathname === '/carrinho';
+   const isProdutoPage = location.pathname.startsWith('/produto/');
 
-   if (isHome) {
+   // Não mostrar se estiver na home ou nas páginas que já têm LojaHeader
+   if (isHome || isLojaPage || isCarrinhoPage || isProdutoPage) {
       return null;
    }
 

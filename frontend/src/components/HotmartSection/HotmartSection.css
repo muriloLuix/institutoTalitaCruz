@@ -201,6 +201,15 @@
     gap: 3rem;
   }
   
+  .hotmart-text {
+    text-align: center;
+  }
+  
+  .hotmart-button {
+    display: block;
+    margin: 0 auto;
+  }
+  
   .hotmart-card {
     transform: none;
   }
@@ -216,8 +225,16 @@
     background-attachment: scroll; /* Remove parallax no mobile para melhor performance */
   }
   
+  .hotmart-text {
+    text-align: center;
+  }
+  
   .hotmart-description {
     font-size: 1rem;
+  }
+  
+  .hotmart-benefits {
+    text-align: left;
   }
   
   .hotmart-benefits li {
@@ -227,6 +244,8 @@
   .hotmart-button {
     font-size: 1rem;
     padding: 0.875rem 2rem;
+    display: block;
+    margin: 0 auto;
   }
   
   .card-content h3 {

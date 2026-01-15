@@ -114,12 +114,46 @@
     margin-bottom: 3rem;
   }
   
+  /* Estilo de timeline vertical para mobile */
+  .perguntas-grid {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .perguntas-grid::before {
+    content: '';
+    position: absolute;
+    left: 0.75rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--color-gold), transparent);
+  }
+  
   .pergunta-card {
     padding: 1.5rem;
+    position: relative;
+    margin-bottom: 1.5rem;
+    border-left: 3px solid var(--color-gold);
+    border-radius: 0 12px 12px 0;
+  }
+
+  .pergunta-card::before {
+    content: '';
+    position: absolute;
+    left: -2.0rem;
+    top: 1.5rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-gold);
+    border: 3px solid var(--color-black);
+    box-shadow: 0 0 0 2px var(--color-gold);
   }
   
   .pergunta-numero {
-    font-size: 2rem;
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
   }
   
   .pergunta-texto {

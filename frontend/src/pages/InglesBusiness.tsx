@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import RelatedNavigation from '../components/RelatedNavigation';
 import './InglesBusiness.css';
 
 const InglesBusiness = () => {
@@ -78,6 +79,8 @@ const InglesBusiness = () => {
                </div>
             </div>
          </section>
+
+         <RelatedNavigation />
       </div>
    );
 };

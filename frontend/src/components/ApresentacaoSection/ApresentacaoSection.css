@@ -101,6 +101,11 @@
   z-index: 1;
 }
 
+/* No desktop, mantém column mesmo com a classe carousel */
+.apresentacao-grid.apresentacao-carousel {
+  flex-direction: column;
+}
+
 .apresentacao-card {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -147,12 +152,29 @@
   transform: translateY(-10px);
 }
 
+/* Cards intercalados - texto e imagem alternados */
+/* Cards intercalados - texto e imagem alternados */
 .apresentacao-card.card-right {
   direction: rtl;
 }
 
 .apresentacao-card.card-right > * {
   direction: ltr;
+}
+
+/* No desktop, garantir intercalação correta */
+@media (min-width: 769px) {
+  .apresentacao-card.card-left {
+    direction: ltr;
+  }
+
+  .apresentacao-card.card-right {
+    direction: rtl;
+  }
+
+  .apresentacao-card.card-right > * {
+    direction: ltr;
+  }
 }
 
 .apresentacao-card-image-wrapper {
@@ -354,12 +376,48 @@
     font-size: 1rem;
   }
 
-  .apresentacao-grid {
-    gap: 2.5rem;
+  /* Wrapper do carrossel para mobile */
+  .carousel-wrapper {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Carrossel para mobile - só aqui muda para row */
+  .apresentacao-grid.apresentacao-carousel {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 0;
+    position: relative;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    will-change: transform;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .apresentacao-carousel .carousel-slide {
+    min-width: 100%;
+    width: 100%;
+    max-width: 100%;
+    flex-shrink: 0;
+    flex-grow: 0;
+    margin: 0;
+    box-sizing: border-box;
+    display: block;
+  }
+
+  .apresentacao-carousel .apresentacao-card {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-bottom: 0;
+    width: 100%;
+    height: auto;
   }
 
   .apresentacao-card-image-wrapper {
-    min-height: 250px;
+    min-height: 200px;
   }
 
   .apresentacao-card-image {
@@ -377,6 +435,51 @@
   .apresentacao-card-description {
     font-size: 0.95rem;
     margin-bottom: 1.5rem;
+  }
+
+  /* Indicadores do carrossel - só visíveis em mobile */
+  .carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+}
+
+/* Esconder indicadores e wrapper do carrossel no desktop */
+@media (min-width: 769px) {
+  .carousel-wrapper {
+    overflow: visible;
+  }
+
+  .carousel-indicators {
+    display: none;
+  }
+
+  .apresentacao-grid.apresentacao-carousel {
+    transform: none !important;
+  }
+
+  .apresentacao-carousel .carousel-slide {
+    min-width: auto;
+    width: auto;
+    max-width: none;
+  }
+
+  .carousel-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--color-gold);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+  }
+
+  .carousel-indicator.active {
+    background: var(--color-gold);
+    transform: scale(1.2);
   }
 }
 

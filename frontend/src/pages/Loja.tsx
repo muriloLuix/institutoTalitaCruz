@@ -3,7 +3,8 @@ import { useSearchParams, useLocation, useNavigate, Link } from 'react-router-do
 import { apiClient } from '../utils/apiClient';
 import api from '../config/api';
 import { useCarrinho } from '../hooks/useCarrinho';
-import { showSuccess } from "../utils/swal/swal.ts";
+import { showSuccess, showError } from "../utils/swal/swal.ts";
+import LojaHeader from '../components/LojaHeader';
 import './Loja.css';
 
 interface Produto {
@@ -33,6 +34,7 @@ const Loja = () => {
    const [disponibilidadeFiltro, setDisponibilidadeFiltro] = useState<string>('todos');
    const { adicionarItem, totalItens } = useCarrinho();
    const [addingToCart, setAddingToCart] = useState<Set<number>>(new Set());
+   const [filtrosAbertos, setFiltrosAbertos] = useState<boolean>(false);
 
    const categorias = [
       { id: 'todos', nome: 'Todos os Produtos' },
@@ -50,6 +52,18 @@ const Loja = () => {
          behavior: 'instant'
       });
    }, [location.pathname]);
+
+   // Prevenir scroll do body quando menu estiver aberto
+   useEffect(() => {
+      if (filtrosAbertos) {
+         document.body.style.overflow = 'hidden';
+      } else {
+         document.body.style.overflow = '';
+      }
+      return () => {
+         document.body.style.overflow = '';
+      };
+   }, [filtrosAbertos]);
 
    useEffect(() => {
       const fetchProdutos = async () => {
@@ -203,47 +217,43 @@ const Loja = () => {
 
    return (
       <div className="loja-page">
-         <Link 
-            to="/carrinho" 
-            className="loja-carrinho-icon"
-            aria-label="Carrinho de compras"
-         >
-            <svg 
-               width="24" 
-               height="24" 
-               viewBox="0 0 24 24" 
-               fill="none" 
-               stroke="currentColor" 
-               strokeWidth="2" 
-               strokeLinecap="round" 
-               strokeLinejoin="round"
-            >
-               <circle cx="9" cy="21" r="1"></circle>
-               <circle cx="20" cy="21" r="1"></circle>
-               <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-            </svg>
-            {totalItens > 0 && (
-               <span className="loja-carrinho-badge">{totalItens}</span>
-            )}
-         </Link>
-
-         <section className="loja-hero">
-            <div className="container">
-               <h1 className="page-title">Nossa Loja</h1>
-               <p className="page-subtitle">
-                  Descubra nossos produtos exclusivos: cursos de inglês, inglês business, pacotes terapêuticos, 
-                  mentorias e muito mais para transformar sua vida pessoal e profissional
-               </p>
-            </div>
-         </section>
+         <LojaHeader />
 
          <section className="loja-content">
             <div className="container">
+               {/* Botão para abrir filtros em mobile */}
+               <button 
+                  className="filtros-toggle-btn"
+                  onClick={() => setFiltrosAbertos(true)}
+                  aria-label="Abrir filtros"
+               >
+                  <i className="fas fa-filter"></i>
+                  <span>Filtros</span>
+               </button>
+
+               {/* Overlay escuro quando menu estiver aberto */}
+               {filtrosAbertos && (
+                  <div 
+                     className="filtros-overlay"
+                     onClick={() => setFiltrosAbertos(false)}
+                  ></div>
+               )}
+
                <div className="loja-layout">
                   {/* Sidebar de Filtros */}
-                  <aside className="loja-sidebar">
-                     <div className="sidebar-content">
+                  <aside className={`loja-sidebar ${filtrosAbertos ? 'filtros-aberto' : ''}`}>
+                     <div className="sidebar-header-mobile">
                         <h3 className="sidebar-title">Filtros</h3>
+                        <button 
+                           className="filtros-close-btn"
+                           onClick={() => setFiltrosAbertos(false)}
+                           aria-label="Fechar filtros"
+                        >
+                           <i className="fas fa-times"></i>
+                        </button>
+                     </div>
+                     <div className="sidebar-content">
+                        <h3 className="sidebar-title desktop-only">Filtros</h3>
                         
                         {/* Filtro de Categoria */}
                         <div className="filter-section">

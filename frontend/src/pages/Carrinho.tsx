@@ -3,6 +3,7 @@ import { useCarrinho } from '../hooks/useCarrinho';
 import { showSuccess, showError } from '../utils/swal/swal';
 import ConfirmModal from '../components/Admin/ConfirmModal/ConfirmModal';
 import { useState, useEffect } from 'react';
+import LojaHeader from '../components/LojaHeader';
 import './Carrinho.css';
 
 const Carrinho = () => {
@@ -105,11 +106,7 @@ const Carrinho = () => {
    if (loading) {
       return (
          <div className="carrinho-page">
-            <section className="carrinho-hero">
-               <div className="container">
-                  <h1 className="page-title">Carrinho de Compras</h1>
-               </div>
-            </section>
+            <LojaHeader />
 
             <section className="carrinho-content">
                <div className="container">
@@ -142,11 +139,7 @@ const Carrinho = () => {
    if (itens.length === 0) {
       return (
          <div className="carrinho-page">
-            <section className="carrinho-hero">
-               <div className="container">
-                  <h1 className="page-title">Carrinho de Compras</h1>
-               </div>
-            </section>
+            <LojaHeader />
 
             <section className="carrinho-content">
                <div className="container">
@@ -187,11 +180,7 @@ const Carrinho = () => {
 
    return (
       <div className="carrinho-page">
-         <section className="carrinho-hero">
-            <div className="container">
-               <h1 className="page-title">Carrinho de Compras</h1>
-            </div>
-         </section>
+         <LojaHeader />
 
          <section className="carrinho-content">
             <div className="container">

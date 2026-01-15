@@ -63,20 +63,6 @@ class ParametroSeeder extends Seeder
             'par_descricao' => 'Número do WhatsApp apenas com números (para criar link clicável, formato: 55DDDNUMERO sem espaços ou caracteres especiais)',
             'par_tipo' => 'contato',
          ],
-         [
-            'par_nome' => 'Horário de Funcionamento - Semana',
-            'par_valor' => 'Segunda a Sexta: 9h às 18h',
-            'par_chave' => 'contato_horario_semana',
-            'par_descricao' => 'Horário de funcionamento de segunda a sexta-feira',
-            'par_tipo' => 'contato',
-         ],
-         [
-            'par_nome' => 'Horário de Funcionamento - Sábado',
-            'par_valor' => 'Sábado: 9h às 13h',
-            'par_chave' => 'contato_horario_sabado',
-            'par_descricao' => 'Horário de funcionamento aos sábados',
-            'par_tipo' => 'contato',
-         ],
          // Parâmetros de Redes Sociais
          [
             'par_nome' => 'Instagram',

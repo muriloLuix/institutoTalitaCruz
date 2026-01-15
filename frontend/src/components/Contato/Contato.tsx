@@ -18,8 +18,6 @@ const Contato = () => {
    const contatoEmail = getParametro('contato_email', 'contato@institutotalitacruz.com.br');
    const contatoWhatsapp = getParametro('contato_whatsapp', '(00) 00000-0000');
    const contatoWhatsappNumero = getParametro('contato_whatsapp_numero', '');
-   const contatoHorarioSemana = getParametro('contato_horario_semana', 'Segunda a Sexta: 9h às 18h');
-   const contatoHorarioSabado = getParametro('contato_horario_sabado', 'Sábado: 9h às 13h');
 
    // Cria o link do WhatsApp se o número estiver disponível
    const whatsappLink = contatoWhatsappNumero 
@@ -129,19 +127,6 @@ const Contato = () => {
                                  {contatoWhatsapp}
                               </a>
                            </p>
-                        </div>
-                     </div>
-                  )}
-                  
-                  {(contatoHorarioSemana || contatoHorarioSabado) && (
-                     <div className="info-item">
-                        <div className="info-icon">
-                           <i className="fas fa-clock"></i>
-                        </div>
-                        <div className="info-text">
-                           <h3>Horário de Atendimento</h3>
-                           {contatoHorarioSemana && <p>{contatoHorarioSemana}</p>}
-                           {contatoHorarioSabado && <p>{contatoHorarioSabado}</p>}
                         </div>
                      </div>
                   )}

@@ -2,9 +2,7 @@
   min-height: 100vh;
   background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
   color: var(--color-text-light);
-  padding-top: 80px;
   position: relative;
-  overflow-x: hidden;
 }
 
 .produto-detalhes-page::before {
@@ -32,67 +30,11 @@
   }
 }
 
-.produto-detalhes-hero {
-  padding: 2rem 0;
-  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-  position: relative;
-  z-index: 1;
-}
-
-.btn-back {
-  background: transparent;
-  border: 2px solid rgba(212, 175, 55, 0.3);
-  color: var(--color-text-light);
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  position: relative;
-  overflow: hidden;
-  animation: slideInLeft 0.6s ease-out;
-}
-
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.btn-back::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
-  transition: left 0.5s ease;
-}
-
-.btn-back:hover::before {
-  left: 100%;
-}
-
-.btn-back:hover {
-  border-color: var(--color-gold);
-  color: var(--color-gold);
-  transform: translateX(-5px);
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-}
-
 .produto-detalhes-content {
-  padding: 3rem 0;
+  padding: 40px 0 60px;
   position: relative;
   z-index: 1;
+  overflow-x: hidden;
 }
 
 .produto-detalhes-layout {

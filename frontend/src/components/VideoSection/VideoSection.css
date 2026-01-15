@@ -233,13 +233,51 @@
     padding: 0 20px;
   }
   
+  .video-wrapper {
+    max-width: 100%;
+    padding: 6px;
+    margin: 0 10px;
+  }
+  
+  .video-container {
+    aspect-ratio: 9/16; /* Formato vertical para vídeos portrait */
+    width: 100%;
+  }
+  
+  .video-iframe {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Faz o vídeo preencher o container */
+  }
+  
   .video-placeholder {
     padding: 1.5rem;
+    aspect-ratio: 9/16;
   }
   
   .play-button svg {
     width: 60px;
     height: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .video-wrapper {
+    margin: 0 5px;
+    padding: 4px;
+  }
+  
+  .video-container {
+    aspect-ratio: 9/16;
+  }
+  
+  .video-title {
+    font-size: 1.5rem;
+  }
+  
+  .video-subtitle {
+    font-size: 0.9rem;
+    padding: 0 15px;
   }
 }
 

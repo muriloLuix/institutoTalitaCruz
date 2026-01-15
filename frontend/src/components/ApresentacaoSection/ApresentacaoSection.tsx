@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './ApresentacaoSection.css';
 
@@ -15,6 +15,10 @@ interface ApresentacaoItem {
 
 const ApresentacaoSection = () => {
    const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+   const [currentSlide, setCurrentSlide] = useState(0);
+   const [touchStart, setTouchStart] = useState(0);
+   const [touchEnd, setTouchEnd] = useState(0);
+   const carouselRef = useRef<HTMLDivElement>(null);
 
    const apresentacoes: ApresentacaoItem[] = [
       {
@@ -59,6 +63,28 @@ const ApresentacaoSection = () => {
       }
    ];
 
+   const handleTouchStart = (e: React.TouchEvent) => {
+      setTouchStart(e.targetTouches[0].clientX);
+   };
+
+   const handleTouchMove = (e: React.TouchEvent) => {
+      setTouchEnd(e.targetTouches[0].clientX);
+   };
+
+   const handleTouchEnd = () => {
+      if (!touchStart || !touchEnd) return;
+      
+      const distance = touchStart - touchEnd;
+      const isLeftSwipe = distance > 50;
+      const isRightSwipe = distance < -50;
+
+      if (isLeftSwipe && currentSlide < apresentacoes.length - 1) {
+         setCurrentSlide(currentSlide + 1);
+      }
+      if (isRightSwipe && currentSlide > 0) {
+         setCurrentSlide(currentSlide - 1);
+      }
+   };
 
    return (
       <section className="apresentacao-section" id="apresentacao">
@@ -76,7 +102,15 @@ const ApresentacaoSection = () => {
                </p>
             </div>
 
-            <div className="apresentacao-grid">
+            <div className="carousel-wrapper">
+               <div 
+                  className="apresentacao-grid apresentacao-carousel"
+                  ref={carouselRef}
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
+                  style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+               >
                {apresentacoes.map((item, index) => {
                   const isEven = index % 2 === 0;
                   
@@ -84,7 +118,7 @@ const ApresentacaoSection = () => {
                      <Link
                         key={item.id}
                         to={item.link || '#'}
-                        className={`apresentacao-card ${isEven ? 'card-left' : 'card-right'} ${hoveredCard === item.id ? 'hovered' : ''}`}
+                        className={`apresentacao-card ${isEven ? 'card-left' : 'card-right'} ${hoveredCard === item.id ? 'hovered' : ''} carousel-slide`}
                         onMouseEnter={() => setHoveredCard(item.id)}
                         onMouseLeave={() => setHoveredCard(null)}
                      >
@@ -112,6 +146,19 @@ const ApresentacaoSection = () => {
                      </Link>
                   );
                })}
+               </div>
+            </div>
+            
+            {/* Indicadores do carrossel para mobile */}
+            <div className="carousel-indicators">
+               {apresentacoes.map((_, index) => (
+                  <button
+                     key={index}
+                     className={`carousel-indicator ${index === currentSlide ? 'active' : ''}`}
+                     onClick={() => setCurrentSlide(index)}
+                     aria-label={`Ir para slide ${index + 1}`}
+                  />
+               ))}
             </div>
          </div>
       </section>
