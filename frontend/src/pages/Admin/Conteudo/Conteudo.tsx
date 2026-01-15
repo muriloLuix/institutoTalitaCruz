@@ -77,6 +77,7 @@ const Conteudo = () => {
     descricao: "Livros e materiais didáticos",
     precoLabel: "A partir de",
     preco: "R$ 99,90",
+    botaoLink: "/loja",
   });
   const [loadingHotmartCard, setLoadingHotmartCard] = useState(true);
   const [editingHotmartCard, setEditingHotmartCard] = useState(false);
@@ -306,6 +307,7 @@ const Conteudo = () => {
         "hotmart_card_descricao",
         "hotmart_card_preco_label",
         "hotmart_card_preco",
+        "hotmart_card_botao_link",
       ];
       const response = await fetch(api.parametros.buscarMuitos(chaves));
 
@@ -319,6 +321,7 @@ const Conteudo = () => {
             "Livros e materiais didáticos",
           precoLabel: data["hotmart_card_preco_label"]?.valor || "A partir de",
           preco: data["hotmart_card_preco"]?.valor || "R$ 99,90",
+          botaoLink: data["hotmart_card_botao_link"]?.valor || "/loja",
         });
       } else {
         // Fallback para valores padrão se a requisição falhar
@@ -328,6 +331,7 @@ const Conteudo = () => {
           descricao: "Livros e materiais didáticos",
           precoLabel: "A partir de",
           preco: "R$ 99,90",
+          botaoLink: "/loja",
         });
       }
     } catch (error) {
@@ -339,6 +343,7 @@ const Conteudo = () => {
         descricao: "Livros e materiais didáticos",
         precoLabel: "A partir de",
         preco: "R$ 99,90",
+        botaoLink: "/loja",
       });
     } finally {
       setLoadingHotmartCard(false);
@@ -380,6 +385,12 @@ const Conteudo = () => {
           valor: hotmartCardData.preco,
           nome: "Preço do Card Hotmart",
           descricao: "Valor do preço exibido no card",
+        },
+        {
+          chave: "hotmart_card_botao_link",
+          valor: hotmartCardData.botaoLink,
+          nome: "Link do Botão do Card Hotmart",
+          descricao: "URL de destino do botão 'Ver produto na loja' (ex: /loja ou https://...)",
         },
       ];
 
@@ -1373,6 +1384,23 @@ const Conteudo = () => {
                             />
                           </div>
                         </div>
+                        <div className="admin-form-group">
+                          <label>Link do Botão "Ver produto na loja"</label>
+                          <input
+                            type="text"
+                            value={hotmartCardData.botaoLink}
+                            onChange={(e) =>
+                              setHotmartCardData({
+                                ...hotmartCardData,
+                                botaoLink: e.target.value,
+                              })
+                            }
+                            placeholder="/loja ou https://..."
+                          />
+                          <p style={{ color: 'var(--color-text-light)', opacity: 0.7, fontSize: '0.85rem', marginTop: '0.5rem' }}>
+                            <i className="fas fa-info-circle"></i> Use "/loja" para rota interna ou uma URL completa (https://...) para link externo.
+                          </p>
+                        </div>
                         <div className="content-editor-actions">
                           <button
                             className="admin-btn-secondary"
@@ -1408,6 +1436,8 @@ const Conteudo = () => {
                           <br />
                           <strong>Preço:</strong> {hotmartCardData.precoLabel}{" "}
                           {hotmartCardData.preco}
+                          <br />
+                          <strong>Link do Botão:</strong> {hotmartCardData.botaoLink || "/loja"}
                         </p>
                         <div
                           className="section-card-footer"

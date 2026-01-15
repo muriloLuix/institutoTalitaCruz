@@ -1,10 +1,10 @@
 import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useParametros } from '../../hooks/useParametros';
 import './HotmartSection.css';
 
 const HotmartSection = () => {
-   // URL do Hotmart - será configurada posteriormente
-   const hotmartUrl = '#'; // Substitua pelo link real do Hotmart
+   const navigate = useNavigate();
    const { getParametro } = useParametros();
    const backgroundImage = getParametro('hotmart_background_image', '');
    const cardBadge = getParametro('hotmart_card_badge', 'Mais Vendido');
@@ -12,12 +12,19 @@ const HotmartSection = () => {
    const cardDescricao = getParametro('hotmart_card_descricao', 'Livros e materiais didáticos');
    const cardPrecoLabel = getParametro('hotmart_card_preco_label', 'A partir de');
    const cardPreco = getParametro('hotmart_card_preco', 'R$ 99,90');
+   const botaoLink = getParametro('hotmart_card_botao_link', '/loja');
    const cardRef = useRef<HTMLDivElement>(null);
    const glowRef = useRef<HTMLDivElement>(null);
 
    const handleClick = () => {
-      if (hotmartUrl !== '#') {
-         window.open(hotmartUrl, '_blank');
+      if (botaoLink && botaoLink !== '#') {
+         // Se for URL externa (http/https), abre em nova aba
+         if (botaoLink.startsWith('http://') || botaoLink.startsWith('https://')) {
+            window.open(botaoLink, '_blank');
+         } else {
+            // Se for rota interna, usa React Router para navegação suave
+            navigate(botaoLink);
+         }
       }
    };
 
@@ -85,7 +92,7 @@ const HotmartSection = () => {
                      <li><i className="fas fa-check"></i> Suporte completo durante sua jornada</li>
                   </ul>
                   <button className="btn-primary hotmart-button" onClick={handleClick}>
-                     Ver Produtos no Hotmart
+                     Ver produto na loja
                   </button>
                </div>
                <div className="hotmart-visual">

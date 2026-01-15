@@ -19,7 +19,7 @@ const Configuracoes = () => {
    const [configuracoes, setConfiguracoes] = useState<Configuracao[]>([]);
    const [loading, setLoading] = useState(true);
    const [saving, setSaving] = useState(false);
-   const [activeTab, setActiveTab] = useState<'geral' | 'contato' | 'integracoes' | 'redes-sociais'>('geral');
+   const [activeTab, setActiveTab] = useState<'geral' | 'contato' | 'integracoes' | 'redes-sociais' | 'manutencao'>('geral');
    const [showPasswords, setShowPasswords] = useState<{ [key: number]: boolean }>({});
 
    useEffect(() => {
@@ -266,6 +266,9 @@ const Configuracoes = () => {
 
    // Filtrar configurações, excluindo parâmetros de conteúdo que são gerenciados em /admin/conteudo
    const configuracoesFiltradas = configuracoes.filter(c => {
+      if (activeTab === 'manutencao') {
+         return c.chave === 'manutencao_ativa' || c.chave === 'manutencao_ips_permitidos';
+      }
       if (c.categoria === activeTab) {
          // Na aba geral, excluir parâmetros de conteúdo (gerenciados em /admin/conteudo)
          if (activeTab === 'geral') {
@@ -312,7 +315,8 @@ const Configuracoes = () => {
       { id: 'geral', label: 'Geral', icon: 'fa-cog' },
       { id: 'contato', label: 'Contato', icon: 'fa-envelope' },
       { id: 'integracoes', label: 'Integrações', icon: 'fa-plug' },
-      { id: 'redes-sociais', label: 'Redes Sociais', icon: 'fa-share-alt' }
+      { id: 'redes-sociais', label: 'Redes Sociais', icon: 'fa-share-alt' },
+      { id: 'manutencao', label: 'Manutenção', icon: 'fa-tools' }
    ] as const;
 
    return (
@@ -353,6 +357,67 @@ const Configuracoes = () => {
                   <p>Carregando...</p>
                ) : configuracoesFiltradas.length === 0 ? (
                   <p className="admin-empty-state">Nenhuma configuração nesta categoria</p>
+               ) : activeTab === 'manutencao' ? (
+                  // Renderização especial para aba de Manutenção
+                  <div className="config-manutencao-section">
+                     <div className="admin-config-grid">
+                        {configuracoesFiltradas.map(config => (
+                           <div key={config.id} className="admin-config-card">
+                              <div className="config-card-header">
+                                 <h3>{config.nome}</h3>
+                                 <p className="config-description">{config.descricao}</p>
+                              </div>
+                              <div className="config-card-body">
+                                 {config.chave === 'manutencao_ativa' ? (
+                                    // Toggle para ativar/desativar manutenção
+                                    <div className="config-toggle-wrapper">
+                                       <label className="admin-checkbox-label" style={{ fontSize: '1.1rem', cursor: 'pointer' }}>
+                                          <input
+                                             type="checkbox"
+                                             checked={config.valor === '1' || config.valor === 'true'}
+                                             onChange={(e) => {
+                                                const novoValor = e.target.checked ? '1' : '0';
+                                                handleChange(config.id, novoValor, config.chave);
+                                             }}
+                                          />
+                                          <span className="admin-checkbox-custom"></span>
+                                          <span style={{ marginLeft: '0.5rem', fontWeight: 'bold' }}>
+                                             {config.valor === '1' || config.valor === 'true' ? 'Manutenção Ativa' : 'Manutenção Desativada'}
+                                          </span>
+                                       </label>
+                                    </div>
+                                 ) : config.chave === 'manutencao_ips_permitidos' ? (
+                                    // Textarea para IPs permitidos
+                                    <div>
+                                       <textarea
+                                          value={config.valor}
+                                          onChange={(e) => handleChange(config.id, e.target.value, config.chave)}
+                                          rows={8}
+                                          className="config-input"
+                                          placeholder="Digite os IPs permitidos, um por linha ou separados por vírgula&#10;Exemplo:&#10;192.168.1.1&#10;10.0.0.1&#10;ou&#10;192.168.1.1, 10.0.0.1"
+                                       />
+                                       <p style={{ color: 'var(--color-text-light)', opacity: 0.7, fontSize: '0.85rem', marginTop: '0.5rem' }}>
+                                          <i className="fas fa-info-circle"></i> IPs permitidos durante a manutenção. Um por linha ou separados por vírgula.
+                                       </p>
+                                    </div>
+                                 ) : (
+                                    <input
+                                       type={config.tipo}
+                                       value={config.valor}
+                                       onChange={(e) => handleChange(config.id, e.target.value, config.chave)}
+                                       className="config-input"
+                                    />
+                                 )}
+                              </div>
+                           </div>
+                        ))}
+                     </div>
+                     {configuracoesFiltradas.length === 0 && (
+                        <div className="admin-empty-state">
+                           <p>Configurações de manutenção não encontradas. Elas serão criadas automaticamente ao salvar.</p>
+                        </div>
+                     )}
+                  </div>
                ) : activeTab === 'geral' ? (
                   // Renderização organizada para a aba Geral
                   (() => {

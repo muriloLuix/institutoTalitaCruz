@@ -36,6 +36,7 @@ interface Produto {
    nivel?: 'iniciante' | 'intermediario' | 'avancado';
    destaque: boolean;
    ordem: number;
+   checkoutHotmart: string;
    visualizacoes?: number;
    vendas?: number;
    avaliacaoMedia?: number;
@@ -72,6 +73,7 @@ const Produtos = () => {
       nivel: '' as '' | 'iniciante' | 'intermediario' | 'avancado',
       destaque: false,
       ordem: '0',
+      checkoutHotmart: '',
    });
 
    useEffect(() => {
@@ -111,6 +113,7 @@ const Produtos = () => {
             nivel: formData.nivel || null,
             destaque: formData.destaque,
             ordem: parseInt(formData.ordem) || 0,
+            checkoutHotmart: formData.checkoutHotmart,
          };
 
          if (editingProduto) {
@@ -163,6 +166,7 @@ const Produtos = () => {
          nivel: produto.nivel || '',
          destaque: produto.destaque,
          ordem: produto.ordem.toString(),
+         checkoutHotmart: produto.checkoutHotmart || '',
       });
       setShowModal(true);
    };
@@ -218,6 +222,7 @@ const Produtos = () => {
          nivel: '',
          destaque: false,
          ordem: '0',
+         checkoutHotmart: '',
       });
       setProdutoImagens([]);
       setEditingProduto(null);
@@ -442,6 +447,19 @@ const Produtos = () => {
                               <option value="materiais">Materiais</option>
                            </select>
                         </div>
+                     </div>
+                     <div className="admin-form-group">
+                        <label>Link de Pagamento Hotmart *</label>
+                        <input
+                           type="url"
+                           value={formData.checkoutHotmart}
+                           onChange={(e) => setFormData({ ...formData, checkoutHotmart: e.target.value })}
+                           placeholder="https://..."
+                           required
+                        />
+                        <p style={{ color: 'var(--color-text-light)', opacity: 0.7, fontSize: '0.85rem', marginTop: '0.5rem' }}>
+                           <i className="fas fa-info-circle"></i> Este link é obrigatório para realizar o pagamento do produto via webhook.
+                        </p>
                      </div>
                      <div className="admin-form-row">
                         <div className="admin-form-group">

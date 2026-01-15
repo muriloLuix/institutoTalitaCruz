@@ -1,10 +1,12 @@
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { useState } from 'react';
 import Footer from './components/Footer';
 import Chat from './components/Chat';
 import ScrollToTop from './components/ScrollToTop';
 import BackToHome from './components/BackToHome';
 import TopBanner from './components/TopBanner';
 import ParametrosUpdater from './components/Parametros/ParametrosUpdater';
+import MaintenanceChecker from './components/Manutencao/MaintenanceChecker';
 import Landing from './pages/Landing';
 import Loja from './pages/Loja';
 import ProdutoDetalhes from './pages/ProdutoDetalhes';
@@ -32,6 +34,7 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 
 function AppContent() {
   const location = useLocation();
+  const [isMaintenance, setIsMaintenance] = useState(false);
   const isAdminPage = location.pathname.startsWith('/admin');
   const shouldHideComponents = isAdminPage && 
                                (location.pathname.startsWith('/admin/login') ||
@@ -50,17 +53,9 @@ function AppContent() {
   return (
     <div className="App">
         <ParametrosUpdater />
-        <TopBanner />
+        {!isMaintenance && <TopBanner />}
         <main className="main-content">
           <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/loja" element={<Loja />} />
-            <Route path="/produto/:id" element={<ProdutoDetalhes />} />
-            <Route path="/carrinho" element={<Carrinho />} />
-            <Route path="/equipe" element={<Equipe />} />
-            <Route path="/mentorias" element={<Mentorias />} />
-            <Route path="/pacotes-terapeuticos" element={<PacotesTerapeuticos />} />
-            <Route path="/ingles-business" element={<InglesBusiness />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/recuperar-senha" element={<ForgotPassword />} />
             <Route path="/admin" element={
@@ -79,9 +74,50 @@ function AppContent() {
               <Route path="configuracoes" element={<Configuracoes />} />
             </Route>
             <Route path="/admin/*" element={<Navigate to="/admin/login" replace />} />
+            {/* Rotas públicas com verificação de manutenção */}
+            <Route path="/" element={
+              <MaintenanceChecker onMaintenanceChange={setIsMaintenance}>
+                <Landing />
+              </MaintenanceChecker>
+            } />
+            <Route path="/loja" element={
+              <MaintenanceChecker onMaintenanceChange={setIsMaintenance}>
+                <Loja />
+              </MaintenanceChecker>
+            } />
+            <Route path="/produto/:id" element={
+              <MaintenanceChecker onMaintenanceChange={setIsMaintenance}>
+                <ProdutoDetalhes />
+              </MaintenanceChecker>
+            } />
+            <Route path="/carrinho" element={
+              <MaintenanceChecker onMaintenanceChange={setIsMaintenance}>
+                <Carrinho />
+              </MaintenanceChecker>
+            } />
+            <Route path="/equipe" element={
+              <MaintenanceChecker onMaintenanceChange={setIsMaintenance}>
+                <Equipe />
+              </MaintenanceChecker>
+            } />
+            <Route path="/mentorias" element={
+              <MaintenanceChecker onMaintenanceChange={setIsMaintenance}>
+                <Mentorias />
+              </MaintenanceChecker>
+            } />
+            <Route path="/pacotes-terapeuticos" element={
+              <MaintenanceChecker onMaintenanceChange={setIsMaintenance}>
+                <PacotesTerapeuticos />
+              </MaintenanceChecker>
+            } />
+            <Route path="/ingles-business" element={
+              <MaintenanceChecker onMaintenanceChange={setIsMaintenance}>
+                <InglesBusiness />
+              </MaintenanceChecker>
+            } />
           </Routes>
         </main>
-      {!shouldHideComponents && !isCarrinhoPage && (
+      {!shouldHideComponents && !isCarrinhoPage && !isMaintenance && (
         <>
           <Footer />
           <Chat />
