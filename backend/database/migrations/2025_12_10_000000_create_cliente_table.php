@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigIncrements('cli_id');
             $table->string('cli_nome');
             $table->string('cli_email')->unique();
+            $table->string('cli_password'); // Senha para autenticação
             $table->string('cli_tipo_pessoa')->default('fisica'); // 'fisica' ou 'juridica'
             $table->string('cli_telefone')->nullable();
             $table->string('cli_cpf')->nullable();

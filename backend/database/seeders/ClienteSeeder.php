@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Cliente;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 
 class ClienteSeeder extends Seeder
@@ -18,6 +19,7 @@ class ClienteSeeder extends Seeder
          [
             'cli_nome' => 'Maria Silva',
             'cli_email' => 'maria.silva@email.com',
+            'cli_password' => Hash::make('123456'),
             'cli_tipo_pessoa' => 'fisica',
             'cli_telefone' => '(11) 98765-4321',
             'cli_cpf' => '123.456.789-00',
@@ -33,6 +35,7 @@ class ClienteSeeder extends Seeder
          [
             'cli_nome' => 'João Santos',
             'cli_email' => 'joao.santos@email.com',
+            'cli_password' => Hash::make('123456'),
             'cli_tipo_pessoa' => 'fisica',
             'cli_telefone' => '(21) 99876-5432',
             'cli_cpf' => '987.654.321-00',
@@ -48,6 +51,7 @@ class ClienteSeeder extends Seeder
          [
             'cli_nome' => 'Ana Costa',
             'cli_email' => 'ana.costa@email.com',
+            'cli_password' => Hash::make('123456'),
             'cli_tipo_pessoa' => 'fisica',
             'cli_telefone' => '(31) 91234-5678',
             'cli_cpf' => '456.789.123-00',
@@ -63,6 +67,7 @@ class ClienteSeeder extends Seeder
          [
             'cli_nome' => 'Pedro Oliveira',
             'cli_email' => 'pedro.oliveira@email.com',
+            'cli_password' => Hash::make('123456'),
             'cli_tipo_pessoa' => 'fisica',
             'cli_telefone' => '(41) 98888-7777',
             'cli_cpf' => '789.123.456-00',
@@ -78,6 +83,7 @@ class ClienteSeeder extends Seeder
          [
             'cli_nome' => 'Carla Ferreira',
             'cli_email' => 'carla.ferreira@email.com',
+            'cli_password' => Hash::make('123456'),
             'cli_tipo_pessoa' => 'fisica',
             'cli_telefone' => '(51) 97777-6666',
             'cli_cpf' => '321.654.987-00',
@@ -93,6 +99,7 @@ class ClienteSeeder extends Seeder
          [
             'cli_nome' => 'Roberto Alves',
             'cli_email' => 'roberto.alves@email.com',
+            'cli_password' => Hash::make('123456'),
             'cli_tipo_pessoa' => 'fisica',
             'cli_telefone' => '(85) 96666-5555',
             'cli_cpf' => '654.321.789-00',
@@ -108,6 +115,7 @@ class ClienteSeeder extends Seeder
          [
             'cli_nome' => 'Juliana Lima',
             'cli_email' => 'juliana.lima@email.com',
+            'cli_password' => Hash::make('123456'),
             'cli_tipo_pessoa' => 'fisica',
             'cli_telefone' => '(47) 95555-4444',
             'cli_cpf' => '147.258.369-00',
@@ -123,6 +131,7 @@ class ClienteSeeder extends Seeder
          [
             'cli_nome' => 'Fernando Souza',
             'cli_email' => 'fernando.souza@email.com',
+            'cli_password' => Hash::make('123456'),
             'cli_tipo_pessoa' => 'fisica',
             'cli_telefone' => '(61) 94444-3333',
             'cli_cpf' => '258.369.147-00',
@@ -139,6 +148,7 @@ class ClienteSeeder extends Seeder
          [
             'cli_nome' => 'Tech Solutions LTDA',
             'cli_email' => 'contato@techsolutions.com.br',
+            'cli_password' => Hash::make('123456'),
             'cli_tipo_pessoa' => 'juridica',
             'cli_telefone' => '(11) 3456-7890',
             'cli_cnpj' => '12.345.678/0001-90',
@@ -154,6 +164,7 @@ class ClienteSeeder extends Seeder
          [
             'cli_nome' => 'Educação & Cia',
             'cli_email' => 'comercial@educacaoecia.com.br',
+            'cli_password' => Hash::make('123456'),
             'cli_tipo_pessoa' => 'juridica',
             'cli_telefone' => '(21) 2345-6789',
             'cli_cnpj' => '98.765.432/0001-10',
@@ -169,6 +180,7 @@ class ClienteSeeder extends Seeder
          [
             'cli_nome' => 'Instituto de Idiomas ABC',
             'cli_email' => 'contato@institutoabc.com.br',
+            'cli_password' => Hash::make('123456'),
             'cli_tipo_pessoa' => 'juridica',
             'cli_telefone' => '(31) 3456-7890',
             'cli_cnpj' => '11.222.333/0001-44',

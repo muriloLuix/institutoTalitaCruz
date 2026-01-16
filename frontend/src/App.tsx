@@ -11,6 +11,8 @@ import Landing from './pages/Landing';
 import Loja from './pages/Loja';
 import ProdutoDetalhes from './pages/ProdutoDetalhes';
 import Carrinho from './pages/Carrinho';
+import Login from './pages/Login';
+import Cadastro from './pages/Cadastro';
 import Equipe from './pages/Equipe';
 import Mentorias from './pages/Mentorias';
 import PacotesTerapeuticos from './pages/PacotesTerapeuticos';
@@ -51,11 +53,13 @@ function AppContent() {
   const isCarrinhoPage = location.pathname === '/carrinho';
   const isProdutoPage = location.pathname.startsWith('/produto/');
   const isHomePage = location.pathname === '/';
+  const isLoginPage = location.pathname === '/login';
+  const isCadastroPage = location.pathname === '/cadastro';
 
   return (
     <div className="App">
         <ParametrosUpdater />
-        {!isMaintenance && <TopBanner />}
+        {!isMaintenance && !isLoginPage && !isCadastroPage && <TopBanner />}
         <main className="main-content">
           <Routes>
             <Route path="/admin/login" element={<AdminLogin />} />
@@ -97,6 +101,16 @@ function AppContent() {
                 <Carrinho />
               </MaintenanceChecker>
             } />
+            <Route path="/login" element={
+              <MaintenanceChecker onMaintenanceChange={setIsMaintenance}>
+                <Login />
+              </MaintenanceChecker>
+            } />
+            <Route path="/cadastro" element={
+              <MaintenanceChecker onMaintenanceChange={setIsMaintenance}>
+                <Cadastro />
+              </MaintenanceChecker>
+            } />
             <Route path="/equipe" element={
               <MaintenanceChecker onMaintenanceChange={setIsMaintenance}>
                 <Equipe />
@@ -119,12 +133,12 @@ function AppContent() {
             } />
           </Routes>
         </main>
-      {!shouldHideComponents && !isCarrinhoPage && !isMaintenance && (
+      {!shouldHideComponents && !isCarrinhoPage && !isLoginPage && !isCadastroPage && !isMaintenance && (
         <>
           <Footer />
           {isHomePage && <Chat />}
           <ScrollToTop />
-          {!isLojaPage && !isCarrinhoPage && !isProdutoPage && <BackToHome />}
+          {!isLojaPage && !isCarrinhoPage && !isProdutoPage && !isLoginPage && !isCadastroPage && <BackToHome />}
         </>
       )}
     </div>

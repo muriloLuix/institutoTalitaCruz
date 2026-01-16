@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Cliente extends Model
+class Cliente extends Authenticatable
 {
-   use SoftDeletes;
+   use SoftDeletes, HasApiTokens;
 
    protected $table = 'cliente';
    protected $primaryKey = 'cli_id';
@@ -20,6 +21,7 @@ class Cliente extends Model
    protected $fillable = [
       'cli_nome',
       'cli_email',
+      'cli_password',
       'cli_tipo_pessoa',
       'cli_telefone',
       'cli_cpf',
@@ -34,9 +36,30 @@ class Cliente extends Model
       'cli_observacoes',
    ];
 
+   protected $hidden = [
+      'cli_password',
+   ];
+
    protected $casts = [
       'cli_data_nascimento' => 'date',
+      'cli_password' => 'hashed',
    ];
+
+   /**
+    * Get the name of the unique identifier for the user.
+    */
+   public function getAuthIdentifierName()
+   {
+      return 'cli_email';
+   }
+
+   /**
+    * Get the password for the user.
+    */
+   public function getAuthPassword()
+   {
+      return $this->cli_password;
+   }
 
    /**
     * Scope para buscar apenas clientes ativos

@@ -13,6 +13,7 @@ use App\Http\Controllers\FaqController;
 use App\Http\Controllers\BiografiaController;
 use App\Http\Controllers\ConteudoController;
 use App\Http\Controllers\CarrinhoController;
+use App\Http\Controllers\ClienteAuthController;
 
 // Rotas públicas (com verificação de manutenção)
 // Exceção: login do admin e rotas de parâmetros necessárias para verificar manutenção
@@ -57,6 +58,10 @@ Route::middleware('maintenance')->group(function () {
     Route::put('/carrinho/{id}', [CarrinhoController::class, 'update']);
     Route::delete('/carrinho/{id}', [CarrinhoController::class, 'destroy']);
     Route::delete('/carrinho', [CarrinhoController::class, 'limpar']);
+
+    // Rotas públicas de autenticação de cliente
+    Route::post('/cliente/cadastro', [ClienteAuthController::class, 'cadastro']);
+    Route::post('/cliente/login', [ClienteAuthController::class, 'login']);
 });
 
 // Rotas protegidas (requerem autenticação)
@@ -116,6 +121,10 @@ Route::middleware('auth:sanctum')->group(function () {
    Route::delete('/admin/conteudo/hotmart-background', [ConteudoController::class, 'removeHotmartBackground']);
    Route::post('/admin/conteudo/bonus-card-background', [ConteudoController::class, 'uploadBonusCardBackground']);
    Route::delete('/admin/conteudo/bonus-card-background', [ConteudoController::class, 'removeBonusCardBackground']);
+   
+   // Rotas de cliente autenticado
+   Route::post('/cliente/logout', [ClienteAuthController::class, 'logout']);
+   Route::get('/cliente/me', [ClienteAuthController::class, 'me']);
 });
 
 ?>

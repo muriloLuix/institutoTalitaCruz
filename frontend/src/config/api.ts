@@ -91,6 +91,16 @@ export const api = {
     restaurar: (id: number) => `${API_BASE_URL}/admin/clientes/${id}/restore`,
   },
 
+  // Endpoints de cliente (público - login/cadastro)
+  cliente: {
+    login: () => `${API_BASE_URL}/cliente/login`,
+    logout: () => `${API_BASE_URL}/cliente/logout`,
+    cadastro: () => `${API_BASE_URL}/cliente/cadastro`,
+    me: () => `${API_BASE_URL}/cliente/me`,
+    recuperarSenha: () => `${API_BASE_URL}/cliente/recuperar-senha`,
+    resetarSenha: () => `${API_BASE_URL}/cliente/resetar-senha`,
+  },
+
   // Endpoints de FAQ (públicos)
   faq: {
     listar: () => `${API_BASE_URL}/faq`,

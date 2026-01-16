@@ -6,16 +6,16 @@
   z-index: 1000;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.1);
   backdrop-filter: blur(10px);
-  animation: slideDown 0.6s ease-out;
+  animation: fadeIn 0.4s ease-out;
+  min-height: 100px; /* Altura mínima fixa para evitar mudanças durante carregamento */
+  box-sizing: border-box;
 }
 
-@keyframes slideDown {
+@keyframes fadeIn {
   from {
-    transform: translateY(-100%);
     opacity: 0;
   }
   to {
-    transform: translateY(0);
     opacity: 1;
   }
 }
@@ -40,6 +40,8 @@
   justify-content: space-between;
   gap: 2rem;
   position: relative;
+  min-height: 100px; /* Altura mínima fixa: logo (60px) + padding (40px) = 100px */
+  box-sizing: border-box;
 }
 
 /* Botão Voltar */
@@ -110,6 +112,8 @@
   align-items: center;
   text-decoration: none;
   transition: transform 0.3s ease;
+  min-height: 60px; /* Garante espaço mesmo antes da imagem carregar */
+  flex-shrink: 0;
 }
 
 .loja-header-logo:hover {
@@ -119,14 +123,19 @@
 .loja-header-logo-img {
   height: 60px;
   width: auto;
+  min-height: 60px; /* Garante altura mínima durante carregamento */
   display: block;
   filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
+  object-fit: contain;
+  flex-shrink: 0; /* Evita que a imagem encolha */
 }
 
 .loja-header-title-wrapper {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  min-height: 50px; /* Altura mínima para título + subtítulo */
+  justify-content: center;
 }
 
 .loja-header-title {
@@ -316,10 +325,12 @@
   .loja-header-container {
     padding: 1rem 1.5rem;
     gap: 1.5rem;
+    min-height: 90px; /* Ajuste proporcional para tablet */
   }
 
   .loja-header-logo-img {
     height: 50px;
+    min-height: 50px;
   }
 
   .loja-header-title {
@@ -367,6 +378,7 @@
 
   .loja-header-logo-img {
     height: 45px;
+    min-height: 45px;
   }
 
   .loja-header-title-wrapper {
@@ -434,6 +446,7 @@
 
   .loja-header-logo-img {
     height: 40px;
+    min-height: 40px;
   }
 
   .loja-header-title {

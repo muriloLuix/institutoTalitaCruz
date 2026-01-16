@@ -39,8 +39,19 @@ const Carrinho = () => {
    };
 
    const handleFinalizarCompra = () => {
-      // Aqui será implementada a lógica de finalização de compra
-      console.log('Finalizar compra');
+      // Verifica se o cliente está logado
+      const clienteToken = localStorage.getItem('clienteToken');
+      
+      if (!clienteToken) {
+         // Se não estiver logado, redireciona para a página de login
+         navigate('/login', { 
+            state: { from: { pathname: '/carrinho' } } 
+         });
+         return;
+      }
+
+      // Se estiver logado, mostra alerta (por enquanto)
+      showSuccess('Login verificado!', 'Você está logado. A finalização da compra será implementada em breve.');
    };
 
    const handleRemoverItemClick = (itemId: number) => {
