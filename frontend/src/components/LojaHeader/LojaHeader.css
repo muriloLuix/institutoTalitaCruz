@@ -174,6 +174,12 @@
   gap: 2rem;
 }
 
+.loja-header-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .loja-header-nav {
   display: flex;
   gap: 1.5rem;
@@ -320,6 +326,143 @@
   font-weight: 700;
 }
 
+/* Usuário */
+.loja-header-user-wrapper {
+  position: relative;
+}
+
+.loja-header-user {
+  width: 45px;
+  height: 45px;
+  min-width: 45px;
+  min-height: 45px;
+  max-width: 45px;
+  max-height: 45px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.1));
+  border: 2px solid rgba(212, 175, 55, 0.4);
+  color: var(--color-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+  position: relative;
+  z-index: 10;
+  padding: 0;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.loja-header-user:hover {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.3), rgba(212, 175, 55, 0.2));
+  border-color: var(--color-gold);
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.loja-header-user-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 220px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.98) 0%, rgba(26, 26, 26, 0.98) 100%);
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.2);
+  z-index: 1000;
+  overflow: hidden;
+  animation: slideDownFade 0.3s ease-out;
+}
+
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.user-dropdown-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: rgba(212, 175, 55, 0.05);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.user-dropdown-header i {
+  font-size: 2.5rem;
+  color: var(--color-gold);
+}
+
+.user-dropdown-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.user-dropdown-name {
+  color: var(--color-text-light);
+  font-weight: 700;
+  font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-dropdown-label {
+  color: var(--color-text-gray);
+  font-size: 0.85rem;
+}
+
+.user-dropdown-divider {
+  height: 1px;
+  background: rgba(212, 175, 55, 0.2);
+  margin: 0.5rem 0;
+}
+
+.user-dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: transparent;
+  border: none;
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.user-dropdown-item i {
+  color: var(--color-gold);
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.user-dropdown-item:hover {
+  background: rgba(212, 175, 55, 0.1);
+  color: var(--color-gold);
+  padding-left: 1.5rem;
+}
+
+.user-dropdown-item:active {
+  background: rgba(212, 175, 55, 0.15);
+}
+
 /* Responsivo - Tablet */
 @media (max-width: 1024px) {
   .loja-header-container {
@@ -406,6 +549,25 @@
     justify-content: space-between;
   }
 
+  .loja-header-actions-group {
+    gap: 0.75rem;
+  }
+
+  .loja-header-user {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    font-size: 1rem;
+  }
+
+  .loja-header-user-dropdown {
+    min-width: 200px;
+    right: 0;
+  }
+
   .loja-header-nav {
     gap: 0.75rem;
   }
@@ -428,6 +590,33 @@
   .loja-header-carrinho-icon svg {
     width: 20px;
     height: 20px;
+  }
+
+  .loja-header-user {
+    width: 35px;
+    height: 35px;
+    min-width: 35px;
+    min-height: 35px;
+    max-width: 35px;
+    max-height: 35px;
+    font-size: 0.9rem;
+  }
+
+  .loja-header-user-dropdown {
+    min-width: 180px;
+  }
+
+  .user-dropdown-header {
+    padding: 1rem;
+  }
+
+  .user-dropdown-header i {
+    font-size: 2rem;
+  }
+
+  .user-dropdown-item {
+    padding: 0.875rem 1rem;
+    font-size: 0.9rem;
   }
 }
 

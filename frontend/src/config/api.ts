@@ -101,6 +101,11 @@ export const api = {
     resetarSenha: () => `${API_BASE_URL}/cliente/resetar-senha`,
   },
 
+  // Endpoints de checkout
+  checkout: {
+    finalizar: () => `${API_BASE_URL}/checkout/finalizar`,
+  },
+
   // Endpoints de FAQ (públicos)
   faq: {
     listar: () => `${API_BASE_URL}/faq`,

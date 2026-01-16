@@ -14,6 +14,7 @@ use App\Http\Controllers\BiografiaController;
 use App\Http\Controllers\ConteudoController;
 use App\Http\Controllers\CarrinhoController;
 use App\Http\Controllers\ClienteAuthController;
+use App\Http\Controllers\CheckoutController;
 
 // Rotas públicas (com verificação de manutenção)
 // Exceção: login do admin e rotas de parâmetros necessárias para verificar manutenção
@@ -125,6 +126,9 @@ Route::middleware('auth:sanctum')->group(function () {
    // Rotas de cliente autenticado
    Route::post('/cliente/logout', [ClienteAuthController::class, 'logout']);
    Route::get('/cliente/me', [ClienteAuthController::class, 'me']);
+   
+   // Rotas de checkout (cliente autenticado)
+   Route::post('/checkout/finalizar', [CheckoutController::class, 'finalizarCompra']);
 });
 
 ?>

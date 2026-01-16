@@ -13,6 +13,7 @@ import ProdutoDetalhes from './pages/ProdutoDetalhes';
 import Carrinho from './pages/Carrinho';
 import Login from './pages/Login';
 import Cadastro from './pages/Cadastro';
+import Perfil from './pages/Perfil';
 import Equipe from './pages/Equipe';
 import Mentorias from './pages/Mentorias';
 import PacotesTerapeuticos from './pages/PacotesTerapeuticos';
@@ -55,11 +56,12 @@ function AppContent() {
   const isHomePage = location.pathname === '/';
   const isLoginPage = location.pathname === '/login';
   const isCadastroPage = location.pathname === '/cadastro';
+  const isPerfilPage = location.pathname === '/perfil';
 
   return (
     <div className="App">
         <ParametrosUpdater />
-        {!isMaintenance && !isLoginPage && !isCadastroPage && <TopBanner />}
+        {!isMaintenance && !isLoginPage && !isCadastroPage && !isPerfilPage && <TopBanner />}
         <main className="main-content">
           <Routes>
             <Route path="/admin/login" element={<AdminLogin />} />
@@ -111,6 +113,11 @@ function AppContent() {
                 <Cadastro />
               </MaintenanceChecker>
             } />
+            <Route path="/perfil" element={
+              <MaintenanceChecker onMaintenanceChange={setIsMaintenance}>
+                <Perfil />
+              </MaintenanceChecker>
+            } />
             <Route path="/equipe" element={
               <MaintenanceChecker onMaintenanceChange={setIsMaintenance}>
                 <Equipe />
@@ -133,12 +140,12 @@ function AppContent() {
             } />
           </Routes>
         </main>
-      {!shouldHideComponents && !isCarrinhoPage && !isLoginPage && !isCadastroPage && !isMaintenance && (
+      {!shouldHideComponents && !isCarrinhoPage && !isLoginPage && !isCadastroPage && !isPerfilPage && !isMaintenance && (
         <>
           <Footer />
           {isHomePage && <Chat />}
           <ScrollToTop />
-          {!isLojaPage && !isCarrinhoPage && !isProdutoPage && !isLoginPage && !isCadastroPage && <BackToHome />}
+          {!isLojaPage && !isCarrinhoPage && !isProdutoPage && !isLoginPage && !isCadastroPage && !isPerfilPage && <BackToHome />}
         </>
       )}
     </div>

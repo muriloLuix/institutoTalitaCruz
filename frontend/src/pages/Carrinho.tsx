@@ -3,6 +3,8 @@ import { useCarrinho } from '../hooks/useCarrinho';
 import { showSuccess, showError } from '../utils/swal/swal';
 import ConfirmModal from '../components/Admin/ConfirmModal/ConfirmModal';
 import { useState, useEffect } from 'react';
+import { apiClient } from '../utils/apiClient';
+import api from '../config/api';
 import LojaHeader from '../components/LojaHeader';
 import './Carrinho.css';
 
@@ -15,7 +17,9 @@ const Carrinho = () => {
       limparCarrinho,
       totalPreco,
       loading,
+      sessionId,
    } = useCarrinho();
+   const [finalizandoCompra, setFinalizandoCompra] = useState(false);
    const [showDeleteModal, setShowDeleteModal] = useState(false);
    const [showClearModal, setShowClearModal] = useState(false);
    const [itemToDelete, setItemToDelete] = useState<number | null>(null);
@@ -38,7 +42,7 @@ const Carrinho = () => {
       navigate('/loja');
    };
 
-   const handleFinalizarCompra = () => {
+   const handleFinalizarCompra = async () => {
       // Verifica se o cliente está logado
       const clienteToken = localStorage.getItem('clienteToken');
       
@@ -50,8 +54,45 @@ const Carrinho = () => {
          return;
       }
 
-      // Se estiver logado, mostra alerta (por enquanto)
-      showSuccess('Login verificado!', 'Você está logado. A finalização da compra será implementada em breve.');
+      // Verifica se há itens no carrinho
+      if (itens.length === 0) {
+         showError('Carrinho vazio', 'Adicione produtos ao carrinho antes de finalizar a compra.');
+         return;
+      }
+
+      setFinalizandoCompra(true);
+
+      try {
+         const data = await apiClient.request<{
+            message: string;
+            cliente_id?: number;
+            session_id?: string;
+         }>(
+            api.checkout.finalizar(),
+            {
+               method: 'POST',
+               body: JSON.stringify({
+                  session_id: sessionId,
+               }),
+            },
+            true // Requer autenticação
+         );
+
+         showSuccess(
+            'Solicitação recebida!', 
+            data.message || 'Sua solicitação foi recebida com sucesso!'
+         );
+
+         // Não limpa o carrinho por enquanto, já que a lógica completa será implementada depois
+         // await limparCarrinho();
+         navigate('/loja');
+      } catch (error: any) {
+         console.error('Erro ao finalizar compra:', error);
+         const errorMessage = error.message || 'Não foi possível finalizar a compra. Tente novamente.';
+         showError('Erro ao finalizar compra', errorMessage);
+      } finally {
+         setFinalizandoCompra(false);
+      }
    };
 
    const handleRemoverItemClick = (itemId: number) => {
@@ -350,9 +391,19 @@ const Carrinho = () => {
                         <button
                            className="btn btn-primary btn-block btn-large"
                            onClick={handleFinalizarCompra}
+                           disabled={finalizandoCompra || loading}
                         >
-                           <i className="fas fa-lock"></i>
-                           Finalizar Compra
+                           {finalizandoCompra ? (
+                              <>
+                                 <i className="fas fa-spinner fa-spin"></i>
+                                 Finalizando...
+                              </>
+                           ) : (
+                              <>
+                                 <i className="fas fa-lock"></i>
+                                 Finalizar Compra
+                              </>
+                           )}
                         </button>
 
                         <button

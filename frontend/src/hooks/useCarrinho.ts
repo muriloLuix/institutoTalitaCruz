@@ -171,5 +171,6 @@ export const useCarrinho = () => {
       totalPreco,
       loading,
       recarregar: carregarCarrinho,
+      sessionId, // Exporta sessionId para uso no checkout
    };
 };

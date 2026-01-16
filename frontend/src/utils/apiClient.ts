@@ -6,9 +6,10 @@ import api from '../config/api';
 class ApiClient {
   /**
    * Obtém o token de autenticação do localStorage
+   * Prioriza o token de cliente, depois o de admin
    */
   private getToken(): string | null {
-    return localStorage.getItem('adminToken');
+    return localStorage.getItem('clienteToken') || localStorage.getItem('adminToken');
   }
 
   /**

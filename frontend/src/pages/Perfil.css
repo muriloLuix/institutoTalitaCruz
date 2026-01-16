@@ -1,0 +1,116 @@
+.perfil-page {
+  min-height: 100vh;
+  background: var(--color-black);
+}
+
+.perfil-content {
+  padding: 40px 0 60px;
+}
+
+.perfil-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.perfil-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--color-text-light);
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--color-gold), #ffd700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.perfil-subtitle {
+  font-size: 1.1rem;
+  color: var(--color-text-gray);
+  margin: 0;
+}
+
+.perfil-card {
+  max-width: 900px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(26, 26, 26, 0.95) 100%);
+  border: 2px solid rgba(212, 175, 55, 0.2);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.1);
+}
+
+.perfil-section {
+  margin-bottom: 2.5rem;
+}
+
+.perfil-section:last-child {
+  margin-bottom: 0;
+}
+
+.perfil-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-gold);
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(212, 175, 55, 0.2);
+}
+
+.perfil-section-title i {
+  font-size: 1.3rem;
+}
+
+.perfil-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.perfil-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.perfil-info-item.full-width {
+  grid-column: 1 / -1;
+}
+
+.perfil-info-item label {
+  color: var(--color-text-gray);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.perfil-info-item p {
+  color: var(--color-text-light);
+  font-size: 1rem;
+  margin: 0;
+  padding: 0.75rem 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(212, 175, 55, 0.1);
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .perfil-content {
+    padding: 30px 0 40px;
+  }
+
+  .perfil-card {
+    padding: 1.5rem;
+  }
+
+  .perfil-title {
+    font-size: 2rem;
+  }
+
+  .perfil-info-grid {
+    grid-template-columns: 1fr;
+  }
+}
