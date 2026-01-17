@@ -14,6 +14,7 @@ import Carrinho from './pages/Carrinho';
 import Login from './pages/Login';
 import Cadastro from './pages/Cadastro';
 import Perfil from './pages/Perfil';
+import PedidosCliente from './pages/Pedidos';
 import Equipe from './pages/Equipe';
 import Mentorias from './pages/Mentorias';
 import PacotesTerapeuticos from './pages/PacotesTerapeuticos';
@@ -57,11 +58,12 @@ function AppContent() {
   const isLoginPage = location.pathname === '/login';
   const isCadastroPage = location.pathname === '/cadastro';
   const isPerfilPage = location.pathname === '/perfil';
+  const isPedidosPage = location.pathname === '/pedidos';
 
   return (
     <div className="App">
         <ParametrosUpdater />
-        {!isMaintenance && !isLoginPage && !isCadastroPage && !isPerfilPage && <TopBanner />}
+        {!isMaintenance && !isLoginPage && !isCadastroPage && !isPerfilPage && !isPedidosPage && <TopBanner />}
         <main className="main-content">
           <Routes>
             <Route path="/admin/login" element={<AdminLogin />} />
@@ -118,6 +120,11 @@ function AppContent() {
                 <Perfil />
               </MaintenanceChecker>
             } />
+            <Route path="/pedidos" element={
+              <MaintenanceChecker onMaintenanceChange={setIsMaintenance}>
+                <PedidosCliente />
+              </MaintenanceChecker>
+            } />
             <Route path="/equipe" element={
               <MaintenanceChecker onMaintenanceChange={setIsMaintenance}>
                 <Equipe />
@@ -140,12 +147,12 @@ function AppContent() {
             } />
           </Routes>
         </main>
-      {!shouldHideComponents && !isCarrinhoPage && !isLoginPage && !isCadastroPage && !isPerfilPage && !isMaintenance && (
+      {!shouldHideComponents && !isCarrinhoPage && !isLoginPage && !isCadastroPage && !isPerfilPage && !isPedidosPage && !isMaintenance && (
         <>
           <Footer />
           {isHomePage && <Chat />}
           <ScrollToTop />
-          {!isLojaPage && !isCarrinhoPage && !isProdutoPage && !isLoginPage && !isCadastroPage && !isPerfilPage && <BackToHome />}
+          {!isLojaPage && !isCarrinhoPage && !isProdutoPage && !isLoginPage && !isCadastroPage && !isPerfilPage && !isPedidosPage && <BackToHome />}
         </>
       )}
     </div>

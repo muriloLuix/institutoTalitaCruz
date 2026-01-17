@@ -94,6 +94,11 @@ const LojaHeader = ({ title, subtitle }: LojaHeaderProps = {}) => {
       navigate('/perfil');
    };
 
+   const handleVerPedidos = () => {
+      setShowUserDropdown(false);
+      navigate('/pedidos');
+   };
+
    return (
       <header className="loja-header">
          <div className="loja-header-container">
@@ -185,6 +190,13 @@ const LojaHeader = ({ title, subtitle }: LojaHeaderProps = {}) => {
                               >
                                  <i className="fas fa-user"></i>
                                  <span>Visualizar meu perfil</span>
+                              </button>
+                              <button
+                                 className="user-dropdown-item"
+                                 onClick={handleVerPedidos}
+                              >
+                                 <i className="fas fa-shopping-bag"></i>
+                                 <span>Meus Pedidos</span>
                               </button>
                               <button
                                  className="user-dropdown-item"

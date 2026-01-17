@@ -126,6 +126,9 @@ Route::middleware('auth:sanctum')->group(function () {
    // Rotas de cliente autenticado
    Route::post('/cliente/logout', [ClienteAuthController::class, 'logout']);
    Route::get('/cliente/me', [ClienteAuthController::class, 'me']);
+   Route::put('/cliente/update', [ClienteAuthController::class, 'update']);
+   Route::put('/cliente/alterar-senha', [ClienteAuthController::class, 'alterarSenha']);
+   Route::get('/cliente/pedidos', [ClienteAuthController::class, 'pedidos']);
    
    // Rotas de checkout (cliente autenticado)
    Route::post('/checkout/finalizar', [CheckoutController::class, 'finalizarCompra']);

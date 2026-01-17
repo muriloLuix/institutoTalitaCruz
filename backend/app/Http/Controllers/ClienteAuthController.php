@@ -120,8 +120,15 @@ class ClienteAuthController extends Controller
       // Busca o cliente pelo email
       $cliente = Cliente::where('cli_email', $request->email)->first();
 
-      // Verifica se o cliente existe e se a senha está correta
-      if (!$cliente || !Hash::check($request->password, $cliente->cli_password)) {
+      // Verifica se o cliente existe
+      if (!$cliente) {
+         throw ValidationException::withMessages([
+            'email' => ['Esta conta não existe. Verifique o e-mail informado.'],
+         ]);
+      }
+
+      // Verifica se a senha está correta
+      if (!Hash::check($request->password, $cliente->cli_password)) {
          throw ValidationException::withMessages([
             'email' => ['As credenciais fornecidas estão incorretas.'],
          ]);
@@ -190,6 +197,180 @@ class ClienteAuthController extends Controller
             'cep' => $cliente->cli_cep,
             'status' => $cliente->cli_status,
          ],
+      ], 200);
+   }
+
+   /**
+    * Atualiza os dados do cliente autenticado
+    */
+   public function update(Request $request): JsonResponse
+   {
+      $cliente = $request->user();
+
+      // Validação dos dados
+      $validated = $request->validate([
+         'nome' => 'sometimes|required|string|max:255',
+         'email' => 'sometimes|required|email|max:255|unique:cliente,cli_email,' . $cliente->cli_id . ',cli_id',
+         'telefone' => 'sometimes|nullable|string|max:20',
+         'data_nascimento' => 'sometimes|nullable|date',
+         'endereco' => 'sometimes|nullable|string|max:500',
+         'cidade' => 'sometimes|nullable|string|max:100',
+         'estado' => 'sometimes|nullable|string|max:2',
+         'cep' => 'sometimes|nullable|string|max:10',
+         'razao_social' => 'sometimes|nullable|string|max:255',
+      ], [
+         'nome.required' => 'O nome é obrigatório.',
+         'email.required' => 'O e-mail é obrigatório.',
+         'email.email' => 'O e-mail deve ser válido.',
+         'email.unique' => 'Este e-mail já está cadastrado.',
+      ]);
+
+      // Atualiza apenas os campos fornecidos
+      if (isset($validated['nome'])) {
+         $cliente->cli_nome = $validated['nome'];
+      }
+      if (isset($validated['email'])) {
+         $cliente->cli_email = $validated['email'];
+      }
+      if (isset($validated['telefone'])) {
+         $cliente->cli_telefone = $validated['telefone'];
+      }
+      if (isset($validated['data_nascimento'])) {
+         $cliente->cli_data_nascimento = $validated['data_nascimento'];
+      }
+      if (isset($validated['endereco'])) {
+         $cliente->cli_endereco = $validated['endereco'];
+      }
+      if (isset($validated['cidade'])) {
+         $cliente->cli_cidade = $validated['cidade'];
+      }
+      if (isset($validated['estado'])) {
+         $cliente->cli_estado = strtoupper($validated['estado']);
+      }
+      if (isset($validated['cep'])) {
+         $cliente->cli_cep = $validated['cep'];
+      }
+      if (isset($validated['razao_social'])) {
+         $cliente->cli_razao_social = $validated['razao_social'];
+      }
+
+      $cliente->save();
+
+      return response()->json([
+         'message' => 'Perfil atualizado com sucesso!',
+         'cliente' => [
+            'id' => $cliente->cli_id,
+            'nome' => $cliente->cli_nome,
+            'email' => $cliente->cli_email,
+            'tipoPessoa' => $cliente->cli_tipo_pessoa ?? 'fisica',
+            'telefone' => $cliente->cli_telefone,
+            'cpf' => $cliente->cli_cpf,
+            'cnpj' => $cliente->cli_cnpj,
+            'razaoSocial' => $cliente->cli_razao_social,
+            'dataNascimento' => $cliente->cli_data_nascimento ? $cliente->cli_data_nascimento->format('Y-m-d') : null,
+            'endereco' => $cliente->cli_endereco,
+            'cidade' => $cliente->cli_cidade,
+            'estado' => $cliente->cli_estado,
+            'cep' => $cliente->cli_cep,
+            'status' => $cliente->cli_status,
+         ],
+      ], 200);
+   }
+
+   /**
+    * Altera a senha do cliente autenticado
+    */
+   public function alterarSenha(Request $request): JsonResponse
+   {
+      $cliente = $request->user();
+
+      // Validação dos dados
+      $validated = $request->validate([
+         'senha_atual' => 'required|string',
+         'senha_nova' => 'required|string|min:6',
+         'senha_nova_confirmacao' => 'required|string|same:senha_nova',
+      ], [
+         'senha_atual.required' => 'A senha atual é obrigatória.',
+         'senha_nova.required' => 'A nova senha é obrigatória.',
+         'senha_nova.min' => 'A nova senha deve ter no mínimo 6 caracteres.',
+         'senha_nova_confirmacao.required' => 'A confirmação da nova senha é obrigatória.',
+         'senha_nova_confirmacao.same' => 'As senhas não coincidem.',
+      ]);
+
+      // Verifica se a senha atual está correta
+      if (!Hash::check($validated['senha_atual'], $cliente->cli_password)) {
+         throw ValidationException::withMessages([
+            'senha_atual' => ['A senha atual está incorreta.'],
+         ]);
+      }
+
+      // Atualiza a senha
+      $cliente->cli_password = Hash::make($validated['senha_nova']);
+      $cliente->save();
+
+      return response()->json([
+         'message' => 'Senha alterada com sucesso!',
+      ], 200);
+   }
+
+   /**
+    * Retorna os pedidos do cliente autenticado
+    */
+   public function pedidos(Request $request): JsonResponse
+   {
+      $cliente = $request->user();
+
+      // Busca os pedidos do cliente com relacionamentos
+      $pedidos = \App\Models\Pedido::where('ped_cliente_id', $cliente->cli_id)
+         ->with(['produto.imagens'])
+         ->orderBy('ped_created_at', 'desc')
+         ->get();
+
+      // Helper para obter URL do storage
+      $getStorageUrl = function ($path) {
+         $appUrl = config('app.url');
+         if (!$appUrl || $appUrl === 'http://localhost') {
+            $appUrl = \Illuminate\Support\Facades\URL::to('/');
+         }
+         return rtrim($appUrl, '/') . '/storage/' . ltrim($path, '/');
+      };
+
+      // Formata os dados para retornar
+      $pedidosFormatados = $pedidos->map(function ($pedido) use ($getStorageUrl) {
+         $imagemCapaUrl = null;
+         
+         if ($pedido->produto && $pedido->produto->imagens) {
+            $imagemCapa = $pedido->produto->imagens->where('pim_capa', true)->first();
+            if (!$imagemCapa) {
+               $imagemCapa = $pedido->produto->imagens->first();
+            }
+            if ($imagemCapa) {
+               $imagemCapaUrl = $getStorageUrl($imagemCapa->pim_caminho);
+            }
+         }
+
+         return [
+            'id' => $pedido->ped_id,
+            'produto' => $pedido->produto ? [
+               'id' => $pedido->produto->pro_id,
+               'nome' => $pedido->produto->pro_nome,
+               'descricao' => $pedido->produto->pro_descricao,
+               'preco' => (float) $pedido->produto->pro_preco,
+               'imagemCapa' => $imagemCapaUrl,
+            ] : null,
+            'status' => $pedido->ped_status,
+            'valor' => (float) $pedido->ped_valor,
+            'dataCompra' => $pedido->ped_data_compra ? $pedido->ped_data_compra->format('Y-m-d H:i:s') : null,
+            'dataPagamento' => $pedido->ped_data_pagamento ? $pedido->ped_data_pagamento->format('Y-m-d H:i:s') : null,
+            'dataCancelamento' => $pedido->ped_data_cancelamento ? $pedido->ped_data_cancelamento->format('Y-m-d H:i:s') : null,
+            'transacaoHotmart' => $pedido->ped_transacao_hotmart,
+            'observacoes' => $pedido->ped_observacoes,
+            'criadoEm' => $pedido->ped_created_at ? $pedido->ped_created_at->format('Y-m-d H:i:s') : null,
+         ];
+      });
+
+      return response()->json([
+         'pedidos' => $pedidosFormatados,
       ], 200);
    }
 }
