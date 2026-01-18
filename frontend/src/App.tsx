@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { useState } from 'react';
 import Footer from './components/Footer';
-import Chat from './components/Chat';
+// import Chat from './components/Chat';
 import ScrollToTop from './components/ScrollToTop';
 import BackToHome from './components/BackToHome';
 import TopBanner from './components/TopBanner';
@@ -150,7 +150,7 @@ function AppContent() {
       {!shouldHideComponents && !isCarrinhoPage && !isLoginPage && !isCadastroPage && !isPerfilPage && !isPedidosPage && !isMaintenance && (
         <>
           <Footer />
-          {isHomePage && <Chat />}
+          {/* {isHomePage && <Chat />} */}
           <ScrollToTop />
           {!isLojaPage && !isCarrinhoPage && !isProdutoPage && !isLoginPage && !isCadastroPage && !isPerfilPage && !isPedidosPage && <BackToHome />}
         </>

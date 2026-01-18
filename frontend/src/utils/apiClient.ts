@@ -6,10 +6,19 @@ import api from '../config/api';
 class ApiClient {
   /**
    * Obtém o token de autenticação do localStorage
-   * Prioriza o token de cliente, depois o de admin
+   * Prioriza o token de admin se estiver em rota de admin, senão usa o token de cliente
    */
   private getToken(): string | null {
-    return localStorage.getItem('clienteToken') || localStorage.getItem('adminToken');
+    // Verifica se estamos em uma rota de admin
+    const isAdminRoute = window.location.pathname.startsWith('/admin');
+    
+    if (isAdminRoute) {
+      // Em rotas de admin, prioriza o token de admin
+      return localStorage.getItem('adminToken') || localStorage.getItem('clienteToken');
+    } else {
+      // Em rotas normais, prioriza o token de cliente
+      return localStorage.getItem('clienteToken') || localStorage.getItem('adminToken');
+    }
   }
 
   /**
