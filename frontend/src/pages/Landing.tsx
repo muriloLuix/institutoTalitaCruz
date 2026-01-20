@@ -9,6 +9,7 @@ import LojaSection from '../components/LojaSection';
 import PerguntasSection from '../components/PerguntasSection';
 import PublicoAlvoSection from '../components/PublicoAlvoSection';
 import Biografia from '../components/Biografia';
+import IndicacaoSection from '../components/IndicacaoSection';
 import FAQ from '../components/FAQ';
 import Contato from '../components/Contato';
 import './Landing.css';
@@ -83,6 +84,7 @@ const Landing = () => {
          <PerguntasSection />
          <PublicoAlvoSection />
          <Biografia />
+         <IndicacaoSection />
          <FAQ />
          <Contato />
       </div>

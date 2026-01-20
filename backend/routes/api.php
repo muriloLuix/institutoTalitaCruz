@@ -120,6 +120,8 @@ Route::middleware('auth:sanctum')->group(function () {
    // Rotas de Conteúdo (admin)
    Route::post('/admin/conteudo/hotmart-background', [ConteudoController::class, 'uploadHotmartBackground']);
    Route::delete('/admin/conteudo/hotmart-background', [ConteudoController::class, 'removeHotmartBackground']);
+   Route::post('/admin/conteudo/hotmart-card-background', [ConteudoController::class, 'uploadHotmartCardBackground']);
+   Route::delete('/admin/conteudo/hotmart-card-background', [ConteudoController::class, 'removeHotmartCardBackground']);
    Route::post('/admin/conteudo/bonus-card-background', [ConteudoController::class, 'uploadBonusCardBackground']);
    Route::delete('/admin/conteudo/bonus-card-background', [ConteudoController::class, 'removeBonusCardBackground']);
    

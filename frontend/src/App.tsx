@@ -19,6 +19,7 @@ import Equipe from './pages/Equipe';
 import Mentorias from './pages/Mentorias';
 import PacotesTerapeuticos from './pages/PacotesTerapeuticos';
 import InglesBusiness from './pages/InglesBusiness';
+import IndicacaoAlunos from './pages/IndicacaoAlunos';
 import { AdminLogin, ForgotPassword } from './pages/Admin';
 import AdminLayout from './pages/Admin/Layout/AdminLayout';
 import AdminDashboard from './pages/Admin/Dashboard/AdminDashboard';
@@ -143,6 +144,11 @@ function AppContent() {
             <Route path="/ingles-business" element={
               <MaintenanceChecker onMaintenanceChange={setIsMaintenance}>
                 <InglesBusiness />
+              </MaintenanceChecker>
+            } />
+            <Route path="/indicacao-alunos" element={
+              <MaintenanceChecker onMaintenanceChange={setIsMaintenance}>
+                <IndicacaoAlunos />
               </MaintenanceChecker>
             } />
           </Routes>

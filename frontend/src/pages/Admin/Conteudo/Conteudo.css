@@ -276,7 +276,8 @@
 }
 
 .content-editor-form input,
-.content-editor-form textarea {
+.content-editor-form textarea,
+.content-editor-form select {
   width: 100%;
   padding: 0.875rem;
   background: var(--color-black);
@@ -287,13 +288,35 @@
   font-size: 1rem;
   transition: all 0.3s ease;
   resize: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+}
+
+.content-editor-form select {
+  background-color: var(--color-black) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23d4af37' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.875rem center;
+  padding-right: 2.5rem;
+  color: var(--color-text-light) !important;
 }
 
 .content-editor-form input:focus,
-.content-editor-form textarea:focus {
+.content-editor-form textarea:focus,
+.content-editor-form select:focus {
   outline: none;
   border-color: var(--color-gold);
   box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+  background-color: var(--color-black);
+  color: var(--color-text-light) !important;
+}
+
+.content-editor-form select:hover {
+  border-color: var(--color-gold);
+  background-color: var(--color-black);
+  color: var(--color-text-light) !important;
 }
 
 .content-editor-form textarea {
@@ -334,6 +357,112 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+
+/* Lista Compacta de Cards Hotmart */
+.hotmart-cards-admin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.hotmart-card-admin-item {
+  background: var(--color-black);
+  border: 1px solid var(--color-gray);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.hotmart-card-admin-item:hover {
+  border-color: var(--color-gold);
+}
+
+.hotmart-card-admin-item.expanded {
+  border-color: var(--color-gold);
+  border-width: 2px;
+}
+
+.hotmart-card-admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.hotmart-card-admin-header:hover {
+  background: rgba(212, 175, 55, 0.05);
+}
+
+.hotmart-card-admin-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.hotmart-card-admin-number {
+  background: var(--color-gold);
+  color: var(--color-black);
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  min-width: 60px;
+  text-align: center;
+}
+
+.hotmart-card-admin-title {
+  color: var(--color-text-light);
+  font-weight: 600;
+  font-size: 1rem;
+  flex: 1;
+  min-width: 150px;
+}
+
+.hotmart-card-admin-badge {
+  background: rgba(212, 175, 55, 0.2);
+  color: var(--color-gold);
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.hotmart-card-admin-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.hotmart-card-admin-content {
+  padding: 1.5rem;
+  border-top: 1px solid var(--color-gray);
+  background: rgba(0, 0, 0, 0.2);
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 2000px;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+}
+
+.hotmart-card-admin-preview {
+  padding: 0;
 }
 
 @media (max-width: 968px) {

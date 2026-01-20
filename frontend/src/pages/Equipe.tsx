@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import RelatedNavigation from '../components/RelatedNavigation';
+import { useParametros } from '../hooks/useParametros';
 import './Equipe.css';
 
 interface Profissional {
@@ -8,6 +9,7 @@ interface Profissional {
    cargo: string;
    descricao: string;
    foto?: string;
+   whatsapp?: string;
 }
 
 const Equipe = () => {
@@ -16,6 +18,10 @@ const Equipe = () => {
    const [touchEnd, setTouchEnd] = useState(0);
    const carouselRef = useRef<HTMLDivElement>(null);
    const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
+   const { getParametro } = useParametros();
+   
+   // Busca o número geral de WhatsApp como fallback
+   const whatsappGeral = getParametro('contato_whatsapp_numero', '');
 
    const profissionais: Profissional[] = [
       {
@@ -23,28 +29,32 @@ const Equipe = () => {
          nome: 'Nome do Profissional',
          cargo: 'Cargo/Função',
          descricao: 'Texto breve de apresentação sobre o profissional, destacando sua experiência, formação e especialidades. Este profissional traz anos de experiência e dedicação ao desenvolvimento humano.',
-         foto: ''
+         foto: '',
+         whatsapp: ''
       },
       {
          id: 2,
          nome: 'Nome do Profissional',
          cargo: 'Cargo/Função',
          descricao: 'Texto breve de apresentação sobre o profissional, destacando sua experiência, formação e especialidades. Este profissional traz anos de experiência e dedicação ao desenvolvimento humano.',
-         foto: ''
+         foto: '',
+         whatsapp: ''
       },
       {
          id: 3,
          nome: 'Nome do Profissional',
          cargo: 'Cargo/Função',
          descricao: 'Texto breve de apresentação sobre o profissional, destacando sua experiência, formação e especialidades. Este profissional traz anos de experiência e dedicação ao desenvolvimento humano.',
-         foto: ''
+         foto: '',
+         whatsapp: ''
       },
       {
          id: 4,
          nome: 'Nome do Profissional',
          cargo: 'Cargo/Função',
          descricao: 'Texto breve de apresentação sobre o profissional, destacando sua experiência, formação e especialidades. Este profissional traz anos de experiência e dedicação ao desenvolvimento humano.',
-         foto: ''
+         foto: '',
+         whatsapp: ''
       }
    ];
 
@@ -201,50 +211,82 @@ const Equipe = () => {
                   </p>
                </div>
 
-               <div className="profissionais-carousel-wrapper">
-                  <div 
-                     className="profissionais-carousel"
-                     ref={carouselRef}
-                     onTouchStart={handleTouchStart}
-                     onTouchMove={handleTouchMove}
-                     onTouchEnd={handleTouchEnd}
-                     style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-                  >
-                     {profissionais.map((profissional, index) => {
-                        const isEven = index % 2 === 0;
-                        
-                        return (
-                           <div 
-                              key={profissional.id} 
-                              className={`profissional-slide ${isEven ? 'slide-left' : 'slide-right'}`}
-                           >
-                              <div className="profissional-slide-content">
-                                 {/* Foto do Profissional */}
-                                 <div className="profissional-slide-foto">
-                                    {profissional.foto ? (
-                                       <img src={profissional.foto} alt={profissional.nome} />
-                                    ) : (
-                                       <div className="profissional-foto-placeholder-large">
-                                          <i className="fas fa-user"></i>
-                                       </div>
-                                    )}
-                                 </div>
-
-                                 {/* Informações do Profissional */}
-                                 <div className="profissional-slide-info">
-                                    <div className="profissional-slide-badge">
-                                       <i className="fas fa-star"></i>
-                                       <span>PROFISSIONAL</span>
+               <div className="profissionais-carousel-container">
+                  <div className="profissionais-carousel-wrapper">
+                     <div 
+                        className="profissionais-carousel"
+                        ref={carouselRef}
+                        onTouchStart={handleTouchStart}
+                        onTouchMove={handleTouchMove}
+                        onTouchEnd={handleTouchEnd}
+                        style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                     >
+                        {profissionais.map((profissional, index) => {
+                           const isEven = index % 2 === 0;
+                           
+                           return (
+                              <div 
+                                 key={profissional.id} 
+                                 className={`profissional-slide ${isEven ? 'slide-left' : 'slide-right'}`}
+                              >
+                                 <div className="profissional-slide-content">
+                                    {/* Foto do Profissional */}
+                                    <div className="profissional-slide-foto">
+                                       {profissional.foto ? (
+                                          <img src={profissional.foto} alt={profissional.nome} />
+                                       ) : (
+                                          <div className="profissional-foto-placeholder-large">
+                                             <i className="fas fa-user"></i>
+                                          </div>
+                                       )}
                                     </div>
-                                    <h3 className="profissional-slide-nome">{profissional.nome}</h3>
-                                    <p className="profissional-slide-cargo">{profissional.cargo}</p>
-                                    <div className="profissional-slide-divider"></div>
-                                    <p className="profissional-slide-descricao">{profissional.descricao}</p>
+
+                                    {/* Informações do Profissional */}
+                                    <div className="profissional-slide-info">
+                                       <div className="profissional-slide-badge">
+                                          <i className="fas fa-star"></i>
+                                          <span>PROFISSIONAL</span>
+                                       </div>
+                                       <h3 className="profissional-slide-nome">{profissional.nome}</h3>
+                                       <p className="profissional-slide-cargo">{profissional.cargo}</p>
+                                       <div className="profissional-slide-divider"></div>
+                                       <p className="profissional-slide-descricao">{profissional.descricao}</p>
+                                       {(() => {
+                                          const whatsappNumero = profissional.whatsapp || whatsappGeral;
+                                          const whatsappLink = whatsappNumero 
+                                             ? `https://wa.me/${whatsappNumero.replace(/\D/g, '')}` 
+                                             : '#';
+                                          
+                                          return (
+                                             <a 
+                                                href={whatsappLink}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="profissional-agende-btn"
+                                             >
+                                                <i className="fab fa-whatsapp"></i>
+                                                Agende agora
+                                             </a>
+                                          );
+                                       })()}
+                                    </div>
                                  </div>
                               </div>
-                           </div>
-                        );
-                     })}
+                           );
+                        })}
+                     </div>
+
+                     {/* Indicadores */}
+                     <div className="carousel-indicators-profissionais">
+                        {profissionais.map((_, index) => (
+                           <button
+                              key={index}
+                              className={`carousel-indicator-profissional ${index === currentSlide ? 'active' : ''}`}
+                              onClick={() => goToSlide(index)}
+                              aria-label={`Ir para slide ${index + 1}`}
+                           />
+                        ))}
+                     </div>
                   </div>
 
                   {/* Controles de Navegação */}
@@ -262,18 +304,6 @@ const Equipe = () => {
                   >
                      <i className="fas fa-chevron-right"></i>
                   </button>
-
-                  {/* Indicadores */}
-                  <div className="carousel-indicators-profissionais">
-                     {profissionais.map((_, index) => (
-                        <button
-                           key={index}
-                           className={`carousel-indicator-profissional ${index === currentSlide ? 'active' : ''}`}
-                           onClick={() => goToSlide(index)}
-                           aria-label={`Ir para slide ${index + 1}`}
-                        />
-                     ))}
-                  </div>
                </div>
             </div>
          </section>
