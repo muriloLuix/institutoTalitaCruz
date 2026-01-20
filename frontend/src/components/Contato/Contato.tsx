@@ -87,7 +87,7 @@ const Contato = () => {
    return (
       <section className="contato-section" id="contato">
          <div className="container">
-            <h2 className="section-title">Entre em Contato</h2>
+            <h2 className="section-title">Entre em contato</h2>
             <p className="contato-subtitle">
                Tem alguma dúvida? Estamos aqui para ajudar você!
             </p>

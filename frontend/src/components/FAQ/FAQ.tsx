@@ -42,7 +42,7 @@ const FAQ = () => {
    return (
       <section className="faq-section" id="faq">
          <div className="container">
-            <h2 className="section-title">Perguntas Frequentes</h2>
+            <h2 className="section-title">Perguntas frequentes</h2>
             <p className="faq-subtitle">
                Tire suas dúvidas sobre nossos cursos, livros e mentorias
             </p>

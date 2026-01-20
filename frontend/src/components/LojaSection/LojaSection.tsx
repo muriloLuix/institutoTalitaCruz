@@ -5,7 +5,7 @@ const LojaSection = () => {
    return (
       <section className="loja-section" id="loja">
          <div className="container">
-            <h2 className="section-title">Nossa Loja</h2>
+            <h2 className="section-title">Nossa loja</h2>
             <p className="loja-subtitle">
                Explore nossos produtos exclusivos: mentorias, cursos, livros e muito mais!
             </p>
@@ -66,7 +66,7 @@ const LojaSection = () => {
             
             <div className="loja-cta">
                <Link to="/loja" className="btn-primary loja-button">
-                  Explorar Loja Completa
+                  Explorar loja completa
                </Link>
             </div>
          </div>

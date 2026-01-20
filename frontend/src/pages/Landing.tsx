@@ -50,7 +50,7 @@ const Landing = () => {
             <div className="container">
                <div className="hero-content">
                   <h1 className="hero-title">
-                     Transforme sua <span className="highlight">Vida</span> com
+                     Transforme sua <span className="highlight">vida</span> com
                      <br />
                      <span className="highlight-gold">Talita Cruz</span>
                   </h1>

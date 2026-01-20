@@ -40,7 +40,7 @@ const VideoSection = () => {
                   <span>Vídeo de Apresentação</span>
                </div>
                <h2 className="video-title">
-                  Conheça a <span className="video-highlight">História</span> por Trás do Sucesso
+                  Conheça a <span className="video-highlight">história</span> por trás do sucesso
                </h2>
                <p className="video-subtitle">
                   Assista ao vídeo e descubra como o Instituto Talita Cruz pode transformar sua vida através de cursos de inglês, 

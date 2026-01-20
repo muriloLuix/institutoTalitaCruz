@@ -80,7 +80,7 @@ const HotmartSection = () => {
          <div className="container" style={{ position: 'relative', zIndex: 2 }}>
             <div className="hotmart-content">
                <div className="hotmart-text">
-                  <h2 className="section-title">Produtos e Cursos Exclusivos</h2>
+                  <h2 className="section-title">Produtos e cursos exclusivos</h2>
                   <p className="hotmart-description">
                      Descubra nossa coleção completa: cursos de inglês, inglês business, pacotes terapêuticos, 
                      livros, mentorias e muito mais. Desenvolvidos especialmente para sua transformação pessoal e profissional.
